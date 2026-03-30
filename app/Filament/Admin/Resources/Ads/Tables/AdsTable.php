@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\Ads\Tables;
 
 use App\Models\Ad;
+use App\Notifications\AdStatusChanged;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -66,19 +67,28 @@ class AdsTable
                     ->label('Approve')
                     ->icon('heroicon-o-check')
                     ->visible(fn (Ad $record) => $record->status === 'pending' || $record->status === 'rejected')
-                    ->action(fn (Ad $record) => $record->update(['status' => 'active'])),
+                    ->action(function (Ad $record) {
+                        $record->update(['status' => 'active']);
+                        $record->user?->notify(new AdStatusChanged($record, 'active'));
+                    }),
                 Action::make('reject')
                     ->label('Reject')
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
                     ->visible(fn (Ad $record) => $record->status === 'pending' || $record->status === 'active')
-                    ->action(fn (Ad $record) => $record->update(['status' => 'rejected'])),
+                    ->action(function (Ad $record) {
+                        $record->update(['status' => 'rejected']);
+                        $record->user?->notify(new AdStatusChanged($record, 'rejected'));
+                    }),
                 Action::make('close')
                     ->label('Close')
                     ->icon('heroicon-o-lock-closed')
                     ->color('warning')
                     ->visible(fn (Ad $record) => $record->status === 'active')
-                    ->action(fn (Ad $record) => $record->update(['status' => 'closed'])),
+                    ->action(function (Ad $record) {
+                        $record->update(['status' => 'closed']);
+                        $record->user?->notify(new AdStatusChanged($record, 'closed'));
+                    }),
                 EditAction::make(),
             ])
             ->toolbarActions([

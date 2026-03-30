@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chat;
 use App\Models\Message;
+use App\Notifications\NewChatMessage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class MessageController extends Controller
             'message' => ['required', 'string', 'max:2000'],
         ]);
 
-        Message::query()->create([
+        $message = Message::query()->create([
             'chat_id' => $chat->id,
             'user_id' => $userId,
             'message' => $data['message'],
@@ -32,6 +33,11 @@ class MessageController extends Controller
         ]);
 
         $chat->update(['last_message_at' => now()]);
+
+        $recipient = $userId === $chat->buyer_id ? $chat->seller : $chat->buyer;
+        if ($recipient) {
+            $recipient->notify(new NewChatMessage($chat, $message));
+        }
 
         return back();
     }
