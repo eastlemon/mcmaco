@@ -12,6 +12,12 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('ads.index')" :active="request()->routeIs('ads.index')">
+                        {{ __('Ads') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('ads.manage.index')" :active="request()->routeIs('ads.manage.*')">
+                        {{ __('My Ads') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
