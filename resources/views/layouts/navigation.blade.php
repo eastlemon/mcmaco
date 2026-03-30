@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('ads.manage.index')" :active="request()->routeIs('ads.manage.*')">
                         {{ __('My Ads') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('chats.index')" :active="request()->routeIs('chats.*')">
+                        {{ __('My Chats') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>

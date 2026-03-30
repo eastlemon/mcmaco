@@ -3,6 +3,8 @@
 use App\Http\Controllers\AdController;
 use App\Http\Controllers\AdImageController;
 use App\Http\Controllers\AdManageController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +28,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/ads/{ad}/images', [AdImageController::class, 'store'])->name('ads.images.store');
     Route::delete('/ads/{ad}/images/{adImage}', [AdImageController::class, 'destroy'])->name('ads.images.destroy');
+
+    Route::get('/my/chats', [ChatController::class, 'index'])->name('chats.index');
+    Route::post('/ads/{ad}/chats', [ChatController::class, 'store'])->name('chats.store');
+    Route::get('/my/chats/{chat}', [ChatController::class, 'show'])->name('chats.show');
+    Route::post('/my/chats/{chat}/messages', [MessageController::class, 'store'])->name('messages.store');
 });
 
 require __DIR__.'/auth.php';
