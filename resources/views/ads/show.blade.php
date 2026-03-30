@@ -15,12 +15,32 @@
                 {{ $ad->description }}
             </div>
 
-            <div class="mt-6">
+            <div class="mt-6 flex items-center gap-3">
                 @auth
                     <form method="POST" action="{{ route('chats.store', $ad) }}">
                         @csrf
                         <button class="bg-amber-600 text-white px-4 py-2 rounded">Написать продавцу</button>
                     </form>
+
+                    @php
+                        $isFavorite = auth()->user()
+                            ?->favorites()
+                            ->where('ad_id', $ad->id)
+                            ->exists();
+                    @endphp
+
+                    @if($isFavorite)
+                        <form method="POST" action="{{ route('favorites.destroy', $ad) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button class="border px-4 py-2 rounded">Убрать из избранного</button>
+                        </form>
+                    @else
+                        <form method="POST" action="{{ route('favorites.store', $ad) }}">
+                            @csrf
+                            <button class="border px-4 py-2 rounded">В избранное</button>
+                        </form>
+                    @endif
                 @else
                     <a href="{{ route('login') }}" class="bg-amber-600 text-white px-4 py-2 rounded inline-block">Войти, чтобы написать</a>
                 @endauth

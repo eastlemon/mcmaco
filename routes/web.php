@@ -4,6 +4,7 @@ use App\Http\Controllers\AdController;
 use App\Http\Controllers\AdImageController;
 use App\Http\Controllers\AdManageController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/ads/{ad}/chats', [ChatController::class, 'store'])->name('chats.store');
     Route::get('/my/chats/{chat}', [ChatController::class, 'show'])->name('chats.show');
     Route::post('/my/chats/{chat}/messages', [MessageController::class, 'store'])->name('messages.store');
+
+    Route::get('/my/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/ads/{ad}/favorite', [FavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete('/ads/{ad}/favorite', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
 });
 
 require __DIR__.'/auth.php';

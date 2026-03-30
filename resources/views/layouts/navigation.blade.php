@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('chats.index')" :active="request()->routeIs('chats.*')">
                         {{ __('My Chats') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('favorites.index')" :active="request()->routeIs('favorites.*')">
+                        {{ __('Favorites') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
