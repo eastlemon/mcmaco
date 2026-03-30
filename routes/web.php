@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\AdController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AdController::class, 'index'])->name('ads.index');
+Route::get('/ads/{ad}', [AdController::class, 'show'])->name('ads.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
