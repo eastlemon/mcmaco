@@ -28,6 +28,9 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden sm:block ms-4">
+                    <livewire:cart-dropdown />
+                </div>
             </div>
 
             <!-- Settings Dropdown -->

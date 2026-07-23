@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AdController::class, 'index'])->name('ads.index');
 Route::get('/listing/{slug}', [AdController::class, 'show'])->name('ads.show');
 
+// Cart & Checkout
+Route::get('/cart', fn () => view('livewire.cart-page'))->name('cart');
+Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/order/{order}', [\App\Http\Controllers\CheckoutController::class, 'show'])->name('orders.show');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

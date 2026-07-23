@@ -75,12 +75,8 @@
                 {{-- Действия --}}
                 <div class="space-y-3">
                     @if($ad->stock > 0)
-                        <button class="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 rounded-lg transition" onclick="alert('Корзина будет в Этапе 2')">
-                            🛒 В корзину
-                        </button>
-                        <button class="w-full border-2 border-amber-600 text-amber-700 hover:bg-amber-50 font-medium py-3 rounded-lg transition" onclick="alert('Быстрый заказ будет в Этапе 2')">
-                            ⚡ Купить в 1 клик
-                        </button>
+                        <livewire:add-to-cart :ad-id="$ad->id" :key="'cart-' . $ad->id" />
+                        <livewire:quick-order :ad-id="$ad->id" :key="'quick-' . $ad->id" />
                     @endif
 
                     <div class="flex gap-2 pt-2">
