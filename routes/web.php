@@ -10,7 +10,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AdController::class, 'index'])->name('ads.index');
-Route::get('/ads/{ad}', [AdController::class, 'show'])->name('ads.show');
+Route::get('/listing/{slug}', [AdController::class, 'show'])->name('ads.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

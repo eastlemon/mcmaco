@@ -9,13 +9,14 @@ use Illuminate\Http\Request;
 class AdController extends Controller
 {
     /**
-     * Публичный список объявлений с фильтрами.
+     * Главная витрина: популярные + новинки + категории.
      */
     public function index(Request $request)
     {
         $query = Ad::query()
             ->with(['category', 'user', 'images'])
-            ->where('status', 'active');
+            ->active()
+            ->inStock();
 
         if ($search = $request->string('q')->trim()->toString()) {
             $query->where(function ($q) use ($search) {
@@ -54,22 +55,61 @@ class AdController extends Controller
         }
 
         $ads = $query->paginate(20)->withQueryString();
-        $categories = Category::query()->orderBy('name')->get();
+        $categories = Category::roots()->get();
 
         return view('ads.index', compact('ads', 'categories'));
     }
 
     /**
-     * Карточка объявления.
+     * Карточка товара с schema.org Product.
      */
-    public function show(Ad $ad)
+    public function show(string $slug)
     {
-        if ($ad->status !== 'active') {
-            abort(404);
+        $ad = Ad::with(['category', 'user', 'images'])
+            ->where('slug', $slug)
+            ->active()
+            ->firstOrFail();
+
+        $ad->increment('views');
+
+        $related = Ad::query()
+            ->where('category_id', $ad->category_id)
+            ->where('id', '!=', $ad->id)
+            ->active()
+            ->inStock()
+            ->limit(4)
+            ->get();
+
+        $schema = $this->buildProductSchema($ad);
+
+        return view('ads.show', compact('ad', 'related', 'schema'));
+    }
+
+    private function buildProductSchema(Ad $ad): array
+    {
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Product',
+            'name' => $ad->title,
+            'description' => strip_tags($ad->description),
+            'sku' => $ad->sku ?? "MC-{$ad->id}",
+            'brand' => ['@type' => 'Brand', 'name' => 'mcma.co'],
+            'offers' => [
+                '@type' => 'Offer',
+                'price' => $ad->price,
+                'priceCurrency' => 'RUB',
+                'availability' => $ad->stock > 0
+                    ? 'https://schema.org/InStock'
+                    : 'https://schema.org/OutOfStock',
+                'url' => route('ads.show', $ad->slug),
+            ],
+        ];
+
+        $images = $ad->images->map(fn ($img) => asset('storage/' . $img->path))->take(5);
+        if ($images->isNotEmpty()) {
+            $schema['image'] = $images->toArray();
         }
 
-        $ad->load(['category', 'user', 'images']);
-
-        return view('ads.show', compact('ad'));
+        return $schema;
     }
 }

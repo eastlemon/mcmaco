@@ -3,55 +3,66 @@
 namespace App\Console\Commands;
 
 use App\Models\Ad;
+use App\Models\Category;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class GenerateSitemap extends Command
 {
     protected $signature = 'sitemap:generate';
-    protected $description = 'Generate sitemap.xml for active ads';
+    protected $description = 'Generate sitemap.xml for SEO';
 
-    public function handle(): int
+    public function handle(): void
     {
         $urls = [];
+        $baseUrl = config('app.url');
 
-        $urls[] = [
-            'loc' => url('/'),
-            'lastmod' => now()->toAtomString(),
-        ];
+        // Static pages
+        $urls[] = ['loc' => $baseUrl, 'priority' => '1.0', 'changefreq' => 'daily'];
 
-        Ad::query()
-            ->where('status', 'active')
-            ->orderByDesc('updated_at')
-            ->chunk(500, function ($ads) use (&$urls) {
-                foreach ($ads as $ad) {
-                    $urls[] = [
-                        'loc' => route('ads.show', $ad),
-                        'lastmod' => $ad->updated_at->toAtomString(),
-                    ];
-                }
-            });
+        // Categories
+        foreach (Category::roots()->get() as $category) {
+            $urls[] = [
+                'loc' => $baseUrl . '/?category_id=' . $category->id,
+                'priority' => '0.8',
+                'changefreq' => 'weekly',
+            ];
+        }
+
+        // Active listings
+        foreach (Ad::active()->select('id', 'slug', 'updated_at')->cursor() as $ad) {
+            $urls[] = [
+                'loc' => $baseUrl . '/listing/' . $ad->slug,
+                'priority' => '0.6',
+                'changefreq' => 'weekly',
+                'lastmod' => $ad->updated_at?->toDateString(),
+            ];
+        }
 
         $xml = $this->buildXml($urls);
-        Storage::disk('public')->put('sitemap.xml', $xml);
 
-        $this->info('Sitemap generated.');
-
-        return self::SUCCESS;
+        File::put(public_path('sitemap.xml'), $xml);
+        $this->info('Sitemap generated: ' . count($urls) . ' URLs');
     }
 
     private function buildXml(array $urls): string
     {
-        $items = array_map(function ($item) {
-            return "    <url>\n".
-                "        <loc>{$item['loc']}</loc>\n".
-                "        <lastmod>{$item['lastmod']}</lastmod>\n".
-                "    </url>";
-        }, $urls);
+        $lines = ['<?xml version="1.0" encoding="UTF-8"?>'];
+        $lines[] = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".
-            "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n".
-            implode("\n", $items).
-            "\n</urlset>\n";
+        foreach ($urls as $url) {
+            $lines[] = '  <url>';
+            $lines[] = '    <loc>' . htmlspecialchars($url['loc']) . '</loc>';
+            $lines[] = '    <priority>' . $url['priority'] . '</priority>';
+            $lines[] = '    <changefreq>' . $url['changefreq'] . '</changefreq>';
+            if (isset($url['lastmod'])) {
+                $lines[] = '    <lastmod>' . $url['lastmod'] . '</lastmod>';
+            }
+            $lines[] = '  </url>';
+        }
+
+        $lines[] = '</urlset>';
+
+        return implode("\n", $lines);
     }
 }

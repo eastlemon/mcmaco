@@ -21,24 +21,36 @@ class AdsTable
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
-                    ->searchable(),
                 TextColumn::make('title')
-                    ->searchable(),
+                    ->searchable()
+                    ->limit(40),
                 TextColumn::make('price')
                     ->money('RUB', locale: 'ru')
                     ->sortable(),
+                TextColumn::make('stock')
+                    ->numeric()
+                    ->sortable()
+                    ->color(fn ($state) => $state > 0 ? 'success' : 'danger'),
                 TextColumn::make('category.name')
                     ->searchable(),
-                TextColumn::make('city')
-                    ->searchable(),
-                TextColumn::make('condition')
-                    ->searchable(),
                 TextColumn::make('status')
-                    ->searchable(),
+                    ->badge()
+                    ->color(fn (string $state) => match ($state) {
+                        'active' => 'success',
+                        'pending' => 'warning',
+                        'rejected' => 'danger',
+                        'closed' => 'gray',
+                        default => 'gray',
+                    }),
+                TextColumn::make('condition')
+                    ->badge(),
+                IconColumn::make('is_featured')
+                    ->boolean()
+                    ->label('Реком.'),
                 TextColumn::make('views')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -56,10 +68,15 @@ class AdsTable
                 TrashedFilter::make(),
                 SelectFilter::make('status')
                     ->options([
-                        'pending' => 'Pending',
-                        'active' => 'Active',
-                        'closed' => 'Closed',
-                        'rejected' => 'Rejected',
+                        'pending' => 'На модерации',
+                        'active' => 'Активен',
+                        'closed' => 'Закрыт',
+                        'rejected' => 'Отклонён',
+                    ]),
+                SelectFilter::make('is_featured')
+                    ->options([
+                        '1' => 'Рекомендуемые',
+                        '0' => 'Обычные',
                     ]),
             ])
             ->recordActions([
