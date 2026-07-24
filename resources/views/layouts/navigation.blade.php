@@ -13,17 +13,17 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('ads.index')" :active="request()->routeIs('ads.index')">
-                        {{ __('Товары') }}
+                        {{ __('Ads') }}
                     </x-nav-link>
                     @auth
                     <x-nav-link :href="route('ads.manage.index')" :active="request()->routeIs('ads.manage.*')">
-                        {{ __('Мои товары') }}
+                        {{ __('My Ads') }}
                     </x-nav-link>
                     <x-nav-link :href="route('chats.index')" :active="request()->routeIs('chats.*')">
-                        {{ __('Чаты') }}
+                        {{ __('My Chats') }}
                     </x-nav-link>
                     <x-nav-link :href="route('favorites.index')" :active="request()->routeIs('favorites.*')">
-                        {{ __('Избранное') }}
+                        {{ __('Favorites') }}
                     </x-nav-link>
                     @endauth
                 </div>
@@ -94,11 +94,11 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('ads.index')" :active="request()->routeIs('ads.index')">
-                {{ __('Товары') }}
+                {{ __('Ads') }}
             </x-responsive-nav-link>
             @auth
             <x-responsive-nav-link :href="route('ads.manage.index')" :active="request()->routeIs('ads.manage.*')">
-                {{ __('Мои товары') }}
+                {{ __('My Ads') }}
             </x-responsive-nav-link>
             @endauth
         </div>
