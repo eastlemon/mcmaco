@@ -144,10 +144,10 @@
 - [ ] Filament: OrderResource, управление статусами
 
 ### Этап 3 — Платежи
-- [ ] ЮKassa integration (create payment, redirect, webhook)
-- [ ] Payment модель, статусы
-- [ ] Filament: управление платежами, возвраты
-- [ ] Тестовый режим
+- [x] ЮKassa integration (create payment, redirect, webhook)
+- [x] Payment модель, статусы
+- [x] Filament: управление платежами, возвраты
+- [x] Тестовый режим
 
 ### Этап 4 — Доставка
 - [ ] Справочник способов доставки (СДЭК, Почта, самовывоз)

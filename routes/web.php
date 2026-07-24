@@ -6,6 +6,7 @@ use App\Http\Controllers\AdManageController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,11 @@ Route::get('/cart', fn () => view('livewire.cart-page'))->name('cart');
 Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/order/{order}', [\App\Http\Controllers\CheckoutController::class, 'show'])->name('orders.show');
+
+// Payments
+Route::get('/order/{order}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
+Route::get('/order/{order}/success', [PaymentController::class, 'success'])->name('payments.success');
+Route::post('/payments/yookassa/webhook', [PaymentController::class, 'webhook'])->name('payments.webhook');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

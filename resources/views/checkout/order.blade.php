@@ -30,7 +30,20 @@
                 @if($order->delivery_address) {{ $order->delivery_address }} @endif
             </div>
 
-            <p class="text-sm text-gray-400 mb-6">Мы свяжемся с вами по телефону для подтверждения заказа.</p>
+            @if(in_array($order->status, [\App\Models\Order::STATUS_NEW, \App\Models\Order::STATUS_CONFIRMED]) && app(\App\Services\YooKassaService::class)->isEnabled())
+                <div class="flex flex-col gap-3 items-center mb-6">
+                    <a href="{{ route('payments.pay', $order) }}" class="inline-block bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition font-medium">
+                        💳 Оплатить онлайн
+                    </a>
+                    <span class="text-xs text-gray-400">или оплатите при получении</span>
+                </div>
+            @else
+                <p class="text-sm text-gray-400 mb-6">Мы свяжемся с вами по телефону для подтверждения заказа.</p>
+            @endif
+
+            @if(session('error'))
+                <div class="bg-red-50 text-red-600 text-sm rounded-lg p-3 mb-4">{{ session('error') }}</div>
+            @endif
 
             <a href="{{ route('ads.index') }}" class="inline-block bg-amber-600 text-white px-6 py-2 rounded-lg hover:bg-amber-700">
                 Продолжить покупки

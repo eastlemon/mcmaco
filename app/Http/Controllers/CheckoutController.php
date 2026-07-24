@@ -78,6 +78,11 @@ class CheckoutController extends Controller
 
         $cartService->clear($cart);
 
+        // If payment method is online, redirect to payment
+        if ($request->has('pay_online') && app(\App\Services\YooKassaService::class)->isEnabled()) {
+            return redirect()->route('payments.pay', $order);
+        }
+
         return redirect()->route('orders.show', $order);
     }
 
