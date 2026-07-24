@@ -2,7 +2,7 @@ FROM php:8.4-fpm-alpine
 
 LABEL maintainer="mcmaco"
 
-# System deps + PHP extensions
+# Build deps + PHP extensions + redis via pecl
 RUN apk add --no-cache \
     nginx \
     git \
@@ -15,6 +15,7 @@ RUN apk add --no-cache \
     libxml2-dev \
     icu-dev \
     linux-headers \
+    $PHPIZE_DEPS \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         pdo_mysql \
@@ -28,7 +29,8 @@ RUN apk add --no-cache \
         pcntl \
         bcmath \
     && pecl install redis \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable redis \
+    && apk del $PHPIZE_DEPS linux-headers
 
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
