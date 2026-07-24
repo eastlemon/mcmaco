@@ -1,7 +1,3 @@
-@php
-    $img = $ad->coverImage ? asset('storage/' . $ad->coverImage->path) : 'https://placehold.co/60x60?text=📦';
-@endphp
-
 <div x-data="{ open: false }" @cart-updated.window="open = true; setTimeout(() => open = false, 2000)"
      class="relative">
     <button @click="open = !open" class="relative flex items-center gap-1 text-sm hover:text-amber-600">

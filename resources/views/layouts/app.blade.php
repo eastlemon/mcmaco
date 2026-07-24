@@ -37,7 +37,7 @@
             @endisset
 
             <main>
-                {{ $slot }}
+                @yield('content')
             </main>
 
             <footer class="bg-white border-t mt-12 py-8">
