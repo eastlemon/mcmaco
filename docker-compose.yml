@@ -1,4 +1,27 @@
 services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: mcmaco-app
+        restart: unless-stopped
+        ports:
+            - '${APP_PORT:-8080}:8080'
+        volumes:
+            - .:/var/www/html
+            - /var/www/html/vendor
+        environment:
+            DB_HOST: mysql
+            DB_DATABASE: '${DB_DATABASE:-mcmaco}'
+            DB_USERNAME: '${DB_USERNAME:-mcmaco}'
+            DB_PASSWORD: '${DB_PASSWORD:-secret}'
+            REDIS_HOST: redis
+        depends_on:
+            mysql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+
     mysql:
         image: 'mysql:8.0'
         container_name: mcmaco-mysql
@@ -13,7 +36,7 @@ services:
         volumes:
             - 'mcmaco-mysql:/var/lib/mysql'
         healthcheck:
-            test: ["CMD", "mysqladmin", "ping", "-p${DB_ROOT_PASSWORD:-secret}"]
+            test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD:-secret}"]
             retries: 3
             timeout: 5s
 
