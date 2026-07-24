@@ -2,177 +2,143 @@
 
 ## Концепция
 
-Витрина-магазин для продажи физических товаров с доставкой. Управление товарами как записями в блоге через Filament. Корзина, заказы, оплата через ЮKassa. SEO-инструменты. Готовность к интеграции сторонних API (pipelines).
+Витрина-магазин для продажи физических товаров с доставкой. Управление товарами через Filament. Корзина, заказы, оплата через ЮKassa. Livewire-фильтры каталога. SEO. Pipelines для сторонних API.
 
-## Текущее состояние репозитория
-
-В репо уже есть базовая доска объявлений (Avito-style):
-- Модели: Ad, Category, AdImage, Chat, Message, Favorite, Report, User
-- Filament admin: Ads, Categories, Chats, Messages, Reports, Users
- Витрина: список + карточка объявления, фильтры, поиск
-- Чат между покупателем и продавцом
-- Избранное
-- Breeze auth
-
-**Что нужно добавить/переделать:**
-- Ad → Listing (переход от «объявления» к «товару магазина»)
-- Корзина + оформление заказа
-- Оплата ЮKassa
-- Быстрый заказ в 1 клик (по телефону)
-- Витрина: популярные + новые
-- SEO: meta, sitemap, schema.org
-- Pipelines для сторонних API
-- Доставка (адрес, трекинг)
+- **Домен**: `mcmaco.ru`
+- **Repo**: `git@github.com:eastlemon/mcmaco.git`, branch `main`
+- **Dev**: `/var/www/mcmaco` на vdska
 
 ## Стек
 
 - **Backend**: Laravel 13 + PHP 8.4
 - **Admin**: Filament 5 (Livewire 4)
 - **DB**: MySQL 8 + Redis
-- **Frontend**: Tailwind CSS + Livewire (витрина, корзина)
-- **Платежи**: ЮKassa (YooMoney API)
-- **Search**: MySQL FULLTEXT (позже Meilisearch)
-- **Тесты**: Pest 4
+- **Frontend**: Tailwind CSS + Livewire
+- **Платежи**: ЮKassa (`yoomoney/yookassa-sdk-php`)
+- **Тесты**: PHPUnit (45 тестов / 117 assertions)
+- **Auth**: Breeze
 
-## Модели (target)
+## Что уже реализовано
 
-### Существующие (адаптировать)
-- **User** — +role (customer/seller/admin), +phone
-- **Category** — +meta_title, +meta_description (SEO)
-- **Listing** (бывший Ad) — +slug (unique), +sku, +stock, +is_featured, +meta_title, +meta_description, +weight, +dimensions
+### Витрина (Этап 1 ✅)
+- Модель `Ad` (используется как товар, не «объявление») — slug, sku, stock, is_featured, weight, dimensions, SEO-поля
+- Главная страница: hero, категории, популярные товары (is_featured), сетка всех товаров
+- Карточка товара `/listing/{slug}`: галерея, цена, наличие, schema.org Product JSON-LD, похожие товары
+- `Category` — древовидная (parent/children), SEO-поля
+- Sitemap command + robots.txt
 
-### Новые
-- **Cart** — session-based, user_id nullable (guest carts)
-- **CartItem** — cart_id, listing_id, qty
-- **Order** — user_id, status, total, customer_name, phone, email, address, delivery_method, tracking_number, paid_at
-- **OrderItem** — order_id, listing_id, title_snapshot, price_snapshot, qty
-- **Payment** — order_id, provider, provider_payment_id, status, amount
-- **Pipeline** — name, provider, config (JSON), is_active (для сторонних API)
-- **PipelineLog** — pipeline_id, action, status, payload, created_at
+### Фильтры каталога (✅)
+- **Livewire `ProductBrowser`** — живая фильтрация с URL-синхронизацией
+- Фильтры: поиск (title/description/sku), категория (с подкатегориями), цена от/до, состояние, город, в наличии, хиты
+- Сортировка: новые / цена ↑ / цена ↓ / популярные
+- Mobile: раскрывающийся сайдбар с бейджем активных фильтров
+- Сброс одним кликом
 
-## Витрина
+### Корзина и заказы (Этап 2 ✅)
+- `Cart` + `CartItem` — session-based, guest carts
+- `CartService` — getOrCreate, clear
+- `CheckoutController` — оформление (контакты, адрес, способ доставки)
+- Способы доставки: самовывоз / СДЭК / Почта России / курьер (фикс. цена)
+- `Order` + `OrderItem` — snapshot цены/названия, order_number (auto-gen)
+- Статусы: new → confirmed → paid → processing → shipped → delivered → done / cancelled
+- Filament: OrderResource (просмотр, управление статусами)
 
-### Страницы
+### Платежи (Этап 3 ✅)
+- `Payment` модель — provider, provider_payment_id, status, amount, confirmation_url, payload (JSON), paid_at
+- `YooKassaService` — createPayment, checkPaymentStatus, refund, processWebhook
+- `YooKassaHttpClient` — HTTP-клиент с idempotence key
+- `PaymentController` — `/order/{order}/pay` (redirect), `/order/{order}/success`, `/payments/yookassa/webhook`
+- Webhook: `payment.succeeded` → Order::STATUS_PAID + paid_at (идемпотентно)
+- Filament: PaymentResource — список, просмотр, кнопки «Проверить статус» и «Возврат»
+- config: `config/payments.php` (shop_id, secret_key, test_mode)
+- `.env`: `YOOKASSA_ENABLED`, `YOOKASSA_SHOP_ID`, `YOOKASSA_SECRET_KEY`
+
+### Прочее (из базовой доски объявлений)
+- Чат между покупателем и продавцом (Chat, Message)
+- Избранное (Favorite)
+- Breeze auth (login/register/profile)
+- Навигация: @auth/@guest (починено — не падает для гостей)
+
+## Модели
+
+| Модель | Назначение |
+|--------|-----------|
+| `User` | Пользователь (customer/seller/admin) |
+| `Category` | Категория товара (дерево, SEO-поля) |
+| `Ad` | Товар (slug, sku, price, stock, condition, is_featured, SEO) |
+| `AdImage` | Изображение товара |
+| `Cart` / `CartItem` | Корзина (session-based) |
+| `Order` / `OrderItem` | Заказ + позиции (snapshot) |
+| `Payment` | Платёж (ЮKassa) |
+| `Chat` / `Message` | Чат между покупателем и продавцом |
+| `Favorite` | Избранное |
+| `Report` | Жалоба |
+
+## Маршруты (витрина)
+
 | Route | Описание |
 |-------|----------|
-| `/` | Главная: популярные + новые товары, категории |
-| `/category/{slug}` | Товары категории с фильтрами |
-| `/listings` | Все товары (с фильтрами, сортировкой) |
+| `/` | Главная: hero + категории + популярные + каталог с фильтрами |
 | `/listing/{slug}` | Карточка товара (schema.org Product) |
 | `/cart` | Корзина (Livewire) |
 | `/checkout` | Оформление заказа |
-| `/order/{order}` | Статус заказа |
-| `/search?q=` | Поиск |
+| `/order/{order}` | Статус заказа + кнопка оплаты |
+| `/order/{order}/pay` | Инициация платежа ЮKassa |
+| `/order/{order}/success` | Возврат после оплаты |
+| `/payments/yookassa/webhook` | Webhook от ЮKassa |
 
-### Главная витрина
-- Слайдер/сетка категорий
-- «Популярные» — is_featured = true + топ по views/orders
-- «Новинки» — последние созданные, status = active, stock > 0
+## Filament Resources
 
-### Карточка товара
-- Галерея изображений
-- Цена, наличие, SKU
-- Кнопка «В корзину» + «Купить в 1 клик» (модалка с телефоном)
-- schema.org Product JSON-LD (name, price, availability, images, rating)
-- Похожие товары из категории
-
-## Корзина и заказ
-
-### Корзина
-- Session-based, без обязательной регистрации
-- Livewire компонент: +/− qty, удалить, subtotal
-- При логине — привязка к user_id, мёрдж guest cart
-
-### Оформление заказа
-1. Контактные данные (имя, телефон, email)
-2. Адрес доставки
-3. Способ доставки (СДЭК, Почта России, самовывоз — пока справочник)
-4. Комментарий
-5. Оплата: ЮKassa (redirect → confirmation → webhook)
-
-### Быстрый заказ (1 клик)
-- Модалка на карточке товара
-- Только телефон (обязательно) + имя (опционально)
-- Создаёт Order со статусом `new`, без корзины
-- Админ видит в Filament, перезванивает для уточнения
-
-### Статусы заказа
-`new` → `confirmed` → `paid` → `processing` → `shipped` → `delivered` → `done`
-`new` → `cancelled`
-
-## Оплата (ЮKassa)
-
-- Создание платежа через YooKassa API (redirect flow)
-- Webhook `payment.succeeded` → Order → `paid`
-- Возвраты через Filament admin
-- Тестовый режим через env
-
-## SEO
-
-- **Sitemap**: `php artisan sitemap:generate` — категории + товары + статические страницы
-- **Meta**: per listing/category — title, description, og-tags
-- **Schema.org**: Product (price, availability, images), BreadcrumbList
-- **robots.txt**: allow all, sitemap link
-- **Friendly URLs**: `/category/{slug}`, `/listing/{slug}`
-- **Canonical**: на карточке товара
-
-## Pipelines (сторонние API)
-
-Архитектура как в LeadFlow — адаптеры с конфигом:
-
-- **Импорт товаров**: CSV/XML/API → Listings (с маппингом полей)
-- **Синхронизация цен/наличия**: внешний API → обновление stock/price
-- **Экспорт заказов**: новый заказ → внешний CRM/ERP
-- **Маркетплейс-экспорт**: товары → Яндекс.Маркет, Avito, VK
-
-Каждый pipeline: config (JSON), provider, is_active. Jobs на очереди.
+Orders, Payments, Ads, Categories, Chats, Messages, Reports, Users
 
 ## Этапы
 
-### Этап 1 — Рефакторинг базы (текущий → магазин)
-- [ ] Миграция: переименование/расширение ads → listings (slug, sku, stock, is_featured, SEO)
-- [ ] Обновить модели, контроллеры, views
-- [ ] Главная витрина (популярные + новинки)
-- [ ] Карточка товара с schema.org
-- [ ] Базовый SEO (meta, sitemap, robots)
+### ✅ Этап 1 — Рефакторинг базы
+- Расширение ads: slug, sku, stock, is_featured, SEO-поля, weight, dimensions
+- Главная витрина (популярные + новинки)
+- Карточка товара с schema.org
+- Базовый SEO (meta, sitemap, robots)
 
-### Этап 2 — Корзина и заказы
-- [ ] Cart + CartItem (session-based, Livewire)
-- [ ] Checkout (контакты, адрес, доставка)
-- [ ] Быстрый заказ в 1 клик
-- [ ] Order + OrderItem модели
-- [ ] Filament: OrderResource, управление статусами
+### ✅ Этап 2 — Корзина и заказы
+- Cart + CartItem (session-based, Livewire)
+- Checkout (контакты, адрес, доставка)
+- Order + OrderItem модели
+- Filament: OrderResource
 
-### Этап 3 — Платежи
-- [x] ЮKassa integration (create payment, redirect, webhook)
-- [x] Payment модель, статусы
-- [x] Filament: управление платежами, возвраты
-- [x] Тестовый режим
+### ✅ Этап 3 — Платежи
+- ЮKassa integration (create payment, redirect, webhook)
+- Payment модель, статусы
+- Filament: PaymentResource, возвраты
+- Тестовый режим через env
 
-### Этап 4 — Доставка
-- [ ] Справочник способов доставки (СДЭК, Почта, самовывоз)
-- [ ] Расчёт стоимости (пока фиксированный/по зоне)
-- [ ] Трекинг-номера
-- [ ] Уведомления покупателю
+### 🔜 Этап 4 — Доставка
+- Справочник способов доставки (СДЭК, Почта, самовывоз)
+- Расчёт стоимости (пока фиксированный/по зоне)
+- Трекинг-номера
+- Уведомления покупателю
 
-### Этап 5 — Pipelines (сторонние API)
-- [ ] Pipeline + PipelineLog модели
-- [ ] AdapterRegistry (как в LeadFlow)
-- [ ] Импорт товаров (CSV/XML)
-- [ ] Синхронизация цен/наличия
-- [ ] Экспорт заказов
-- [ ] Filament: PipelineResource, логи, ручной запуск
+### 🔜 Этап 5 — Pipelines (сторонние API)
+- Pipeline + PipelineLog модели
+- AdapterRegistry (как в LeadFlow)
+- Импорт товаров (CSV/XML)
+- Синхронизация цен/наличия
+- Экспорт заказов
+- Filament: PipelineResource, логи, ручной запуск
 
-### Этап 6 — SEO и аналитика
-- [ ] Sitemap.xml (автогенерация, cron)
-- [ ] schema.org Product + BreadcrumbList
-- [ ] Open Graph, Twitter Cards
-- [ ] Meta per listing/category
-- [ ] microdata breadcrumbs
-- [ ] Yandex.Metrika / Google Analytics
+### 🔜 Этап 6 — SEO и аналитика
+- Sitemap.xml (автогенерация, cron)
+- schema.org Product + BreadcrumbList
+- Open Graph, Twitter Cards
+- Meta per listing/category
+- Yandex.Metrika / Google Analytics
 
 ## Не в скоупе (пока)
-- Мульти-вендор (несколько продавцов) — пока один продавец (Alex)
-- Складской учёт (позже)
+- Мульти-вендор (несколько продавцов)
+- Складской учёт
 - Мобильное приложение
 - Платная подписка/промо
+
+## Tech notes
+- `category_id` nullable на ads (с 24.07.2026)
+- `doctrine/dbal` установлен для change()-миграций
+- Layout использует `@yield('content')` (не `{{ $slot }}`)
