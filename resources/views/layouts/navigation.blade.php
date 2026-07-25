@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('ads.index') }}">
-                        <span class="text-xl font-bold text-amber-600">mcma.co</span>
+                        <span class="text-xl font-bold text-amber-600">mcmaco</span>
                     </a>
                 </div>
 
@@ -27,14 +27,14 @@
                     </x-nav-link>
                     @endauth
                 </div>
-                <div class="hidden sm:block ms-4">
-                    <livewire:cart-dropdown />
-                </div>
             </div>
 
-            <!-- Settings Dropdown (auth only) -->
+            <!-- Settings Dropdown (auth only) + Cart -->
             @auth
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden sm:flex sm:items-center sm:ms-6 gap-4">
+                <div class="flex items-center">
+                    <livewire:cart-dropdown />
+                </div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -68,9 +68,12 @@
             </div>
             @endauth
 
-            <!-- Guest: Login/Register -->
+            <!-- Guest: Login/Register + Cart -->
             @guest
-            <div class="hidden sm:flex sm:items-center sm:ms-6 gap-3">
+            <div class="hidden sm:flex sm:items-center sm:ms-6 gap-4">
+                <div class="flex items-center">
+                    <livewire:cart-dropdown />
+                </div>
                 <a href="{{ route('login') }}" class="text-sm text-gray-600 hover:text-gray-900">Войти</a>
                 @if(Route::has('register'))
                 <a href="{{ route('register') }}" class="text-sm bg-amber-600 text-white px-3 py-1.5 rounded hover:bg-amber-700">Регистрация</a>
@@ -133,10 +136,13 @@
         @guest
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="mt-3 space-y-1 px-4">
-                <x-responsive-nav-link :href="route('login')">Войти</x-responsive-nav-link>
-                @if(Route::has('register'))
-                <x-responsive-nav-link :href="route('register')">Регистрация</x-responsive-nav-link>
-                @endif
+                <livewire:cart-dropdown />
+                <div class="mt-2">
+                    <x-responsive-nav-link :href="route('login')">Войти</x-responsive-nav-link>
+                    @if(Route::has('register'))
+                    <x-responsive-nav-link :href="route('register')">Регистрация</x-responsive-nav-link>
+                    @endif
+                </div>
             </div>
         </div>
         @endguest
