@@ -24,8 +24,8 @@
 
         @yield('head_extra')
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+    <body class="font-sans antialiased flex flex-col min-h-screen">
+        <div class="flex flex-col flex-1 bg-gray-100">
             @include('layouts.navigation')
 
             @isset($header)
@@ -36,11 +36,11 @@
                 </header>
             @endisset
 
-            <main>
+            <main class="flex-1">
                 @yield('content')
             </main>
 
-            <footer class="bg-white border-t mt-12 py-8">
+            <footer class="bg-white border-t mt-auto py-6">
                 <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-400">
                     © {{ date('Y') }} mcmaco
                 </div>
