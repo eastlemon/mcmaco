@@ -8,7 +8,7 @@ services:
     container_name: mcmaco-app
     restart: unless-stopped
     ports:
-      - '${APP_PORT:-8080}:8080'
+      - '${APP_PORT:-8080}:80'
     volumes:
       - .:/var/www/html
       - /var/www/html/vendor
@@ -25,22 +25,22 @@ services:
         condition: service_healthy
 
   mysql:
-    image: 'mysql:8.0'
-    container_name: mcmaco-mysql
-    restart: unless-stopped
-    ports:
-      - '${FORWARD_DB_PORT:-3306}:3306'
-    environment:
-      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-secret}'
-      MYSQL_DATABASE: '${DB_DATABASE:-mcmaco}'
-      MYSQL_USER: '${DB_USERNAME:-mcmaco}'
-      MYSQL_PASSWORD: '${DB_PASSWORD:-secret}'
-    volumes:
-      - 'mcmaco-mysql:/var/lib/mysql'
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD:-secret}"]
-      retries: 3
-      timeout: 5s
+      image: 'mysql:8.0'
+      container_name: mcmaco-mysql
+      restart: unless-stopped
+      ports:
+          - '${FORWARD_DB_PORT:-3306}:3306'
+      environment:
+          MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-secret}'
+          MYSQL_DATABASE: '${DB_DATABASE:-mcmaco}'
+          MYSQL_USER: '${DB_USERNAME:-mcmaco}'
+          MYSQL_PASSWORD: '${DB_PASSWORD:-secret}'
+      volumes:
+          - 'mcmaco-mysql:/var/lib/mysql'
+      healthcheck:
+          test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD:-secret}"]
+          retries: 3
+          timeout: 5s
 
   redis:
     image: 'redis:alpine'
