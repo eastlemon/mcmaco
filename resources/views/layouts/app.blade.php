@@ -26,15 +26,15 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         @yield('head_extra')
     </head>
-    <body class="font-sans antialiased flex flex-col min-h-screen">
-        <div class="flex flex-col flex-1 bg-gray-100">
+    <body class="font-sans antialiased flex flex-col min-h-screen bg-gray-100">
+        <div class="flex flex-col flex-1 min-h-screen">
             @include('layouts.navigation')
 
             @include('layouts.category-bar')
@@ -47,15 +47,11 @@
                 </header>
             @endisset
 
-            <main class="flex-1">
+            <main class="flex-1 flex flex-col">
                 @yield('content')
             </main>
 
-            <footer class="bg-white border-t mt-auto py-6">
-                <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-400">
-                    © {{ date('Y') }} mcmaco
-                </div>
-            </footer>
+            @include('layouts.footer')
         </div>
     </body>
 </html>

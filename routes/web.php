@@ -14,6 +14,16 @@ Route::get('/', [AdController::class, 'index'])->name('ads.index');
 Route::get('/listing/{slug}', [AdController::class, 'show'])->name('ads.show');
 
 // Cart & Checkout
+Route::post('/cart/add', function (\Illuminate\Http\Request $request, \App\Services\CartService $cartService) {
+    $validated = $request->validate([
+        'ad_id' => 'required|exists:ads,id',
+        'qty' => 'nullable|integer|min:1',
+    ]);
+    $cart = $cartService->getOrCreateCart($request);
+    $cartService->add($cart, $validated['ad_id'], $validated['qty'] ?? 1);
+    return back()->with('added', true);
+})->name('cart.add');
+
 Route::get('/cart', fn () => view('livewire.cart-page'))->name('cart');
 Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');

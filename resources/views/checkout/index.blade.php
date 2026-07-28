@@ -3,9 +3,18 @@
 @section('meta_title', 'Оформление заказа — mcmaco')
 
 @section('content')
-<div class="py-8">
+<div class="py-6">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-2xl font-bold mb-6">Оформление заказа</h1>
+        {{-- Breadcrumbs --}}
+        <nav class="text-sm text-gray-400 mb-4">
+            <a href="{{ route('ads.index') }}" class="hover:text-amber-600">Главная</a>
+            <span class="mx-1">/</span>
+            <a href="{{ route('cart') }}" class="hover:text-amber-600">Корзина</a>
+            <span class="mx-1">/</span>
+            <span class="text-gray-600">Оформление заказа</span>
+        </nav>
+
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">Оформление заказа</h1>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
@@ -13,7 +22,7 @@
             <form method="POST" action="/checkout">
                 @csrf
                 <div class="bg-white rounded-xl shadow-sm p-6 space-y-4">
-                    <h2 class="font-semibold text-lg">Контактные данные</h2>
+                    <h2 class="font-semibold text-lg text-gray-800">Контактные данные</h2>
 
                     <div>
                         <label class="text-sm text-gray-500">Имя *</label>
@@ -35,10 +44,10 @@
                                class="w-full border rounded-lg px-3 py-2 mt-1">
                     </div>
 
-                    <h2 class="font-semibold text-lg pt-2">Доставка</h2>
+                    <h2 class="font-semibold text-lg text-gray-800 pt-2">Доставка</h2>
 
                     <div>
-                        <select name="delivery_method" id="delivery_method" class="w-full border rounded-lg px-3 py-2 mt-1">
+                        <select name="delivery_method" id="delivery_method" class="w-full border rounded-lg px-3 py-2 mt-1 bg-white">
                             @foreach($deliveryMethods as $value => $label)
                                 <option value="{{ $value }}" @selected(old('delivery_method') === $value)>
                                     {{ $label }}@if($value !== 'pickup') (+{{ $value === 'cdek' ? 350 : ($value === 'post' ? 250 : 400) }} ₽)@endif
@@ -62,10 +71,10 @@
                     </div>
                 </div>
 
-                <button type="submit" name="pay_online" value="1" class="w-full bg-green-600 text-white font-medium py-3 rounded-lg mt-4 hover:bg-green-700">
+                <button type="submit" name="pay_online" value="1" class="w-full bg-green-600 text-white font-medium py-3 rounded-lg mt-4 hover:bg-green-700 transition">
                     💳 Оплатить онлайн
                 </button>
-                <button type="submit" class="w-full bg-amber-600 text-white font-medium py-3 rounded-lg mt-2 hover:bg-amber-700">
+                <button type="submit" class="w-full bg-amber-600 text-white font-medium py-3 rounded-lg mt-2 hover:bg-amber-700 transition">
                     Подтвердить заказ (оплата при получении)
                 </button>
             </form>
@@ -73,7 +82,7 @@
             {{-- Сводка --}}
             <div>
                 <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h2 class="font-semibold text-lg mb-4">Ваш заказ</h2>
+                    <h2 class="font-semibold text-lg text-gray-800 mb-4">Ваш заказ</h2>
                     <div class="space-y-2 mb-4">
                         @foreach($items as $item)
                             <div class="flex justify-between text-sm">
@@ -87,7 +96,7 @@
                             <span>Товары</span>
                             <span>{{ number_format($total, 0, ',', ' ') }} ₽</span>
                         </div>
-                        <div class="flex justify-between text-lg font-bold">
+                        <div class="flex justify-between text-lg font-bold text-gray-800">
                             <span>Итого</span>
                             <span>{{ number_format($total, 0, ',', ' ') }} ₽</span>
                         </div>

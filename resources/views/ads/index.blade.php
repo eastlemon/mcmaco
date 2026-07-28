@@ -1,43 +1,31 @@
 @extends('layouts.app')
 
-@section('meta_title', 'mcmaco — товары с доставкой')
+@section('meta_title', 'mcmaco — товары с доставкой по России')
 @section('meta_description', 'Интернет-магазин mcmaco: популярные товары и новинки с доставкой по России')
 
 @section('content')
-<div class="py-8">
+<div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {{-- Hero (only on clean landing, no query params) --}}
-        @if(!request()->hasAny(['q', 'category_id', 'city', 'condition', 'min_price', 'max_price', 'sort', 'page', 'inStockOnly', 'featuredOnly']))
-            <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-8 mb-8 text-white">
-                <h1 class="text-3xl font-bold mb-2">mcmaco</h1>
-                <p class="text-lg opacity-90">Товары с доставкой по России</p>
-            </div>
+        {{-- Breadcrumbs --}}
+        <nav class="text-sm text-gray-400 mb-4">
+            <span class="text-gray-600">Главная</span>
+        </nav>
 
-            {{-- Категории --}}
-            @php
-                $categories = \App\Models\Category::roots()->get();
-            @endphp
-            @if($categories->isNotEmpty())
-                <div class="mb-8">
-                    <h2 class="text-lg font-semibold mb-4 text-gray-700">Категории</h2>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach($categories as $category)
-                            <a href="?category_id={{ $category->id }}" class="px-4 py-2 bg-white shadow-sm rounded-full text-sm hover:bg-amber-50 transition">
-                                {{ $category->name }}
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
+        {{-- Hero (only on clean landing) --}}
+        @if(!request()->hasAny(['q', 'category_id', 'city', 'condition', 'min_price', 'max_price', 'sort', 'page', 'inStockOnly', 'featuredOnly']))
+            <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-6 mb-6 text-white">
+                <h1 class="text-2xl font-bold mb-1">mcmaco</h1>
+                <p class="text-base opacity-90">Товары с доставкой по России</p>
+            </div>
 
             {{-- Популярные --}}
             @php
                 $featured = \App\Models\Ad::featured()->with(['images', 'category'])->limit(8)->get();
             @endphp
             @if($featured->isNotEmpty())
-                <div class="mb-10">
-                    <h2 class="text-xl font-bold mb-4">⭐ Популярные товары</h2>
+                <div class="mb-8">
+                    <h2 class="text-lg font-bold mb-4 text-gray-800">⭐ Популярные товары</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         @foreach($featured as $item)
                             @include('ads.partials.card', ['ad' => $item])
@@ -46,7 +34,19 @@
                 </div>
             @endif
 
-            <h2 class="text-xl font-bold mb-4">🆕 Все товары</h2>
+            <h2 class="text-lg font-bold mb-4 text-gray-800">🛒 Все товары</h2>
+        @else
+            {{-- Breadcrumbs with category --}}
+            @if(request('category_id'))
+                @php $cat = \App\Models\Category::find(request('category_id')); @endphp
+                @if($cat)
+                    <nav class="text-sm text-gray-400 mb-4">
+                        <a href="{{ route('ads.index') }}" class="hover:text-amber-600">Главная</a>
+                        <span class="mx-1">/</span>
+                        <span class="text-gray-600">{{ $cat->name }}</span>
+                    </nav>
+                @endif
+            @endif
         @endif
 
         {{-- Livewire Product Browser --}}
