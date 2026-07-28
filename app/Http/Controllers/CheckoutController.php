@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Notifications\NewOrderAdmin;
+use App\Notifications\OrderCreated;
 use App\Services\CartService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class CheckoutController extends Controller
 {
@@ -77,6 +80,15 @@ class CheckoutController extends Controller
         }
 
         $cartService->clear($cart);
+
+        // Email notifications
+        if ($order->customer_email) {
+            $order->notify(new OrderCreated($order));
+        }
+        $adminEmail = config('mail.admin_address');
+        if ($adminEmail) {
+            Notification::route('mail', $adminEmail)->notify(new NewOrderAdmin($order));
+        }
 
         // If payment method is online, redirect to payment
         if ($request->has('pay_online') && app(\App\Services\YooKassaService::class)->isEnabled()) {

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('meta_title', 'mcma.co — товары с доставкой')
-@section('meta_description', 'Интернет-магазин mcma.co: популярные товары и новинки с доставкой по России')
+@section('meta_title', 'mcmaco — товары с доставкой')
+@section('meta_description', 'Интернет-магазин mcmaco: популярные товары и новинки с доставкой по России')
 
 @section('content')
 <div class="py-8">
@@ -10,7 +10,7 @@
         {{-- Hero (only on clean landing, no query params) --}}
         @if(!request()->hasAny(['q', 'category_id', 'city', 'condition', 'min_price', 'max_price', 'sort', 'page', 'inStockOnly', 'featuredOnly']))
             <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-8 mb-8 text-white">
-                <h1 class="text-3xl font-bold mb-2">mcma.co</h1>
+                <h1 class="text-3xl font-bold mb-2">mcmaco</h1>
                 <p class="text-lg opacity-90">Товары с доставкой по России</p>
             </div>
 

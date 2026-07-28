@@ -115,4 +115,10 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    | Admin notification address (fallback when no admin users in DB)
+    */
+
+    'admin_address' => env('ADMIN_EMAIL', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
+
 ];

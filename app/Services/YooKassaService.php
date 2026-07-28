@@ -33,7 +33,7 @@ class YooKassaService
     {
         $description = strtr(config('payments.description_template'), [
             '{order_number}' => $order->order_number,
-            '{site}' => config('app.name', 'mcma.co'),
+            '{site}' => config('app.name', 'mcmaco'),
         ]);
 
         $idempotenceKey = uniqid('mc_', true);

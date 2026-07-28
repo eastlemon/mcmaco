@@ -5,15 +5,24 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>@yield('meta_title', config('app.name'))</title>
-        <meta name="description" content="@yield('meta_description', 'mcmaco — интернет-магазин товаров с доставкой')">
+        <title>@yield('meta_title', config('app.name') . ' — интернет-магазин товаров с доставкой')</title>
+        <meta name="description" content="@yield('meta_description', 'mcmaco — интернет-магазин товаров с доставкой по России')">
+        <meta name="robots" content="index, follow">
 
         <!-- Open Graph -->
+        <meta property="og:site_name" content="mcmaco">
+        <meta property="og:locale" content="ru_RU">
         <meta property="og:title" content="@yield('og_title', config('app.name'))">
-        <meta property="og:description" content="@yield('meta_description', 'mcmaco — интернет-магазин')">
+        <meta property="og:description" content="@yield('meta_description', 'mcmaco — интернет-магазин товаров с доставкой по России')">
         <meta property="og:type" content="@yield('og_type', 'website')">
         <meta property="og:url" content="{{ request()->url() }}">
         @yield('og_image')
+
+        <!-- Twitter Cards -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="@yield('og_title', config('app.name'))">
+        <meta name="twitter:description" content="@yield('meta_description', 'mcmaco — интернет-магазин товаров с доставкой по России')">
+        @yield('twitter_image')
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

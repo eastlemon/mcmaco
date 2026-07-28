@@ -40,7 +40,7 @@ class Category extends Model
 
     public function getMetaDescriptionAttribute(): ?string
     {
-        return $this->attributes['meta_description'] ?? 'Товары в категории «' . $this->name . '» — mcma.co';
+        return $this->attributes['meta_description'] ?? 'Товары в категории «' . $this->name . '» — mcmaco';
     }
 
     public function scopeRoots(Builder $query): Builder

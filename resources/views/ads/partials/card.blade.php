@@ -1,6 +1,6 @@
 @php
     $cover = $ad->coverImage;
-    $imgUrl = $cover ? asset('storage/' . $cover->path) : 'https://placehold.co/400x300?text=mcma.co';
+    $imgUrl = $cover ? asset('storage/' . $cover->path) : 'https://placehold.co/400x300?text=mcmaco';
 @endphp
 
 <a href="{{ route('ads.show', $ad->slug) }}" class="bg-white rounded-xl shadow-sm hover:shadow-md transition overflow-hidden group">

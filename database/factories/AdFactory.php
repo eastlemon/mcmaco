@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Ad;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,6 +16,7 @@ class AdFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => User::factory(),
             'title' => $this->faker->sentence(5),
             'description' => $this->faker->paragraphs(3, true),
             'price' => $this->faker->numberBetween(0, 100000),

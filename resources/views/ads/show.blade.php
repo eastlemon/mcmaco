@@ -3,10 +3,41 @@
 @section('meta_title', $ad->meta_title)
 @section('meta_description', $ad->meta_description)
 @section('og_type', 'product')
+@section('og_title', $ad->title . ' — ' . config('app.name'))
 
 @push('head_extra')
+    @php
+        $imageUrl = $ad->images->isNotEmpty() ? asset('storage/' . $ad->images->first()->path) : null;
+    @endphp
+    @if($imageUrl)
+        <meta property="og:image" content="{{ $imageUrl }}">
+        <meta name="twitter:image" content="{{ $imageUrl }}">
+    @endif
+
     <script type="application/ld+json">
         {!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+    </script>
+
+    @php
+        $breadcrumbs = [
+            ['name' => 'Главная', 'url' => route('ads.index')],
+        ];
+        if ($ad->category) {
+            $breadcrumbs[] = ['name' => $ad->category->name, 'url' => route('ads.index') . '?category_id=' . $ad->category->id];
+        }
+        $breadcrumbs[] = ['name' => $ad->title, 'url' => route('ads.show', $ad->slug)];
+    @endphp
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => collect($breadcrumbs)->map(fn ($crumb, $i) => [
+                '@type' => 'ListItem',
+                'position' => $i + 1,
+                'name' => $crumb['name'],
+                'item' => $crumb['url'],
+            ])->values()->toArray(),
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
 @endpush
 

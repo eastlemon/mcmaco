@@ -93,7 +93,7 @@ class AdController extends Controller
             'name' => $ad->title,
             'description' => strip_tags($ad->description),
             'sku' => $ad->sku ?? "MC-{$ad->id}",
-            'brand' => ['@type' => 'Brand', 'name' => 'mcma.co'],
+            'brand' => ['@type' => 'Brand', 'name' => 'mcmaco'],
             'offers' => [
                 '@type' => 'Offer',
                 'price' => $ad->price,

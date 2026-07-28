@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('meta_title', 'Оформление заказа — mcma.co')
+@section('meta_title', 'Оформление заказа — mcmaco')
 
 @section('content')
 <div class="py-8">

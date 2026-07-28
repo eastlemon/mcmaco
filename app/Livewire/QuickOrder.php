@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\Ad;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Notifications\NewOrderAdmin;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -43,6 +45,12 @@ class QuickOrder extends Component
             'qty' => 1,
             'subtotal' => $ad->price,
         ]);
+
+        // Notify admins about new quick order
+        $adminEmail = config('mail.admin_address');
+        if ($adminEmail) {
+            Notification::route('mail', $adminEmail)->notify(new NewOrderAdmin($order));
+        }
 
         $this->showModal = false;
         $this->reset(['name', 'phone']);
