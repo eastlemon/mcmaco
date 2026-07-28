@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AdController::class, 'index'])->name('ads.index');
 Route::get('/listing/{slug}', [AdController::class, 'show'])->name('ads.show');
+Route::get('/category/{slug}', [\App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
 
 // Cart & Checkout
 Route::post('/cart/add', function (\Illuminate\Http\Request $request, \App\Services\CartService $cartService) {

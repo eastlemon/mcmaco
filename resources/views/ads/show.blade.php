@@ -23,7 +23,7 @@
             ['name' => 'Главная', 'url' => route('ads.index')],
         ];
         if ($ad->category) {
-            $breadcrumbs[] = ['name' => $ad->category->name, 'url' => route('ads.index') . '?category_id=' . $ad->category->id];
+            $breadcrumbs[] = ['name' => $ad->category->name, 'url' => $ad->category->slug ? route('categories.show', $ad->category->slug) : route('ads.index', ['category_id' => $ad->category->id])];
         }
         $breadcrumbs[] = ['name' => $ad->title, 'url' => route('ads.show', $ad->slug)];
     @endphp
@@ -50,7 +50,7 @@
             <a href="{{ route('ads.index') }}" class="hover:text-amber-600">Главная</a>
             @if($ad->category)
                 <span class="mx-1">/</span>
-                <a href="{{ route('ads.index', ['category_id' => $ad->category->id]) }}" class="hover:text-amber-600">{{ $ad->category->name }}</a>
+                <a href="{{ $ad->category->slug ? route('categories.show', $ad->category->slug) : route('ads.index', ['category_id' => $ad->category->id]) }}" class="hover:text-amber-600">{{ $ad->category->name }}</a>
             @endif
             <span class="mx-1">/</span>
             <span class="text-gray-600">{{ $ad->title }}</span>

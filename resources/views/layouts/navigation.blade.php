@@ -74,7 +74,7 @@
                 Все товары
             </a>
             @foreach($rootCategories as $cat)
-                <a href="{{ route('ads.index', ['category_id' => $cat->id]) }}"
+                <a href="{{ $cat->slug ? route('categories.show', $cat->slug) : route('ads.index', ['category_id' => $cat->id]) }}"
                    class="shrink-0 px-3 py-1 text-sm {{ request('category_id') == $cat->id ? 'text-amber-600 font-medium' : 'text-gray-600 hover:text-amber-600' }} transition">
                     {{ $cat->name }}
                     @if($cat->ads_count > 0)
@@ -104,7 +104,7 @@
                 <div class="flex flex-wrap gap-2">
                     <a href="{{ route('ads.index') }}" class="text-sm px-3 py-1 rounded-full {{ !request('category_id') ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-600' }}">Все</a>
                     @foreach($rootCategories as $cat)
-                        <a href="{{ route('ads.index', ['category_id' => $cat->id]) }}" class="text-sm px-3 py-1 rounded-full {{ request('category_id') == $cat->id ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-600' }}">{{ $cat->name }}</a>
+                        <a href="{{ $cat->slug ? route('categories.show', $cat->slug) : route('ads.index', ['category_id' => $cat->id]) }}" class="text-sm px-3 py-1 rounded-full {{ request('category_id') == $cat->id ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-600' }}">{{ $cat->name }}</a>
                     @endforeach
                 </div>
             @endif

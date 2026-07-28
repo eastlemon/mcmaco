@@ -16,7 +16,7 @@
                 <ul class="space-y-2 text-sm">
                     @php $rootCats = \App\Models\Category::roots()->limit(6)->get(); @endphp
                     @foreach($rootCats as $cat)
-                        <li><a href="{{ route('ads.index', ['category_id' => $cat->id]) }}" class="hover:text-amber-400 transition">{{ $cat->name }}</a></li>
+                        <li><a href="{{ $cat->slug ? route('categories.show', $cat->slug) : route('ads.index', ['category_id' => $cat->id]) }}" class="hover:text-amber-400 transition">{{ $cat->name }}</a></li>
                     @endforeach
                     <li><a href="{{ route('ads.index') }}" class="hover:text-amber-400 transition">Все товары</a></li>
                 </ul>

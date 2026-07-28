@@ -23,10 +23,18 @@ class GenerateSitemap extends Command
         // Categories
         foreach (Category::roots()->get() as $category) {
             $urls[] = [
-                'loc' => $baseUrl . '/?category_id=' . $category->id,
+                'loc' => $baseUrl . '/category/' . $category->slug,
                 'priority' => '0.8',
                 'changefreq' => 'weekly',
             ];
+            // Subcategories
+            foreach ($category->children as $child) {
+                $urls[] = [
+                    'loc' => $baseUrl . '/category/' . $child->slug,
+                    'priority' => '0.7',
+                    'changefreq' => 'weekly',
+                ];
+            }
         }
 
         // Active listings

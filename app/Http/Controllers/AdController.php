@@ -21,7 +21,8 @@ class AdController extends Controller
         if ($search = $request->string('q')->trim()->toString()) {
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('sku', 'like', "%{$search}%");
             });
         }
 
@@ -50,6 +51,8 @@ class AdController extends Controller
             $query->orderBy('price');
         } elseif ($sort === 'price_desc') {
             $query->orderByDesc('price');
+        } elseif ($sort === 'popular') {
+            $query->orderByDesc('views');
         } else {
             $query->latest();
         }

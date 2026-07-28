@@ -31,7 +31,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        @yield('head_extra')
+        @stack('head_extra')
     </head>
     <body class="font-sans antialiased flex flex-col min-h-screen bg-gray-100">
         <div class="flex flex-col flex-1 min-h-screen">

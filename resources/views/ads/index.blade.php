@@ -43,7 +43,7 @@
                     <nav class="text-sm text-gray-400 mb-4">
                         <a href="{{ route('ads.index') }}" class="hover:text-amber-600">Главная</a>
                         <span class="mx-1">/</span>
-                        <span class="text-gray-600">{{ $cat->name }}</span>
+                        <a href="{{ $cat->slug ? route('categories.show', $cat->slug) : route('ads.index', ['category_id' => $cat->id]) }}" class="hover:text-amber-600">{{ $cat->name }}</a>
                     </nav>
                 @endif
             @endif
