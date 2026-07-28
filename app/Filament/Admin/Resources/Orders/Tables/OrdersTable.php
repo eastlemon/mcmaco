@@ -51,9 +51,16 @@ class OrdersTable
                     ->money('RUB', locale: 'ru')
                     ->sortable(),
 
-                TextColumn::make('delivery_method')
+                TextColumn::make('deliveryMethod.name')
                     ->label('Доставка')
-                    ->formatStateUsing(fn (string $state) => Order::DELIVERY_METHODS[$state] ?? $state),
+                    ->placeholder(fn (Order $record) => Order::DELIVERY_METHODS[$record->delivery_method] ?? $record->delivery_method),
+
+                TextColumn::make('tracking_number')
+                    ->label('Трек')
+                    ->searchable()
+                    ->copyable()
+                    ->limit(20)
+                    ->placeholder('—'),
 
                 TextColumn::make('is_quick_order')
                     ->label('Тип')
@@ -71,9 +78,9 @@ class OrdersTable
                     ->label('Статус')
                     ->options(Order::STATUSES),
 
-                SelectFilter::make('delivery_method')
+                SelectFilter::make('delivery_method_id')
                     ->label('Доставка')
-                    ->options(Order::DELIVERY_METHODS),
+                    ->relationship('deliveryMethod', 'name'),
 
                 SelectFilter::make('is_quick_order')
                     ->label('Тип заказа')

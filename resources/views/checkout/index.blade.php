@@ -5,7 +5,6 @@
 @section('content')
 <div class="py-6">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {{-- Breadcrumbs --}}
         <nav class="text-sm text-gray-400 mb-4">
             <a href="{{ route('ads.index') }}" class="hover:text-amber-600">Главная</a>
             <span class="mx-1">/</span>
@@ -19,7 +18,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             {{-- Форма --}}
-            <form method="POST" action="/checkout">
+            <form method="POST" action="/checkout" id="checkout-form">
                 @csrf
                 <div class="bg-white rounded-xl shadow-sm p-6 space-y-4">
                     <h2 class="font-semibold text-lg text-gray-800">Контактные данные</h2>
@@ -44,16 +43,28 @@
                                class="w-full border rounded-lg px-3 py-2 mt-1">
                     </div>
 
-                    <h2 class="font-semibold text-lg text-gray-800 pt-2">Доставка</h2>
+                    <h2 class="font-semibold text-lg text-gray-800 pt-2">Способ доставки</h2>
 
-                    <div>
-                        <select name="delivery_method" id="delivery_method" class="w-full border rounded-lg px-3 py-2 mt-1 bg-white">
-                            @foreach($deliveryMethods as $value => $label)
-                                <option value="{{ $value }}" @selected(old('delivery_method') === $value)>
-                                    {{ $label }}@if($value !== 'pickup') (+{{ $value === 'cdek' ? 350 : ($value === 'post' ? 250 : 400) }} ₽)@endif
-                                </option>
-                            @endforeach
-                        </select>
+                    <div class="space-y-2">
+                        @foreach($deliveryOptions as $option)
+                            @php $method = $option['method']; @endphp
+                            <label class="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition {{ old('delivery_method_id') == $method->id ? 'border-amber-500 bg-amber-50' : '' }}"
+                                   data-type="{{ $method->type }}"
+                                   onclick="updateDelivery(this, {{ $option['cost'] }})">
+                                <input type="radio" name="delivery_method_id" value="{{ $method->id }}"
+                                       class="mt-1 text-amber-600 focus:ring-amber-500"
+                                       @checked(old('delivery_method_id') == $method->id || ($loop->first && !old('delivery_method_id')))>
+                                <div class="flex-1">
+                                    <div class="font-medium text-sm text-gray-800">{{ $method->name }}</div>
+                                    @if($method->description)
+                                        <div class="text-xs text-gray-400 mt-0.5">{{ $method->description }}</div>
+                                    @endif
+                                </div>
+                                <div class="text-sm font-medium {{ $option['cost'] === 0 ? 'text-green-600' : 'text-gray-700' }}">
+                                    {{ $option['cost'] === 0 ? 'Бесплатно' : number_format($option['cost'], 0, ',', ' ') . ' ₽' }}
+                                </div>
+                            </label>
+                        @endforeach
                     </div>
 
                     <div id="address-field">
@@ -81,7 +92,7 @@
 
             {{-- Сводка --}}
             <div>
-                <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="bg-white rounded-xl shadow-sm p-6 sticky top-20">
                     <h2 class="font-semibold text-lg text-gray-800 mb-4">Ваш заказ</h2>
                     <div class="space-y-2 mb-4">
                         @foreach($items as $item)
@@ -96,12 +107,15 @@
                             <span>Товары</span>
                             <span>{{ number_format($total, 0, ',', ' ') }} ₽</span>
                         </div>
+                        <div class="flex justify-between text-sm text-gray-500">
+                            <span>Доставка</span>
+                            <span id="delivery-cost-label">—</span>
+                        </div>
                         <div class="flex justify-between text-lg font-bold text-gray-800">
                             <span>Итого</span>
-                            <span>{{ number_format($total, 0, ',', ' ') }} ₽</span>
+                            <span id="grand-total">{{ number_format($total, 0, ',', ' ') }} ₽</span>
                         </div>
                     </div>
-                    <div class="text-xs text-gray-400 mt-3">Стоимость доставки будет рассчитана после подтверждения.</div>
                 </div>
             </div>
         </div>
@@ -109,9 +123,47 @@
 </div>
 
 <script>
-document.getElementById('delivery_method').addEventListener('change', function() {
-    document.getElementById('address-field').style.display = this.value === 'pickup' ? 'none' : '';
+const itemsTotal = {{ $total }};
+const deliveryLabels = {
+    @foreach($deliveryOptions as $option)
+    {{ $option['method']->id }}: {{ $option['cost'] }},
+    @endforeach
+};
+
+function updateDelivery(label, cost) {
+    // Update visual selection
+    document.querySelectorAll('label[data-type]').forEach(l => {
+        l.classList.remove('border-amber-500', 'bg-amber-50');
+    });
+    label.classList.add('border-amber-500', 'bg-amber-50');
+
+    // Update cost display
+    const deliveryLabel = document.getElementById('delivery-cost-label');
+    const grandTotal = document.getElementById('grand-total');
+
+    if (cost === 0) {
+        deliveryLabel.textContent = 'Бесплатно';
+        deliveryLabel.classList.add('text-green-600');
+    } else {
+        deliveryLabel.textContent = cost.toLocaleString('ru-RU') + ' ₽';
+        deliveryLabel.classList.remove('text-green-600');
+    }
+
+    grandTotal.textContent = (itemsTotal + cost).toLocaleString('ru-RU') + ' ₽';
+
+    // Show/hide address field
+    const isPickup = label.dataset.type === 'pickup';
+    document.getElementById('address-field').style.display = isPickup ? 'none' : '';
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', () => {
+    const checked = document.querySelector('input[name="delivery_method_id"]:checked');
+    if (checked) {
+        const label = checked.closest('label');
+        const cost = deliveryLabels[checked.value] || 0;
+        updateDelivery(label, cost);
+    }
 });
-document.getElementById('delivery_method').dispatchEvent(new Event('change'));
 </script>
 @endsection

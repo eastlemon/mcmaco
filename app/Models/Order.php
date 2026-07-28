@@ -15,7 +15,8 @@ class Order extends Model
     protected $fillable = [
         'user_id', 'order_number', 'status',
         'customer_name', 'customer_phone', 'customer_email',
-        'delivery_address', 'delivery_method', 'delivery_cost',
+        'delivery_address', 'delivery_method', 'delivery_method_id', 'delivery_cost',
+        'tracking_number',
         'items_total', 'total', 'comment',
         'is_quick_order', 'paid_at',
     ];
@@ -53,7 +54,7 @@ class Order extends Model
         'cdek' => 'СДЭК',
         'post' => 'Почта России',
         'courier' => 'Курьер',
-    ];
+    ]; // Legacy, kept for backward compatibility
 
     protected static function booted(): void
     {
@@ -79,6 +80,11 @@ class Order extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function deliveryMethod(): BelongsTo
+    {
+        return $this->belongsTo(DeliveryMethod::class);
+    }
+
     public function getFormattedTotalAttribute(): string
     {
         return number_format($this->total, 0, ',', ' ') . ' ₽';
@@ -91,6 +97,22 @@ class Order extends Model
 
     public function getDeliveryMethodLabelAttribute(): string
     {
+        if ($this->deliveryMethod) {
+            return $this->deliveryMethod->name;
+        }
         return self::DELIVERY_METHODS[$this->delivery_method] ?? $this->delivery_method;
+    }
+
+    public function getTrackingUrlAttribute(): ?string
+    {
+        if (!$this->tracking_number || !$this->deliveryMethod?->tracking_url) {
+            return null;
+        }
+        return str_replace('{track}', $this->tracking_number, $this->deliveryMethod->tracking_url);
+    }
+
+    public function getHasTrackingAttribute(): bool
+    {
+        return (bool) $this->tracking_url;
     }
 }

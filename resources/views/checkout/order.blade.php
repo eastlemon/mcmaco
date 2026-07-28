@@ -35,6 +35,16 @@
             <div class="text-sm text-gray-500 mb-6">
                 Доставка: {{ $order->delivery_method_label }}<br>
                 @if($order->delivery_address) {{ $order->delivery_address }} @endif
+                @if($order->has_tracking)
+                    <br>
+                    <span class="inline-block mt-2">
+                        Трек-номер: <span class="font-mono font-medium text-gray-800">{{ $order->tracking_number }}</span>
+                        <a href="{{ $order->tracking_url }}" target="_blank" rel="noopener"
+                           class="ml-2 text-amber-600 hover:text-amber-700 text-xs underline">
+                            Отследить →
+                        </a>
+                    </span>
+                @endif
             </div>
 
             @if(in_array($order->status, [\App\Models\Order::STATUS_NEW, \App\Models\Order::STATUS_CONFIRMED]) && app(\App\Services\YooKassaService::class)->isEnabled())

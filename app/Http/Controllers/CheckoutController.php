@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DeliveryMethod;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Notifications\NewOrderAdmin;
 use App\Notifications\OrderCreated;
 use App\Services\CartService;
+use App\Services\DeliveryCalculator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 
@@ -22,9 +24,19 @@ class CheckoutController extends Controller
         }
 
         $total = $items->sum(fn ($item) => $item->ad->price * $item->qty);
-        $deliveryMethods = Order::DELIVERY_METHODS;
+        $deliveryMethods = DeliveryMethod::active()->get();
 
-        return view('checkout.index', compact('items', 'total', 'deliveryMethods'));
+        // Pre-calculate delivery cost for each method
+        $totalWeight = $items->sum(fn ($item) => ($item->ad->weight ?? 0) * $item->qty);
+        $calculator = app(DeliveryCalculator::class);
+        $deliveryOptions = $deliveryMethods->map(function ($method) use ($calculator, $totalWeight) {
+            return [
+                'method' => $method,
+                'cost' => $calculator->calculate($method, $totalWeight),
+            ];
+        });
+
+        return view('checkout.index', compact('items', 'total', 'deliveryOptions'));
     }
 
     public function store(Request $request, CartService $cartService)
@@ -33,10 +45,17 @@ class CheckoutController extends Controller
             'customer_name' => 'required|string|min:2',
             'customer_phone' => 'required|string|regex:/^[\d\s\+\-\(\)]{10,18}$/',
             'customer_email' => 'nullable|email',
-            'delivery_method' => 'required|in:' . implode(',', array_keys(Order::DELIVERY_METHODS)),
-            'delivery_address' => 'required_unless:delivery_method,pickup|nullable|string',
+            'delivery_method_id' => 'required|exists:delivery_methods,id',
+            'delivery_address' => 'nullable|string',
             'comment' => 'nullable|string|max:1000',
         ]);
+
+        $deliveryMethod = DeliveryMethod::findOrFail($validated['delivery_method_id']);
+
+        // Address required for non-pickup
+        if ($deliveryMethod->type !== DeliveryMethod::TYPE_PICKUP && empty($validated['delivery_address'])) {
+            return back()->withErrors(['delivery_address' => 'Укажите адрес доставки'])->withInput();
+        }
 
         $cart = $cartService->getOrCreateCart($request);
         $items = $cart->items()->with('ad')->get();
@@ -46,20 +65,18 @@ class CheckoutController extends Controller
         }
 
         $itemsTotal = $items->sum(fn ($item) => $item->ad->price * $item->qty);
-        $deliveryCost = match ($validated['delivery_method']) {
-            'pickup' => 0,
-            'cdek' => 350,
-            'post' => 250,
-            'courier' => 400,
-            default => 0,
-        };
+
+        $calculator = app(DeliveryCalculator::class);
+        $totalWeight = $items->sum(fn ($item) => ($item->ad->weight ?? 0) * $item->qty);
+        $deliveryCost = $calculator->calculate($deliveryMethod, $totalWeight);
 
         $order = Order::create([
             'user_id' => $request->user()?->id,
             'customer_name' => $validated['customer_name'],
             'customer_phone' => $validated['customer_phone'],
             'customer_email' => $validated['customer_email'] ?? null,
-            'delivery_method' => $validated['delivery_method'],
+            'delivery_method' => $deliveryMethod->code,
+            'delivery_method_id' => $deliveryMethod->id,
             'delivery_address' => $validated['delivery_address'] ?? null,
             'comment' => $validated['comment'] ?? null,
             'items_total' => $itemsTotal,
@@ -100,7 +117,7 @@ class CheckoutController extends Controller
 
     public function show(Order $order)
     {
-        $order->load('items.ad');
+        $order->load('items.ad', 'deliveryMethod');
         return view('checkout.order', compact('order'));
     }
 }
