@@ -21,6 +21,15 @@ Route::post('/cart/add', function (\Illuminate\Http\Request $request, \App\Servi
     ]);
     $cart = $cartService->getOrCreateCart($request);
     $cartService->add($cart, $validated['ad_id'], $validated['qty'] ?? 1);
+
+    if ($request->expectsJson()) {
+        return response()->json([
+            'ok' => true,
+            'count' => $cart->items()->sum('qty'),
+            'total' => $cart->items()->get()->sum(fn ($i) => $i->ad->price * $i->qty),
+        ]);
+    }
+
     return back()->with('added', true);
 })->name('cart.add');
 

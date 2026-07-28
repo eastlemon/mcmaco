@@ -1,4 +1,8 @@
-<div x-data="{ open: false }" @cart-updated.window="open = true; setTimeout(() => open = false, 3000)"
+<div x-data="{ open: false }"
+     @cart-updated.window="
+        open = true;
+        setTimeout(() => open = false, 3000);
+     "
      class="relative">
     <button @click="open = !open" class="relative flex items-center gap-1.5 text-sm hover:text-amber-600 transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
