@@ -28,14 +28,20 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
 
+        <!-- Canonical -->
+        <link rel="canonical" href="{{ config('app.url') . request()->getPathInfo() }}">
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         @stack('head_extra')
+        @stack('analytics')
     </head>
     <body class="font-sans antialiased flex flex-col min-h-screen bg-gray-100">
         <div class="flex flex-col flex-1 min-h-screen">
             @include('layouts.navigation')
+
+            @includeWhen(config('analytics.ga4.enabled'), 'analytics.ga4')
 
             @isset($header)
                 <header class="bg-white shadow">
@@ -51,5 +57,7 @@
 
             @include('layouts.footer')
         </div>
+
+        @includeWhen(config('analytics.metrika.enabled'), 'analytics.metrika')
     </body>
 </html>

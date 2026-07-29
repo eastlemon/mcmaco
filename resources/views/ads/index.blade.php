@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@include('schema.home')
+
 @section('meta_title', 'mcmaco — товары с доставкой по России')
 @section('meta_description', 'Интернет-магазин mcmaco: популярные товары и новинки с доставкой по России')
 
