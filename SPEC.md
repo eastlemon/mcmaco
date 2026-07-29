@@ -15,8 +15,12 @@
 - **DB**: MySQL 8 + Redis
 - **Frontend**: Tailwind CSS + Livewire
 - **Платежи**: ЮKassa (`yoomoney/yookassa-sdk-php`)
-- **Тесты**: PHPUnit (45 тестов / 117 assertions)
+- **Тесты**: PHPUnit (102 теста / 248 assertions)
 - **Auth**: Breeze
+
+## Тесты
+
+102 passed (248 assertions). PHPUnit.
 
 ## Что уже реализовано
 
@@ -111,26 +115,32 @@ Orders, Payments, Ads, Categories, Chats, Messages, Reports, Users
 - Filament: PaymentResource, возвраты
 - Тестовый режим через env
 
-### 🔜 Этап 4 — Доставка
+### ✅ Этап 4 — Доставка
 - Справочник способов доставки (СДЭК, Почта, самовывоз)
-- Расчёт стоимости (пока фиксированный/по зоне)
+- Расчёт стоимости (фиксированный/по зоне)
 - Трекинг-номера
 - Уведомления покупателю
 
-### 🔜 Этап 5 — Pipelines (сторонние API)
+### ✅ Этап 5 — Pipelines (сторонние API)
 - Pipeline + PipelineLog модели
 - AdapterRegistry (как в LeadFlow)
-- Импорт товаров (CSV/XML)
-- Синхронизация цен/наличия
-- Экспорт заказов
-- Filament: PipelineResource, логи, ручной запуск
+- ImportAdapter / ExportAdapter контракты с `configSchema()`
+- CsvProductsImport (CSV → товары, create/update by SKU)
+- OrdersExport (заказы → CSV)
+- PipelineService — оркестратор
+- RunPipelineJob (очередь)
+- Scheduler: DB-pipelines с cron-выражением
+- Filament: PipelineResource с динамическими формами (configSchema), логи, ручной запуск
 
-### 🔜 Этап 6 — SEO и аналитика
-- Sitemap.xml (автогенерация, cron)
-- schema.org Product + BreadcrumbList
+### ✅ Этап 6 — SEO и аналитика
+- Sitemap.xml (автогенерация, cron daily 03:00)
+- schema.org: Product + BreadcrumbList + Organization + WebSite + SearchAction
 - Open Graph, Twitter Cards
-- Meta per listing/category
-- Yandex.Metrika / Google Analytics
+- Meta per listing/category (с fallback)
+- `rel="canonical"` на всех страницах
+- Yandex.Metrika (ecommerce, webvisor, clickmap)
+- Google Analytics 4 (GA4)
+- config/analytics.php, вкл/выкл через .env
 
 ## Не в скоупе (пока)
 - Мульти-вендор (несколько продавцов)
