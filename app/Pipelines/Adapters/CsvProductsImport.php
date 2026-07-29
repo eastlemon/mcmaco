@@ -65,35 +65,28 @@ class CsvProductsImport implements ImportAdapter
             $ad = Ad::where('sku', $sku)->first();
         }
 
+        $data = [
+            'title' => $title,
+            'description' => $description ?? '',
+            'price' => $price,
+            'stock' => $stock,
+            'condition' => $condition,
+            'city' => $city ?? '',
+            'category_id' => $categoryId,
+            'weight' => $weight,
+            'status' => 'active',
+        ];
+
         if ($ad) {
-            $ad->update(array_filter([
-                'title' => $title,
-                'description' => $description,
-                'price' => $price,
-                'stock' => $stock,
-                'condition' => $condition,
-                'city' => $city,
-                'category_id' => $categoryId,
-                'weight' => $weight,
-                'status' => 'active',
-            ], fn ($v) => $v !== null));
+            $ad->update(array_filter($data, fn ($v) => $v !== null, ARRAY_FILTER_USE_KEY));
 
             return ['action' => 'updated', 'message' => "Updated: {$title} (SKU: {$sku})"];
         }
 
-        Ad::create(array_filter([
-            'title' => $title,
-            'description' => $description,
-            'price' => $price,
-            'stock' => $stock,
-            'sku' => $sku,
-            'condition' => $condition,
-            'city' => $city,
-            'category_id' => $categoryId,
-            'weight' => $weight,
-            'status' => 'active',
-            'user_id' => $config['default_user_id'] ?? 1,
-        ], fn ($v) => $v !== null));
+        $data['sku'] = $sku;
+        $data['user_id'] = $config['default_user_id'] ?? 1;
+
+        Ad::create($data);
 
         return ['action' => 'created', 'message' => "Created: {$title} (SKU: {$sku})"];
     }
