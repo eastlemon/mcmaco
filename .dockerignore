@@ -1,10 +1,12 @@
 .git
 node_modules
 vendor
+bootstrap/cache/*
 storage/logs/*
 storage/framework/cache/*
 storage/framework/sessions/*
 storage/framework/views/*
 .env
 .phpunit.result.cache
+compose.yaml
 docker-compose.yml

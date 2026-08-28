@@ -43,7 +43,8 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 RUN composer install --no-interaction --optimize-autoloader --no-dev --no-scripts \
-    && php artisan package:discover --ansi || true \
+    && rm -f bootstrap/cache/services.php bootstrap/cache/packages.php \
+    && php artisan package:discover --ansi \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
 
