@@ -19,13 +19,18 @@ Schedule::command('sitemap:generate')->dailyAt('03:00')->description('Regenerate
 
 // Pipeline schedules — registered at boot from DB
 // Note: after adding/changing pipeline schedules, run: php artisan schedule:reload
-Pipeline::whereNotNull('schedule')
-    ->where('is_active', true)
-    ->each(function (Pipeline $pipeline) {
-        Schedule::call(function () use ($pipeline) {
-            RunPipelineJob::dispatch($pipeline->fresh());
-        })
-            ->cron($pipeline->schedule)
-            ->name("pipeline:{$pipeline->id}")
-            ->description("Pipeline: {$pipeline->name}");
-    });
+// Wrapped in try/catch: DB may not exist during composer install / package:discover
+try {
+    Pipeline::whereNotNull('schedule')
+        ->where('is_active', true)
+        ->each(function (Pipeline $pipeline) {
+            Schedule::call(function () use ($pipeline) {
+                RunPipelineJob::dispatch($pipeline->fresh());
+            })
+                ->cron($pipeline->schedule)
+                ->name("pipeline:{$pipeline->id}")
+                ->description("Pipeline: {$pipeline->name}");
+        });
+} catch (\Throwable $e) {
+    // DB not ready yet (e.g. during composer install / package:discover in Docker build)
+}

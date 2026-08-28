@@ -42,7 +42,8 @@ COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 WORKDIR /var/www/html
 COPY . /var/www/html
 
-RUN composer install --no-interaction --optimize-autoloader --no-dev \
+RUN composer install --no-interaction --optimize-autoloader --no-dev --no-scripts \
+    && php artisan package:discover --ansi || true \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
 
