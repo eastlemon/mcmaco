@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+# Rebuild package cache (in case volume mount overwrote it)
+php artisan package:discover --ansi || true
+
 # Start php-fpm in background
 php-fpm -D
 
