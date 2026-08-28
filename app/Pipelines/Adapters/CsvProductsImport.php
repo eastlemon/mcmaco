@@ -111,6 +111,11 @@ class CsvProductsImport implements ImportAdapter
                 'label' => 'ID продавца по умолчанию',
                 'default' => 1,
             ],
+            'auto_create_categories' => [
+                'type' => 'toggle',
+                'label' => 'Автосоздание категорий',
+                'default' => true,
+            ],
         ];
     }
 
