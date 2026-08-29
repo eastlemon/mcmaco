@@ -107,6 +107,29 @@ $ad->update(array_filter($data, fn ($v) => $v !== null));
 
 ---
 
+## 6. Dot-колонка Filament на не-relation методе: `getRelated() on null`
+
+**Дата:** 29.08.2026 · **Симптом (runtime):** `/admin/pipelines` → `Call to a member function getRelated() on null` (HasCellState.php:456)
+
+### Причина
+`TextColumn::make('lastRun.status')` — Filament в dot-нотации проверяет первую часть через `Model::isRelation()`, а тот возвращает true для **ЛЮБОГО метода модели** (проверка `method_exists`). Наш `lastRun()` был обычным методом `?PipelineLog` (лог из `logs()->first()`), не relation'ом. Filament звал `lastRun()->getRelated()` → на пайплайне без запусков это `null->getRelated()` → фейтал. Колонка не могла работать ни при каких данных.
+
+### Фикс
+```php
+/** @return HasOne<PipelineLog, $this> */
+public function lastRun(): HasOne
+{
+    return $this->hasOne(PipelineLog::class)->latestOfMany();
+}
+```
+Настоящий relation — dot-нотация `lastRun.status` / `lastRun.created_at` работает, без запусков колонка показывает placeholder, plus появился eager-load `Pipeline::with('lastRun')`.
+
+### Урок
+1. Публичные методы моделей, не являющиеся relations, — мина: Eloquent `isRelation()` считает методом-relation всё, что `method_exists`. Имя метода без глагола — сразу думать «а не relation ли это должен быть».
+2. Дот-нотация в Filament-колонках требует настоящих relations. «Хочу последний из» — это `hasOne()->latestOfMany()`, не `hasMany()->first()` обёрнутый в метод.
+
+---
+
 ## 5. Прочее, пойманное тем же прогоном (29.08.2026)
 
 - `PipelineService::run()` — мёртвый `$details = []` (никогда не заполнялся, ternary always false), `fresh()` мог вернуть `null` → заменён на `refresh()`.

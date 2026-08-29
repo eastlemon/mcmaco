@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pipeline extends Model
 {
@@ -56,9 +57,10 @@ class Pipeline extends Model
         return $this->hasMany(PipelineLog::class)->latest();
     }
 
-    public function lastRun(): ?PipelineLog
+    /** @return HasOne<PipelineLog, $this> */
+    public function lastRun(): HasOne
     {
-        return $this->logs()->first();
+        return $this->hasOne(PipelineLog::class)->latestOfMany();
     }
 
     public function scopeActive($query)
