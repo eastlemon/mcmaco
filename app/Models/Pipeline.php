@@ -50,6 +50,7 @@ class Pipeline extends Model
         });
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<PipelineLog, $this> */
     public function logs(): HasMany
     {
         return $this->hasMany(PipelineLog::class)->latest();

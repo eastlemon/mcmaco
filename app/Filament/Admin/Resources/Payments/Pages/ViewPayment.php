@@ -9,6 +9,9 @@ use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 
+/**
+ * @property Payment $record
+ */
 class ViewPayment extends ViewRecord
 {
     protected static string $resource = PaymentResource::class;

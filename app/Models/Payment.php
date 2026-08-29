@@ -41,6 +41,7 @@ class Payment extends Model
         self::STATUS_FAILED => 'Ошибка',
     ];
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Order, $this> */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);

@@ -38,6 +38,7 @@ class PipelineLog extends Model
         'details' => 'array',
     ];
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Pipeline, $this> */
     public function pipeline(): BelongsTo
     {
         return $this->belongsTo(Pipeline::class);

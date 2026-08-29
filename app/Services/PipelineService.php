@@ -22,12 +22,11 @@ class PipelineService
         try {
             $adapter = $this->registry->getAdapter($pipeline->adapter, $pipeline->type);
             $stats = ['processed' => 0, 'created' => 0, 'updated' => 0, 'errors' => 0];
-            $details = [];
 
             if ($pipeline->type === Pipeline::TYPE_IMPORT) {
                 $result = $this->runImport($adapter, $pipeline->config ?? []);
                 $stats = array_merge($stats, $result);
-            } else {
+            } elseif ($pipeline->type === Pipeline::TYPE_EXPORT) {
                 $result = $this->runExport($adapter, $pipeline->config ?? []);
                 $stats = array_merge($stats, $result);
             }
@@ -42,7 +41,6 @@ class PipelineService
                 'created' => $stats['created'] ?? 0,
                 'updated' => $stats['updated'] ?? 0,
                 'errors' => $stats['errors'] ?? 0,
-                'details' => $details ?: null,
             ]);
         } catch (\Throwable $e) {
             $log->update([
@@ -53,6 +51,8 @@ class PipelineService
 
             throw $e;
         }
+
+        $log->refresh();
 
         return $log;
     }

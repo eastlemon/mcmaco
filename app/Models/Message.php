@@ -20,11 +20,13 @@ class Message extends Model
         'read_at' => 'datetime',
     ];
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Chat, $this> */
     public function chat(): BelongsTo
     {
         return $this->belongsTo(Chat::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

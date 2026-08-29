@@ -15,11 +15,13 @@ class Report extends Model
         'status',
     ];
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Ad, $this> */
     public function ad(): BelongsTo
     {
         return $this->belongsTo(Ad::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this> */
     public function reporter(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reporter_user_id');

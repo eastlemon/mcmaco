@@ -12,11 +12,13 @@ class Favorite extends Model
         'ad_id',
     ];
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Ad, $this> */
     public function ad(): BelongsTo
     {
         return $this->belongsTo(Ad::class);

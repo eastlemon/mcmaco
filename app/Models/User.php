@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -13,7 +13,7 @@ use Illuminate\Notifications\Notifiable;
 
 #[Fillable(['name', 'email', 'password', 'phone', 'city', 'avatar', 'bio'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -31,26 +31,31 @@ class User extends Authenticatable
         ];
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Ad, $this> */
     public function ads(): HasMany
     {
         return $this->hasMany(Ad::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Favorite, $this> */
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Chat, $this> */
     public function chatsAsBuyer(): HasMany
     {
         return $this->hasMany(Chat::class, 'buyer_id');
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Chat, $this> */
     public function chatsAsSeller(): HasMany
     {
         return $this->hasMany(Chat::class, 'seller_id');
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Report, $this> */
     public function reports(): HasMany
     {
         return $this->hasMany(Report::class, 'reporter_user_id');

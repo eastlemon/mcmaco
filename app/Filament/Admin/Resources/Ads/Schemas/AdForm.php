@@ -2,11 +2,11 @@
 
 namespace App\Filament\Admin\Resources\Ads\Schemas;
 
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class AdForm
@@ -28,7 +28,7 @@ class AdForm
                             ->afterStateUpdated(fn ($state, $set) => $set('slug', \Illuminate\Support\Str::slug($state) . '-' . \Illuminate\Support\Str::random(6))),
                         TextInput::make('slug')
                             ->required()
-                            ->unique(ignoringRecord: true),
+                            ->unique(ignoreRecord: true),
                         Textarea::make('description')
                             ->required()
                             ->maxLength(5000)
@@ -52,7 +52,7 @@ class AdForm
                             ->label('Остаток на складе'),
                         TextInput::make('sku')
                             ->label('Артикул (SKU)')
-                            ->unique(ignoringRecord: true),
+                            ->unique(ignoreRecord: true),
                     ])->columns(3),
 
                 Section::make('Категория и параметры')

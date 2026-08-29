@@ -30,13 +30,13 @@ class NewChatMessage extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $adTitle = $this->chat->ad?->title ?? 'Объявление';
+        $adTitle = $this->chat->ad->title ?? 'Объявление';
 
         return (new MailMessage)
             ->subject('Новое сообщение по объявлению')
             ->greeting('Привет!')
             ->line("Новое сообщение по объявлению: {$adTitle}.")
-            ->line('От: ' . ($this->message->user?->name ?? 'Пользователь'))
+            ->line('От: ' . ($this->message->user->name ?? 'Пользователь'))
             ->line($this->message->message)
             ->action('Перейти в чат', route('chats.show', $this->chat))
             ->line('Если вы не ожидали это письмо — просто проигнорируйте его.');

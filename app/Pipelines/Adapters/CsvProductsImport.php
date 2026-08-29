@@ -78,7 +78,7 @@ class CsvProductsImport implements ImportAdapter
         ];
 
         if ($ad) {
-            $ad->update(array_filter($data, fn ($v) => $v !== null, ARRAY_FILTER_USE_KEY));
+            $ad->update(array_filter($data, fn ($v) => $v !== null));
 
             return ['action' => 'updated', 'message' => "Updated: {$title} (SKU: {$sku})"];
         }

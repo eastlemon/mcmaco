@@ -35,7 +35,7 @@ class PipelinesTable
 
                 TextColumn::make('format')
                     ->label('Формат')
-                    ->uppercase(),
+                    ->formatStateUsing(fn ($state) => is_string($state) ? mb_strtoupper($state) : $state),
 
                 TextColumn::make('lastRun.status')
                     ->label('Последний запуск')

@@ -65,21 +65,25 @@ class Order extends Model
         });
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<OrderItem, $this> */
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Payment, $this> */
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<DeliveryMethod, $this> */
     public function deliveryMethod(): BelongsTo
     {
         return $this->belongsTo(DeliveryMethod::class);

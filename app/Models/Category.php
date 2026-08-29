@@ -18,16 +18,19 @@ class Category extends Model
         'meta_description',
     ];
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<self, $this> */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<self, $this> */
     public function children(): HasMany
     {
         return $this->hasMany(self::class, 'parent_id');
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Ad, $this> */
     public function ads(): HasMany
     {
         return $this->hasMany(Ad::class);

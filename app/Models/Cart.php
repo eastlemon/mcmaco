@@ -10,11 +10,13 @@ class Cart extends Model
 {
     protected $fillable = ['user_id', 'session_id'];
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<CartItem, $this> */
     public function items(): HasMany
     {
         return $this->hasMany(CartItem::class);

@@ -6,7 +6,6 @@ use App\Filament\Admin\Resources\Orders\OrderResource;
 use App\Models\Order;
 use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewOrder extends ViewRecord
@@ -22,12 +21,12 @@ class ViewOrder extends ViewRecord
                 ->color('info')
                 ->visible(fn (Order $record) => $record->deliveryMethod && $record->deliveryMethod->type !== 'pickup'
                     && in_array($record->status, [Order::STATUS_PAID, Order::STATUS_PROCESSING, Order::STATUS_SHIPPED]))
-                ->form(fn (Form $form) => $form->schema([
+                ->schema([
                     TextInput::make('tracking_number')
                         ->label('Трек-номер')
                         ->required()
                         ->default(fn (Order $record) => $record->tracking_number),
-                ]))
+                ])
                 ->action(function (Order $record, array $data): void {
                     $record->update([
                         'tracking_number' => $data['tracking_number'],

@@ -37,18 +37,17 @@ class AdImageController extends Controller
         $thumbPath = "{$dir}/{$baseName}_thumb.jpg";
 
         $manager = new ImageManager(new Driver());
-        $image = $manager->read($file->getPathname());
+        $image = $manager->decodePath($file->getPathname());
 
         if ($image->width() > 2048) {
             $image = $image->scale(width: 2048);
         }
 
-        $image->toJpeg(quality: 85)->save(Storage::disk('public')->path($originalPath));
+        $image->save(Storage::disk('public')->path($originalPath), quality: 85);
 
-        $manager->read($file->getPathname())
+        $manager->decodePath($file->getPathname())
             ->cover(200, 200)
-            ->toJpeg(quality: 85)
-            ->save(Storage::disk('public')->path($thumbPath));
+            ->save(Storage::disk('public')->path($thumbPath), quality: 85);
 
         $adImage = AdImage::query()->create([
             'ad_id' => $ad->id,

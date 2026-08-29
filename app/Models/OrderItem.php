@@ -17,11 +17,13 @@ class OrderItem extends Model
         'subtotal' => 'integer',
     ];
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Order, $this> */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Ad, $this> */
     public function ad(): BelongsTo
     {
         return $this->belongsTo(Ad::class);

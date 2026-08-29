@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\Pipelines\RelationManagers;
 
 use App\Models\PipelineLog;
+use Filament\Actions\ViewAction;
 use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -65,7 +66,7 @@ class LogsRelationManager extends RelationManager
                     ->options(PipelineLog::STATUSES),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()
+                ViewAction::make()
                     ->mutateRecordDataUsing(function (array $data, PipelineLog $record): array {
                         $data['details_json'] = json_encode($record->details, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
                         return $data;

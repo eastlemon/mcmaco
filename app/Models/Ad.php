@@ -10,6 +10,25 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $price
+ * @property int $stock
+ * @property int $views
+ * @property string $slug
+ * @property string $title
+ * @property string $description
+ * @property string $sku
+ * @property string $city
+ * @property string $condition
+ * @property string $status
+ * @property bool $is_featured
+ * @property int $weight
+ * @property string|null $meta_title
+ * @property string|null $meta_description
+ * @property-read \App\Models\AdImage|null $cover_image
+ * @property-read string $formatted_price
+ * @property-read bool $is_in_stock
+ */
 class Ad extends Model
 {
     use HasFactory, SoftDeletes;
@@ -50,26 +69,31 @@ class Ad extends Model
         });
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category, $this> */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<AdImage, $this> */
     public function images(): HasMany
     {
         return $this->hasMany(AdImage::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Chat, $this> */
     public function chats(): HasMany
     {
         return $this->hasMany(Chat::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Report, $this> */
     public function reports(): HasMany
     {
         return $this->hasMany(Report::class);
@@ -107,7 +131,7 @@ class Ad extends Model
 
     public function scopeFeatured(Builder $query): Builder
     {
-        return $query->where('is_featured', true)->active();
+        return $query->where('is_featured', true)->where('status', 'active');
     }
 
     public function scopeInStock(Builder $query): Builder

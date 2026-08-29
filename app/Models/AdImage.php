@@ -13,6 +13,7 @@ class AdImage extends Model
         'sort_order',
     ];
 
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Ad, $this> */
     public function ad(): BelongsTo
     {
         return $this->belongsTo(Ad::class);
