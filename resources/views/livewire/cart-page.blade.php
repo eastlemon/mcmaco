@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('meta_title', 'Корзина — mcmaco')
+@section('meta_title', __('shop.cart') . ' — mcmaco')
 
 @section('content')
 <div class="py-6">
@@ -9,15 +9,15 @@
         <nav class="text-sm text-gray-400 mb-4">
             <a href="{{ route('ads.index') }}" class="hover:text-amber-600">Главная</a>
             <span class="mx-1">/</span>
-            <span class="text-gray-600">Корзина</span>
+            <span class="text-gray-600">{{ __('shop.cart') }}</span>
         </nav>
 
-        <h1 class="text-2xl font-bold mb-6 text-gray-800">Корзина</h1>
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">{{ __('shop.cart') }}</h1>
 
         @if($items->isEmpty())
             <div class="bg-white rounded-xl shadow-sm p-12 text-center">
                 <div class="text-6xl mb-4">🛒</div>
-                <p class="text-gray-400 mb-4">Корзина пуста</p>
+                <p class="text-gray-400 mb-4">{{ __('shop.cart_empty') }}</p>
                 <a href="{{ route('ads.index') }}" class="inline-block bg-amber-600 text-white px-6 py-2 rounded-lg hover:bg-amber-700 transition">Каталог товаров</a>
             </div>
         @else
@@ -57,7 +57,7 @@
                     <div class="text-2xl font-bold text-gray-800">{{ number_format($total, 0, ',', ' ') }} ₽</div>
                 </div>
                 <a href="{{ route('checkout.index') }}" class="bg-amber-600 hover:bg-amber-700 text-white font-medium px-8 py-3 rounded-lg transition">
-                    Оформить заказ →
+                    {{ __('shop.checkout') }} →
                 </a>
             </div>
         @endif

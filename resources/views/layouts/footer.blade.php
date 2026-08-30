@@ -26,7 +26,7 @@
             <div>
                 <h4 class="text-white font-medium text-sm mb-3">Покупателям</h4>
                 <ul class="space-y-2 text-sm">
-                    <li><a href="{{ route('cart') }}" class="hover:text-amber-400 transition">Корзина</a></li>
+                    <li><a href="{{ route('cart') }}" class="hover:text-amber-400 transition">{{ __('shop.cart') }}</a></li>
                     <li><a href="{{ route('checkout.index') }}" class="hover:text-amber-400 transition">Оформление заказа</a></li>
                     <li><span class="text-gray-500">Доставка по России</span></li>
                     <li><span class="text-gray-500">Оплата онлайн / при получении</span></li>

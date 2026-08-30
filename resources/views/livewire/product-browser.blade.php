@@ -38,7 +38,7 @@
 
             {{-- Search --}}
             <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1.5">Поиск</label>
+                <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ __('ads.filter.label') }}</label>
                 <div class="relative">
                     <input
                         wire:model.live.debounce.300ms="search"
@@ -183,8 +183,8 @@
             @empty
                 <div class="col-span-full bg-white rounded-xl shadow-sm p-12 text-center">
                     <div class="text-5xl mb-4">🔍</div>
-                    <h3 class="text-lg font-medium text-gray-600 mb-2">Ничего не найдено</h3>
-                    <p class="text-sm text-gray-400 mb-4">Попробуйте изменить параметры поиска</p>
+                    <h3 class="text-lg font-medium text-gray-600 mb-2">{{ __('ads.empty') }}</h3>
+                    <p class="text-sm text-gray-400 mb-4">{{ __('ads.empty_hint') }}</p>
                     @if($this->active_filters_count > 0)
                         <button wire:click="clearFilters" class="text-amber-600 hover:text-amber-700 text-sm font-medium">
                             Сбросить фильтры

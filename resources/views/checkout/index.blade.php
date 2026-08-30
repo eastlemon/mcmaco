@@ -8,7 +8,7 @@
         <nav class="text-sm text-gray-400 mb-4">
             <a href="{{ route('ads.index') }}" class="hover:text-amber-600">Главная</a>
             <span class="mx-1">/</span>
-            <a href="{{ route('cart') }}" class="hover:text-amber-600">Корзина</a>
+            <a href="{{ route('cart') }}" class="hover:text-amber-600">{{ __('shop.cart') }}</a>
             <span class="mx-1">/</span>
             <span class="text-gray-600">Оформление заказа</span>
         </nav>

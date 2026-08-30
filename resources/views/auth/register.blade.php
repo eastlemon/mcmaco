@@ -1,6 +1,6 @@
 <x-guest-layout>
-    @section('title', 'Регистрация — mcmaco')
-    <h1 class="text-3xl font-extrabold tracking-tight">Регистрация</h1>
+    @section('title', __('auth.register') . ' — mcmaco')
+    <h1 class="text-3xl font-extrabold tracking-tight">{{ __('auth.register') }}</h1>
     <p class="mt-1.5 text-sm text-gray-400">Это займёт меньше минуты</p>
 
     <form method="POST" action="{{ route('register') }}" class="mt-8 space-y-5">
@@ -72,6 +72,6 @@
 
     <p class="mt-8 text-sm text-center text-gray-500">
         Уже зарегистрированы?
-        <a href="{{ route('login') }}" class="font-semibold text-amber-600 hover:text-amber-700 transition">Войти</a>
+        <a href="{{ route('login') }}" class="font-semibold text-amber-600 hover:text-amber-700 transition">{{ __('auth.login') }}</a>
     </p>
 </x-guest-layout>

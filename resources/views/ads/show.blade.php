@@ -89,11 +89,11 @@
 
                     <div class="flex items-center gap-3 mb-3">
                         @if($ad->stock > 0)
-                            <span class="px-2.5 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">✓ В наличии</span>
+                            <span class="px-2.5 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">✓ {{ __('ads.in_stock') }}</span>
                         @else
-                            <span class="px-2.5 py-1 bg-gray-100 text-gray-500 rounded-full text-xs">Нет в наличии</span>
+                            <span class="px-2.5 py-1 bg-gray-100 text-gray-500 rounded-full text-xs">{{ __('ads.out_of_stock') }}</span>
                         @endif
-                        <span class="text-xs text-gray-400">{{ $ad->condition === 'new' ? 'Новое' : 'Б/у' }}</span>
+                        <span class="text-xs text-gray-400">{{ $ad->condition === 'new' ? __('ads.condition_new') : __('ads.condition_used') }}</span>
                         @if($ad->sku)
                             <span class="text-xs text-gray-400 ml-auto">Артикул: {{ $ad->sku }}</span>
                         @endif
@@ -128,7 +128,7 @@
                                 </button>
                             </form>
                         @else
-                            <a href="{{ route('login') }}" class="flex-1 text-center border px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition">Войти</a>
+                            <a href="{{ route('login') }}" class="flex-1 text-center border px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition">{{ __('auth.login') }}</a>
                         @endauth
                     </div>
                 </div>
@@ -153,7 +153,7 @@
                 <div class="bg-white rounded-xl shadow-sm p-5">
                     <h3 class="font-semibold text-gray-800 mb-3 text-sm">💳 Оплата</h3>
                     <div class="flex flex-wrap gap-2">
-                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1.5 rounded-full">Онлайн (ЮKassa)</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1.5 rounded-full">{{ __('shop.pay') }} (ЮKassa)</span>
                         <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1.5 rounded-full">При получении</span>
                     </div>
                 </div>

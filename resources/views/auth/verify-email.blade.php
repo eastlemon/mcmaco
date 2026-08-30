@@ -28,7 +28,7 @@
                 @csrf
                 <button type="submit"
                         class="w-full py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 font-medium text-sm transition">
-                    Выйти
+                    {{ __('auth.logout') }}
                 </button>
             </form>
         </div>
