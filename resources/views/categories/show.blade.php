@@ -69,7 +69,7 @@
         @if($ads->isNotEmpty())
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
                 @foreach($ads as $ad)
-                    @include('ads.partials.card', ['ad' => $ad])
+                    <x-ads.product-card :ad="$ad" />
                 @endforeach
             </div>
 

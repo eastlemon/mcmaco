@@ -80,8 +80,6 @@ class ProductBrowser extends Component
 
         if ($this->inStockOnly) {
             $query->where('stock', '>', 0);
-        } else {
-            $query->inStock();
         }
 
         if ($this->featuredOnly) {

@@ -30,7 +30,7 @@
                     <h2 class="text-lg font-bold mb-4 text-gray-800">⭐ Популярные товары</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         @foreach($featured as $item)
-                            @include('ads.partials.card', ['ad' => $item])
+                            <x-ads.product-card :ad="$item" />
                         @endforeach
                     </div>
                 </div>

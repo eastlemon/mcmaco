@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <rect width="600" height="600" fill="#f5f5f4"/>
+  <g>
+    <rect x="205" y="272" width="190" height="132" rx="14" fill="#e7e5e4"/>
+    <path d="M205 371c0-8 6-13 13-13l164 0c7 0 13 5 13 13l-26-26-22 0-12 12-42 0-8-20-38 0-12 14-16 0 4 20z" fill="#d6d3d1"/>
+    <circle cx="258" cy="216" r="18" fill="#d6d3d1"/>
+    <path d="M258 198a18 18 0 100 36 18 18 0 000-36zm0 5a13 13 0 110 26 13 13 0 010-26z" fill="#a8a29e"/>
+  </g>
+  <text x="300" y="452" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="600" fill="#a8a29e" letter-spacing="4">MCMACO</text>
+</svg>

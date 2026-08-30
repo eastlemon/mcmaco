@@ -177,11 +177,11 @@
         </div>
 
         {{-- Grid --}}
-        <div wire:loading.remove.delay>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4" wire:loading.remove.delay>
             @forelse($ads as $ad)
-                @include('ads.partials.card', ['ad' => $ad])
+                <x-ads.product-card :ad="$ad" />
             @empty
-                <div class="bg-white rounded-xl shadow-sm p-12 text-center">
+                <div class="col-span-full bg-white rounded-xl shadow-sm p-12 text-center">
                     <div class="text-5xl mb-4">🔍</div>
                     <h3 class="text-lg font-medium text-gray-600 mb-2">Ничего не найдено</h3>
                     <p class="text-sm text-gray-400 mb-4">Попробуйте изменить параметры поиска</p>
@@ -194,41 +194,8 @@
             @endforelse
         </div>
 
-        {{-- Wrap cards in grid --}}
-        @if($ads->isNotEmpty())
-            <script>
-                // Wrap cards in grid (hack for Livewire re-render)
-                document.addEventListener('livewire:init', () => {
-                    wrapCards();
-                });
-                document.addEventListener('livewire:navigated', () => {
-                    wrapCards();
-                });
-                function wrapCards() {
-                    const list = document.querySelector('[wire\\:loading\\.remove\\.delay]');
-                    if (list && !list.classList.contains('product-grid')) {
-                        list.classList.add('product-grid');
-                    }
-                }
-            </script>
-        @endif
-
         <div class="mt-6">
             {{ $ads->links() }}
         </div>
     </div>
 </div>
-
-<style>
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-}
-@media (min-width: 768px) {
-    .product-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (min-width: 1024px) {
-    .product-grid { grid-template-columns: repeat(3, 1fr); }
-}
-</style>

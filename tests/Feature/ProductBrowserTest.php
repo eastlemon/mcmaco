@@ -125,8 +125,16 @@ class ProductBrowserTest extends TestCase
         $this->createAd(['title' => 'Available', 'stock' => 10]);
         $this->createAd(['title' => 'Sold Out', 'stock' => 0]);
 
-        // Default view shows only in-stock
+        // По умолчанию видны все активные товары, включая не в наличии
+        // (карточка помечает их «Нет в наличии»)
         $response = $this->get('/');
+        $response->assertOk();
+        $response->assertSee('Available');
+        $response->assertSee('Sold Out');
+
+        // Фильтр «только в наличии» скрывает не в наличии
+        $response = $this->get('/?inStockOnly=1');
+        $response->assertOk();
         $response->assertSee('Available');
         $response->assertDontSee('Sold Out');
     }
