@@ -1,7 +1,7 @@
 <x-guest-layout>
     @section('title', __('auth.reset_title') . ' — mcmaco')
     <h1 class="text-3xl font-extrabold tracking-tight">{{ __('auth.reset_title') }}</h1>
-    <p class="mt-1.5 text-sm text-gray-400">Придумайте пароль для входа</p>
+    <p class="mt-1.5 text-sm text-gray-400">{{ __('auth.reset_subtitle') }}</p>
 
     <form method="POST" action="{{ route('password.store') }}" class="mt-8 space-y-5">
         @csrf
@@ -23,7 +23,7 @@
         </div>
 
         <div>
-            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Повторите пароль</label>
+            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.password_confirm') }}</label>
             <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
                    class="block w-full rounded-xl border-gray-200 bg-white px-3.5 py-2.5 text-sm shadow-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 transition" />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1.5" />

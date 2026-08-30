@@ -29,10 +29,10 @@
                 @if(request('q')) <input type="hidden" name="q" value="{{ request('q') }}"> @endif
                 <select name="sort" onchange="this.form.submit()"
                         class="border rounded-lg px-3 py-2 text-sm bg-white">
-                    <option value="newest" @selected(request('sort', 'newest') === 'newest')>Сначала новые</option>
-                    <option value="price_asc" @selected(request('sort') === 'price_asc')>Цена ↑</option>
-                    <option value="price_desc" @selected(request('sort') === 'price_desc')>Цена ↓</option>
-                    <option value="popular" @selected(request('sort') === 'popular')>Популярные</option>
+                    <option value="newest" @selected(request('sort', 'newest') === 'newest')>{{ __('ads.sort.newest') }}</option>
+                    <option value="price_asc" @selected(request('sort') === 'price_asc')>{{ __('ads.sort.price_asc') }}</option>
+                    <option value="price_desc" @selected(request('sort') === 'price_desc')>{{ __('ads.sort.price_desc') }}</option>
+                    <option value="popular" @selected(request('sort') === 'popular')>{{ __('ads.sort.popular') }}</option>
                 </select>
             </form>
         </div>
@@ -62,7 +62,7 @@
 
         {{-- Count --}}
         <div class="text-sm text-gray-500 mb-4">
-            Найдено: <span class="font-medium text-gray-700">{{ $ads->total() }}</span> товаров
+            {{ __('ads.found') }}: <span class="font-medium text-gray-700">{{ $ads->total() }}</span> {{ __('ads.items_count') }}
         </div>
 
         {{-- Grid --}}

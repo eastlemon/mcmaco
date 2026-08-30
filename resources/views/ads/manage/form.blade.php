@@ -73,7 +73,7 @@
             @if ($mode === 'edit')
                 <div class="bg-white shadow rounded-lg p-6 mt-6" x-data="imageUploader({{ $ad->id }}, {{ $ad->images->count() }})">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-semibold">{{ __('ads.photos') }} (до 10)</h3>
+                        <h3 class="font-semibold">{{ __('ads.photos') }} ({{ __('ads.photos_max_short') }})</h3>
                         <span class="text-sm text-gray-500" x-text="`${images.length}/10`"></span>
                     </div>
 

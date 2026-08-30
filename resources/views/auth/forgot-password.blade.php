@@ -1,7 +1,7 @@
 <x-guest-layout>
-    @section('title', 'Восстановление пароля — mcmaco')
-    <h1 class="text-3xl font-extrabold tracking-tight">Забыли пароль?</h1>
-    <p class="mt-1.5 text-sm text-gray-400">Напишите email — пришлём ссылку для сброса пароля</p>
+    @section('title', __('auth.forgot_title') . ' — mcmaco')
+    <h1 class="text-3xl font-extrabold tracking-tight">{{ __('auth.forgot_title') }}</h1>
+    <p class="mt-1.5 text-sm text-gray-400">{{ __('auth.forgot_hint') }}</p>
 
     <!-- Session Status -->
     <x-auth-session-status class="mt-4" :status="session('status')" />
@@ -28,6 +28,6 @@
     </form>
 
     <p class="mt-8 text-sm text-center text-gray-500">
-        <a href="{{ route('login') }}" class="font-semibold text-amber-600 hover:text-amber-700 transition">← Вернуться ко входу</a>
+        <a href="{{ route('login') }}" class="font-semibold text-amber-600 hover:text-amber-700 transition">← {{ __('auth.back_to_login') }}</a>
     </p>
 </x-guest-layout>

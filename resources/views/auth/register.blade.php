@@ -1,7 +1,7 @@
 <x-guest-layout>
     @section('title', __('auth.register') . ' — mcmaco')
     <h1 class="text-3xl font-extrabold tracking-tight">{{ __('auth.register') }}</h1>
-    <p class="mt-1.5 text-sm text-gray-400">Это займёт меньше минуты</p>
+    <p class="mt-1.5 text-sm text-gray-400">{{ __('auth.register_subtitle') }}</p>
 
     <form method="POST" action="{{ route('register') }}" class="mt-8 space-y-5">
         @csrf
@@ -43,7 +43,7 @@
                        class="block w-full rounded-xl border-gray-200 bg-white pl-10 pr-11 py-2.5 text-sm shadow-sm placeholder-gray-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 transition" />
                 <button type="button" @click="visible = !visible"
                         class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
-                        aria-label="Показать пароль">
+                        aria-label="{{ __('auth.show_password') }}">
                     <svg x-show="!visible" class="w-5 h-5" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     <svg x-show="visible" x-cloak class="w-5 h-5" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243"/></svg>
                 </button>
@@ -53,7 +53,7 @@
 
         {{-- Подтверждение пароля --}}
         <div>
-            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Повторите пароль</label>
+            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.password_confirm') }}</label>
             <div class="relative">
                 <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
                     <svg class="w-5 h-5" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
