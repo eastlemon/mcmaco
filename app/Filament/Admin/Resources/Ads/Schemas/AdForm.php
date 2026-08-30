@@ -22,6 +22,7 @@ class AdForm
                         Select::make('user_id')
                             ->relationship('user', 'name')
                             ->searchable()
+                            ->preload()
                             ->nullable()
                             ->placeholder('—')
                             ->hint('Товары магазина создаются без владельца')
