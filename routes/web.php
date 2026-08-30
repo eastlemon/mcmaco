@@ -73,6 +73,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/locale.php';
 
 // Fallback внутри web-группы: иначе несопоставленные роуты рендерят errors/404
 // без сессии (livewire cart-dropdown) и превращают 404 в 500.

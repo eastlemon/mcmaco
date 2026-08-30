@@ -23,6 +23,8 @@
 
             {{-- Right actions --}}
             <div class="flex items-center gap-3">
+                <x-locale-switcher />
+
                 {{-- Cart --}}
                 <livewire:cart-dropdown />
 
