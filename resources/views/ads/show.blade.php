@@ -20,7 +20,7 @@
 
     @php
         $breadcrumbs = [
-            ['name' => 'Главная', 'url' => route('ads.index')],
+            ['name' => __('common.home'), 'url' => route('ads.index')],
         ];
         if ($ad->category) {
             $breadcrumbs[] = ['name' => $ad->category->name, 'url' => $ad->category->slug ? route('categories.show', $ad->category->slug) : route('ads.index', ['category_id' => $ad->category->id])];
@@ -47,7 +47,7 @@
 
         {{-- Breadcrumbs --}}
         <nav class="text-sm text-gray-400 mb-4">
-            <a href="{{ route('ads.index') }}" class="hover:text-amber-600">Главная</a>
+            <a href="{{ route('ads.index') }}" class="hover:text-amber-600">{{ __('common.home') }}</a>
             @if($ad->category)
                 <span class="mx-1">/</span>
                 <a href="{{ $ad->category->slug ? route('categories.show', $ad->category->slug) : route('ads.index', ['category_id' => $ad->category->id]) }}" class="hover:text-amber-600">{{ $ad->category->name }}</a>
@@ -95,7 +95,7 @@
                         @endif
                         <span class="text-xs text-gray-400">{{ $ad->condition === 'new' ? __('ads.condition_new') : __('ads.condition_used') }}</span>
                         @if($ad->sku)
-                            <span class="text-xs text-gray-400 ml-auto">Артикул: {{ $ad->sku }}</span>
+                            <span class="text-xs text-gray-400 ml-auto">{{ __('ads.sku') }}: {{ $ad->sku }}</span>
                         @endif
                     </div>
 
@@ -114,7 +114,7 @@
                         @auth
                             <form method="POST" action="{{ route('chats.store', $ad) }}">
                                 @csrf
-                                <button class="flex-1 border px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition">💬 Написать продавцу</button>
+                                <button class="flex-1 border px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition">{{ __('ads.contact_seller') }}</button>
                             </form>
 
                             @php
@@ -124,7 +124,7 @@
                                 @csrf
                                 @if($isFavorite) @method('DELETE') @endif
                                 <button class="border px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition">
-                                    {{ $isFavorite ? '★ В избранном' : '☆ В избранное' }}
+                                    {{ $isFavorite ? __('ads.in_favorites') : __('ads.add_to_favorites') }}
                                 </button>
                             </form>
                         @else
@@ -135,14 +135,14 @@
 
                 {{-- Доставка --}}
                 <div class="bg-white rounded-xl shadow-sm p-5">
-                    <h3 class="font-semibold text-gray-800 mb-3 text-sm">🚚 Доставка</h3>
+                    <h3 class="font-semibold text-gray-800 mb-3 text-sm">🚚 {{ __('shop.delivery') }}</h3>
                     <div class="space-y-2 text-sm text-gray-500">
                         @php $deliveryMethods = \App\Models\DeliveryMethod::active()->get(); @endphp
                         @foreach($deliveryMethods as $method)
                             <div class="flex items-center justify-between">
                                 <span>{{ $method->name }}</span>
                                 <span class="{{ $method->base_price === 0 ? 'text-green-600 font-medium' : 'text-gray-600' }}">
-                                    {{ $method->base_price === 0 ? 'Бесплатно' : 'от ' . $method->formatted_base_price }}
+                                    {{ $method->base_price === 0 ? __('shop.free') : __('shop.delivery_from') . $method->formatted_base_price }}
                                 </span>
                             </div>
                         @endforeach
@@ -151,10 +151,10 @@
 
                 {{-- Оплата --}}
                 <div class="bg-white rounded-xl shadow-sm p-5">
-                    <h3 class="font-semibold text-gray-800 mb-3 text-sm">💳 Оплата</h3>
+                    <h3 class="font-semibold text-gray-800 mb-3 text-sm">💳 {{ __('shop.payment') }}</h3>
                     <div class="flex flex-wrap gap-2">
                         <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1.5 rounded-full">{{ __('shop.pay') }} (ЮKassa)</span>
-                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1.5 rounded-full">При получении</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1.5 rounded-full">{{ __('shop.payment_on_delivery') }}</span>
                     </div>
                 </div>
             </div>
@@ -163,7 +163,7 @@
         {{-- Описание --}}
         @if($ad->description)
         <div class="bg-white rounded-xl shadow-sm p-6 mt-6">
-            <h2 class="font-semibold text-lg text-gray-800 mb-3">Описание</h2>
+            <h2 class="font-semibold text-lg text-gray-800 mb-3">{{ __('ads.description') }}</h2>
             <div class="prose prose-sm max-w-none text-gray-600">
                 {!! nl2br(e($ad->description)) !!}
             </div>
@@ -173,7 +173,7 @@
         {{-- Похожие --}}
         @if($related->isNotEmpty())
             <div class="mt-8">
-                <h2 class="text-lg font-bold mb-4 text-gray-800">Похожие товары</h2>
+                <h2 class="text-lg font-bold mb-4 text-gray-800">{{ __('ads.related') }}</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     @foreach($related as $item)
                         <x-ads.product-card :ad="$item" />

@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
-@section('meta_title', 'Оформление заказа — mcmaco')
+@section('meta_title', __('shop.checkout') . ' — mcmaco')
 
 @section('content')
 <div class="py-6">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="text-sm text-gray-400 mb-4">
-            <a href="{{ route('ads.index') }}" class="hover:text-amber-600">Главная</a>
+            <a href="{{ route('ads.index') }}" class="hover:text-amber-600">{{ __('common.home') }}</a>
             <span class="mx-1">/</span>
             <a href="{{ route('cart') }}" class="hover:text-amber-600">{{ __('shop.cart') }}</a>
             <span class="mx-1">/</span>
-            <span class="text-gray-600">Оформление заказа</span>
+            <span class="text-gray-600">{{ __('shop.checkout') }}</span>
         </nav>
 
-        <h1 class="text-2xl font-bold mb-6 text-gray-800">Оформление заказа</h1>
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">{{ __('shop.checkout') }}</h1>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
@@ -21,17 +21,17 @@
             <form method="POST" action="/checkout" id="checkout-form">
                 @csrf
                 <div class="bg-white rounded-xl shadow-sm p-6 space-y-4">
-                    <h2 class="font-semibold text-lg text-gray-800">Контактные данные</h2>
+                    <h2 class="font-semibold text-lg text-gray-800">{{ __('shop.contact_info') }}</h2>
 
                     <div>
-                        <label class="text-sm text-gray-500">Имя *</label>
+                        <label class="text-sm text-gray-500">{{ __('auth.name') }} *</label>
                         <input name="customer_name" value="{{ old('customer_name', auth()->user()?->name) }}"
                                class="w-full border rounded-lg px-3 py-2 mt-1 @error('customer_name') border-red-500 @enderror">
                         @error('customer_name') <div class="text-xs text-red-500">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
-                        <label class="text-sm text-gray-500">Телефон *</label>
+                        <label class="text-sm text-gray-500">{{ __('shop.phone') }} *</label>
                         <input name="customer_phone" type="tel" placeholder="+7 (___) ___-__-__"
                                class="w-full border rounded-lg px-3 py-2 mt-1 @error('customer_phone') border-red-500 @enderror">
                         @error('customer_phone') <div class="text-xs text-red-500">{{ $message }}</div> @enderror
@@ -43,7 +43,7 @@
                                class="w-full border rounded-lg px-3 py-2 mt-1">
                     </div>
 
-                    <h2 class="font-semibold text-lg text-gray-800 pt-2">Способ доставки</h2>
+                    <h2 class="font-semibold text-lg text-gray-800 pt-2">{{ __('shop.delivery') }}</h2>
 
                     <div class="space-y-2">
                         @foreach($deliveryOptions as $option)
@@ -61,22 +61,22 @@
                                     @endif
                                 </div>
                                 <div class="text-sm font-medium {{ $option['cost'] === 0 ? 'text-green-600' : 'text-gray-700' }}">
-                                    {{ $option['cost'] === 0 ? 'Бесплатно' : number_format($option['cost'], 0, ',', ' ') . ' ₽' }}
+                                    {{ $option['cost'] === 0 ? __('shop.free') : number_format($option['cost'], 0, ',', ' ') . ' ₽' }}
                                 </div>
                             </label>
                         @endforeach
                     </div>
 
                     <div id="address-field">
-                        <label class="text-sm text-gray-500">Адрес доставки</label>
+                        <label class="text-sm text-gray-500">{{ __('shop.delivery_address') }}</label>
                         <textarea name="delivery_address" rows="2"
                                   class="w-full border rounded-lg px-3 py-2 mt-1 @error('delivery_address') border-red-500 @enderror"
-                                  placeholder="Город, улица, дом, квартира">{{ old('delivery_address') }}</textarea>
+                                  placeholder="{{ __('shop.address_placeholder') }}">{{ old('delivery_address') }}</textarea>
                         @error('delivery_address') <div class="text-xs text-red-500">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
-                        <label class="text-sm text-gray-500">Комментарий к заказу</label>
+                        <label class="text-sm text-gray-500">{{ __('shop.comment') }}</label>
                         <textarea name="comment" rows="2"
                                   class="w-full border rounded-lg px-3 py-2 mt-1">{{ old('comment') }}</textarea>
                     </div>
@@ -93,7 +93,7 @@
             {{-- Сводка --}}
             <div>
                 <div class="bg-white rounded-xl shadow-sm p-6 sticky top-20">
-                    <h2 class="font-semibold text-lg text-gray-800 mb-4">Ваш заказ</h2>
+                    <h2 class="font-semibold text-lg text-gray-800 mb-4">{{ __('shop.your_order') }}</h2>
                     <div class="space-y-2 mb-4">
                         @foreach($items as $item)
                             <div class="flex justify-between text-sm">
@@ -104,15 +104,15 @@
                     </div>
                     <div class="border-t pt-3 space-y-1">
                         <div class="flex justify-between text-sm text-gray-500">
-                            <span>Товары</span>
+                            <span>{{ __('shop.items') }}</span>
                             <span>{{ number_format($total, 0, ',', ' ') }} ₽</span>
                         </div>
                         <div class="flex justify-between text-sm text-gray-500">
-                            <span>Доставка</span>
+                            <span>{{ __('shop.delivery') }}</span>
                             <span id="delivery-cost-label">—</span>
                         </div>
                         <div class="flex justify-between text-lg font-bold text-gray-800">
-                            <span>Итого</span>
+                            <span>{{ __('shop.total') }}</span>
                             <span id="grand-total">{{ number_format($total, 0, ',', ' ') }} ₽</span>
                         </div>
                     </div>
@@ -142,7 +142,7 @@ function updateDelivery(label, cost) {
     const grandTotal = document.getElementById('grand-total');
 
     if (cost === 0) {
-        deliveryLabel.textContent = 'Бесплатно';
+        deliveryLabel.textContent = '{{ __(\'shop.free\') }}';
         deliveryLabel.classList.add('text-green-600');
     } else {
         deliveryLabel.textContent = cost.toLocaleString('ru-RU') + ' ₽';

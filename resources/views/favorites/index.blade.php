@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Избранное</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('ads.favorites') }}</h2>
     </x-slot>
 
     <div class="py-8">
@@ -19,11 +19,11 @@
                         <form method="POST" action="{{ route('favorites.destroy', $favorite->ad) }}">
                             @csrf
                             @method('DELETE')
-                            <button class="text-red-600 text-sm">Убрать</button>
+                            <button class="text-red-600 text-sm">{{ __('common.remove') }}</button>
                         </form>
                     </div>
                 @empty
-                    <div class="p-4 text-gray-600">Пусто.</div>
+                    <div class="p-4 text-gray-600">{{ __('favorites.empty') }}</div>
                 @endforelse
             </div>
 

@@ -1,6 +1,6 @@
 <x-guest-layout>
-    @section('title', 'Подтверждение — mcmaco')
-    <h1 class="text-3xl font-extrabold tracking-tight">Подтвердите вход</h1>
+    @section('title', __('auth.confirm_title') . ' — mcmaco')
+    <h1 class="text-3xl font-extrabold tracking-tight">{{ __('auth.confirm_title') }}</h1>
     <p class="mt-1.5 text-sm text-gray-400">Это защищённая зона — введите пароль, чтобы продолжить</p>
 
     <form method="POST" action="{{ route('password.confirm') }}" class="mt-8 space-y-5">

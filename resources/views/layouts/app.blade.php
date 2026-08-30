@@ -5,15 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>@yield('meta_title', config('app.name') . ' — интернет-магазин товаров с доставкой')</title>
-        <meta name="description" content="@yield('meta_description', 'mcmaco — интернет-магазин товаров с доставкой по России')">
+        <title>@yield('meta_title', config('app.name') . ' — ' . __('common.site_tagline'))</title>
+        <meta name="description" content="@yield('meta_description', __('common.meta_description'))">
         <meta name="robots" content="index, follow">
 
         <!-- Open Graph -->
         <meta property="og:site_name" content="mcmaco">
         <meta property="og:locale" content="ru_RU">
         <meta property="og:title" content="@yield('og_title', config('app.name'))">
-        <meta property="og:description" content="@yield('meta_description', 'mcmaco — интернет-магазин товаров с доставкой по России')">
+        <meta property="og:description" content="@yield('meta_description', __('common.meta_description'))">
         <meta property="og:type" content="@yield('og_type', 'website')">
         <meta property="og:url" content="{{ request()->url() }}">
         @yield('og_image')
@@ -21,7 +21,7 @@
         <!-- Twitter Cards -->
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="@yield('og_title', config('app.name'))">
-        <meta name="twitter:description" content="@yield('meta_description', 'mcmaco — интернет-магазин товаров с доставкой по России')">
+        <meta name="twitter:description" content="@yield('meta_description', __('common.meta_description'))">
         @yield('twitter_image')
 
         <!-- Fonts -->

@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Мои чаты</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('chat.my_chats') }}</h2>
     </x-slot>
 
     <div class="py-8">
@@ -9,10 +9,10 @@
                 @forelse($chats as $chat)
                     <a href="{{ route('chats.show', $chat) }}" class="block p-4 hover:bg-gray-50">
                         <div class="font-semibold">{{ $chat->ad?->title }}</div>
-                        <div class="text-sm text-gray-500">Покупатель: {{ $chat->buyer?->name }} · Продавец: {{ $chat->seller?->name }}</div>
+                        <div class="text-sm text-gray-500">{{ __('chat.buyer') }}: {{ $chat->buyer?->name }} · {{ __('chat.seller') }}: {{ $chat->seller?->name }}</div>
                     </a>
                 @empty
-                    <div class="p-4 text-gray-600">Чатов пока нет.</div>
+                    <div class="p-4 text-gray-600">{{ __('chat.empty') }}</div>
                 @endforelse
             </div>
 

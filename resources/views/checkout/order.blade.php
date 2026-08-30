@@ -1,25 +1,25 @@
 @extends('layouts.app')
 
-@section('meta_title', 'Заказ ' . $order->order_number . ' — mcmaco')
+@section('meta_title', __('shop.order') . ' ' . $order->order_number . ' — mcmaco')
 
 @section('content')
 <div class="py-6">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Breadcrumbs --}}
         <nav class="text-sm text-gray-400 mb-4">
-            <a href="{{ route('ads.index') }}" class="hover:text-amber-600">Главная</a>
+            <a href="{{ route('ads.index') }}" class="hover:text-amber-600">{{ __('common.home') }}</a>
             <span class="mx-1">/</span>
-            <span class="text-gray-600">Заказ {{ $order->order_number }}</span>
+            <span class="text-gray-600">{{ __('shop.order') }} {{ $order->order_number }}</span>
         </nav>
 
         <div class="bg-white rounded-xl shadow-sm p-8 text-center">
             <div class="text-5xl mb-4">✅</div>
-            <h1 class="text-2xl font-bold mb-2 text-gray-800">Заказ оформлен!</h1>
-            <div class="text-gray-500 mb-1">Номер заказа: <span class="font-mono font-medium text-gray-800">{{ $order->order_number }}</span></div>
-            <div class="text-sm text-gray-400 mb-6">Статус: {{ $order->status_label }}</div>
+            <h1 class="text-2xl font-bold mb-2 text-gray-800">{{ __('shop.order_placed') }}</h1>
+            <div class="text-gray-500 mb-1">{{ __('shop.order_number_label') }}: <span class="font-mono font-medium text-gray-800">{{ $order->order_number }}</span></div>
+            <div class="text-sm text-gray-400 mb-6">{{ __('shop.order_status') }}: {{ $order->status_label }}</div>
 
             <div class="text-left bg-gray-50 rounded-lg p-4 mb-6">
-                <div class="text-sm font-medium mb-2 text-gray-700">Состав заказа</div>
+                <div class="text-sm font-medium mb-2 text-gray-700">{{ __('shop.order_items') }}</div>
                 @foreach($order->items as $item)
                     <div class="flex justify-between text-sm py-1">
                         <span class="text-gray-600">{{ $item->title_snapshot }} ×{{ $item->qty }}</span>
@@ -27,7 +27,7 @@
                     </div>
                 @endforeach
                 <div class="border-t mt-2 pt-2 flex justify-between font-bold text-gray-800">
-                    <span>Итого</span>
+                    <span>{{ __('shop.total') }}</span>
                     <span>{{ $order->formatted_total }}</span>
                 </div>
             </div>
@@ -52,10 +52,10 @@
                     <a href="{{ route('payments.pay', $order) }}" class="inline-block bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition font-medium">
                         💳 Оплатить онлайн
                     </a>
-                    <span class="text-xs text-gray-400">или оплатите при получении</span>
+                    <span class="text-xs text-gray-400">{{ __('shop.or_pay_on_delivery') }}</span>
                 </div>
             @else
-                <p class="text-sm text-gray-400 mb-6">Мы свяжемся с вами по телефону для подтверждения заказа.</p>
+                <p class="text-sm text-gray-400 mb-6">{{ __('shop.order_confirm_hint') }}</p>
             @endif
 
             @if(session('error'))

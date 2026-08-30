@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Чат по объявлению: {{ $chat->ad?->title }}</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('chat.title') }}: {{ $chat->ad?->title }}</h2>
     </x-slot>
 
     <div class="py-8">
@@ -13,16 +13,16 @@
                             <div>{{ $message->message }}</div>
                         </div>
                     @empty
-                        <div class="text-gray-600">Сообщений пока нет.</div>
+                        <div class="text-gray-600">{{ __('chat.no_messages') }}</div>
                     @endforelse
                 </div>
 
                 <form method="POST" action="{{ route('messages.store', $chat) }}" class="mt-6">
                     @csrf
-                    <textarea name="message" rows="4" class="border rounded w-full px-3 py-2" placeholder="Ваше сообщение..."></textarea>
+                    <textarea name="message" rows="4" class="border rounded w-full px-3 py-2" placeholder="{{ __('chat.placeholder') }}"></textarea>
                     @error('message')<div class="text-red-600 text-sm">{{ $message }}</div>@enderror
                     <div class="mt-2 flex justify-end">
-                        <button class="bg-amber-600 text-white px-4 py-2 rounded">Отправить</button>
+                        <button class="bg-amber-600 text-white px-4 py-2 rounded">{{ __('common.send') }}</button>
                     </div>
                 </form>
             </div>

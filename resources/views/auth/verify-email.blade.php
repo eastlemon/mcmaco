@@ -1,5 +1,5 @@
 <x-guest-layout>
-    @section('title', 'Подтверждение email — mcmaco')
+    @section('title', __('auth.verify_title') . ' — mcmaco')
     <h1 class="text-3xl font-extrabold tracking-tight">Подтвердите email</h1>
     <p class="mt-1.5 text-sm text-gray-400">Мы отправили ссылку для подтверждения на ваш адрес</p>
 

@@ -1,5 +1,5 @@
 <x-guest-layout>
-    @section('title', 'Вход — mcmaco')
+    @section('title', __('auth.login') . ' — mcmaco')
     <h1 class="text-3xl font-extrabold tracking-tight">Вход</h1>
     <p class="mt-1.5 text-sm text-gray-400">Войдите, чтобы заказывать быстрее</p>
 
@@ -11,7 +11,7 @@
 
         {{-- Email --}}
         <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.email') }}</label>
             <div class="relative">
                 <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
                     <svg class="w-5 h-5" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
@@ -25,7 +25,7 @@
         {{-- Пароль --}}
         <div>
             <div class="flex items-center justify-between mb-1.5">
-                <label for="password" class="block text-sm font-medium text-gray-700">Пароль</label>
+                <label for="password" class="block text-sm font-medium text-gray-700">{{ __('auth.password') }}</label>
                 @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}" class="text-xs font-medium text-amber-600 hover:text-amber-700 transition">
                         Забыли пароль?

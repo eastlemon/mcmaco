@@ -21,7 +21,7 @@
          class="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-100 z-50 p-4">
         <div class="text-sm font-medium mb-3 text-gray-700">{{ __('shop.cart') }}</div>
         @if($itemsCount > 0)
-            <div class="text-xs text-gray-500 mb-3">{{ $itemsCount }} товар(ов) · {{ number_format($total, 0, ',', ' ') }} ₽</div>
+            <div class="text-xs text-gray-500 mb-3">{{ $itemsCount }} {{ __('shop.items_label') }} · {{ number_format($total, 0, ',', ' ') }} ₽</div>
             <a href="{{ route('cart') }}" class="block text-center bg-amber-600 text-white text-sm py-2 rounded-lg hover:bg-amber-700 transition">
                 Перейти в корзину
             </a>

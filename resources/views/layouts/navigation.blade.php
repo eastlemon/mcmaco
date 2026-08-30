@@ -38,10 +38,10 @@
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">Профиль</x-dropdown-link>
-                            <x-dropdown-link :href="route('ads.manage.index')">Мои товары</x-dropdown-link>
-                            <x-dropdown-link :href="route('chats.index')">Сообщения</x-dropdown-link>
-                            <x-dropdown-link :href="route('favorites.index')">Избранное</x-dropdown-link>
+                            <x-dropdown-link :href="route('profile.edit')">{{ __('auth.profile') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('ads.manage.index')">{{ __('ads.my_ads') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('chats.index')">{{ __('chat.messages') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('favorites.index')">{{ __('ads.favorites') }}</x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')"
@@ -104,7 +104,7 @@
             {{-- Mobile categories --}}
             @if($rootCategories->isNotEmpty())
                 <div class="flex flex-wrap gap-2">
-                    <a href="{{ route('ads.index') }}" class="text-sm px-3 py-1 rounded-full {{ !request('category_id') ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-600' }}">Все</a>
+                    <a href="{{ route('ads.index') }}" class="text-sm px-3 py-1 rounded-full {{ !request('category_id') ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-600' }}">{{ __('common.all') }}</a>
                     @foreach($rootCategories as $cat)
                         <a href="{{ $cat->slug ? route('categories.show', $cat->slug) : route('ads.index', ['category_id' => $cat->id]) }}" class="text-sm px-3 py-1 rounded-full {{ request('category_id') == $cat->id ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-600' }}">{{ $cat->name }}</a>
                     @endforeach
@@ -112,10 +112,10 @@
             @endif
 
             @auth
-                <a href="{{ route('profile.edit') }}" class="block text-sm text-gray-600 py-1">Профиль</a>
-                <a href="{{ route('ads.manage.index') }}" class="block text-sm text-gray-600 py-1">Мои товары</a>
-                <a href="{{ route('chats.index') }}" class="block text-sm text-gray-600 py-1">Сообщения</a>
-                <a href="{{ route('favorites.index') }}" class="block text-sm text-gray-600 py-1">Избранное</a>
+                <a href="{{ route('profile.edit') }}" class="block text-sm text-gray-600 py-1">{{ __('auth.profile') }}</a>
+                <a href="{{ route('ads.manage.index') }}" class="block text-sm text-gray-600 py-1">{{ __('ads.my_ads') }}</a>
+                <a href="{{ route('chats.index') }}" class="block text-sm text-gray-600 py-1">{{ __('chat.messages') }}</a>
+                <a href="{{ route('favorites.index') }}" class="block text-sm text-gray-600 py-1">{{ __('ads.favorites') }}</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="text-sm text-gray-600 py-1">{{ __('auth.logout') }}</button>
