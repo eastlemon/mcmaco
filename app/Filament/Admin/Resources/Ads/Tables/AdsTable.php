@@ -11,6 +11,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
@@ -22,7 +23,12 @@ class AdsTable
     {
         return $table
             ->columns([
+                ImageColumn::make('cover')
+                    ->label('Фото')
+                    ->getStateUsing(fn (Ad $record): ?string => $record->cover_image?->url)
+                    ->circular(),
                 TextColumn::make('title')
+                    ->label('Название')
                     ->searchable()
                     ->limit(40),
                 TextColumn::make('price')
@@ -33,7 +39,9 @@ class AdsTable
                     ->sortable()
                     ->color(fn ($state) => $state > 0 ? 'success' : 'danger'),
                 TextColumn::make('category.name')
-                    ->searchable(),
+                    ->label('Категория')
+                    ->searchable()
+                    ->placeholder('—'),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state) => match ($state) {

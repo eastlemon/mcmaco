@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -84,7 +85,7 @@ class Ad extends Model
     /** @return \Illuminate\Database\Eloquent\Relations\HasMany<AdImage, $this> */
     public function images(): HasMany
     {
-        return $this->hasMany(AdImage::class);
+        return $this->hasMany(AdImage::class)->orderBy('sort_order')->orderBy('id');
     }
 
     /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Chat, $this> */
@@ -122,6 +123,58 @@ class Ad extends Model
     public function getMetaDescriptionAttribute(): ?string
     {
         return $this->attributes['meta_description'] ?? Str::limit(strip_tags($this->description), 160);
+    }
+
+    /**
+     * Синхронизирует изображения товара с массивом путей (порядок массива = sort_order).
+     * Новые файлы из ads/draft/ переносятся в ads/{id}/.
+     *
+     * @param  array<int, string|null>  $paths
+     */
+    public function syncImages(array $paths): void
+    {
+        $paths = array_values(array_filter(array_map(fn ($path): string => trim((string) $path), $paths), fn (string $path): bool => $path !== ''));
+
+        $disk = Storage::disk('public');
+
+        foreach ($paths as $i => $path) {
+            if (str_starts_with($path, 'ads/draft/')) {
+                $newPath = "ads/{$this->id}/" . Str::uuid() . '.' . (pathinfo($path, PATHINFO_EXTENSION) ?: 'jpg');
+
+                if ($disk->move($path, $newPath)) {
+                    $paths[$i] = $newPath;
+                }
+            }
+        }
+
+        $this->images->each(function (AdImage $image) use ($disk, $paths): void {
+            if (! in_array($image->path, $paths, true)) {
+                $image->delete();
+                $disk->delete($image->path);
+            }
+        });
+
+        $existing = $this->images()
+            ->whereIn('path', $paths)
+            ->pluck('path')
+            ->all();
+
+        foreach ($paths as $i => $path) {
+            if (in_array($path, $existing, true)) {
+                $this->images()
+                    ->where('path', $path)
+                    ->update(['sort_order' => $i]);
+
+                continue;
+            }
+
+            $this->images()->create([
+                'path' => $path,
+                'sort_order' => $i,
+            ]);
+        }
+
+        $this->load('images');
     }
 
     public function scopeActive(Builder $query): Builder

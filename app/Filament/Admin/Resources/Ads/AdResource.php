@@ -22,6 +22,10 @@ class AdResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $modelLabel = 'Товар';
+
+    protected static ?string $pluralModelLabel = 'Товары';
+
     public static function form(Schema $schema): Schema
     {
         return AdForm::configure($schema);

@@ -2,12 +2,14 @@
 
 namespace App\Filament\Admin\Resources\Ads\Schemas;
 
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class AdForm
 {
@@ -20,8 +22,12 @@ class AdForm
                         Select::make('user_id')
                             ->relationship('user', 'name')
                             ->searchable()
-                            ->required(),
+                            ->nullable()
+                            ->placeholder('—')
+                            ->hint('Товары магазина создаются без владельца')
+                            ->label('Владелец'),
                         TextInput::make('title')
+                            ->label('Название')
                             ->required()
                             ->maxLength(100)
                             ->live(onBlur: true)
@@ -30,11 +36,35 @@ class AdForm
                             ->required()
                             ->unique(ignoreRecord: true),
                         Textarea::make('description')
+                            ->label('Описание')
                             ->required()
                             ->maxLength(5000)
                             ->rows(6)
                             ->columnSpanFull(),
                     ])->columns(2),
+
+                Section::make('Фотографии')
+                    ->description('До 10 изображений, порядок перетаскиванием — первое становится обложкой')
+                    ->schema([
+                        FileUpload::make('uploadedImages')
+                            ->label('')
+                            ->image()
+                            ->imageEditor()
+                            ->multiple()
+                            ->reorderable()
+                            ->appendFiles()
+                            ->maxFiles(10)
+                            ->maxSize(5120)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->disk('public')
+                            ->directory('ads/draft')
+                            ->visibility('public')
+                            ->getUploadedFileNameForStorageUsing(fn ($file): string => (string) Str::uuid() . '.' . $file->getClientOriginalExtension())
+                            ->afterStateHydrated(function ($component, ?\App\Models\Ad $record): void {
+                                $component->state($record?->images->pluck('path')->all() ?? []);
+                            })
+                            ->columnSpanFull(),
+                    ]),
 
                 Section::make('Цена и наличие')
                     ->schema([
