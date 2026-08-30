@@ -34,7 +34,7 @@ Route::post('/cart/add', function (\Illuminate\Http\Request $request, \App\Servi
     return back()->with('added', true);
 })->name('cart.add');
 
-Route::get('/cart', fn () => view('livewire.cart-page'))->name('cart');
+Route::get('/cart', \App\Livewire\CartPage::class)->name('cart');
 Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/order/{order}', [\App\Http\Controllers\CheckoutController::class, 'show'])->name('orders.show');
