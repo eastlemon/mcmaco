@@ -57,7 +57,7 @@
             <p class="text-sm text-gray-500">© {{ date('Y') }} mcmaco. {{ __('footer.rights') }}</p>
             <div class="flex items-center gap-4 text-xs text-gray-500">
                 <span>{{ __('footer.payment') }}:</span>
-                <span class="bg-gray-700 px-2 py-1 rounded text-gray-300">ЮKassa</span>
+                <span class="bg-gray-700 px-2 py-1 rounded text-gray-300">{{ __('shop.yookassa') }}</span>
                 <span class="bg-gray-700 px-2 py-1 rounded text-gray-300">{{ __('shop.payment_on_delivery') }}</span>
             </div>
         </div>

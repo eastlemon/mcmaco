@@ -153,7 +153,7 @@
                 <div class="bg-white rounded-xl shadow-sm p-5">
                     <h3 class="font-semibold text-gray-800 mb-3 text-sm">💳 {{ __('shop.payment') }}</h3>
                     <div class="flex flex-wrap gap-2">
-                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1.5 rounded-full">{{ __('shop.pay') }} (ЮKassa)</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1.5 rounded-full">{{ __('shop.pay') }} ({{ __('shop.yookassa') }})</span>
                         <span class="bg-gray-100 text-gray-600 text-xs px-3 py-1.5 rounded-full">{{ __('shop.payment_on_delivery') }}</span>
                     </div>
                 </div>
