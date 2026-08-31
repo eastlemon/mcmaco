@@ -2,7 +2,16 @@
 
 return [
     'site_name'          => 'McMaco',
-    'search_placeholder' => 'Search listings...',
+    'site_tagline'       => 'Online store with delivery across Russia',
+    'meta_description'   => 'Online store with delivery across Russia',
+    'guest_tagline'      => 'One-click ordering, honest prices and hassle-free returns.',
+    'home'               => 'Home',
+    'search_placeholder' => 'Search products...',
+    'title'              => 'Title',
+    'select'             => 'Select',
+    'send'               => 'Send',
+    'remove'             => 'Remove',
+    'error_upload'       => 'Upload error',
     'back'               => 'Back',
     'save'               => 'Save',
     'cancel'             => 'Cancel',
