@@ -13,7 +13,7 @@ class LogsRelationManager extends RelationManager
 {
     protected static string $relationship = 'logs';
 
-    protected static ?string $title = 'История запусков';
+    protected static ?string $title = null; // use getTitle()
 
     public function table(Table $table): Table
     {
@@ -21,7 +21,7 @@ class LogsRelationManager extends RelationManager
             ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('status')
-                    ->label('Статус')
+                    ->label(__('filament.pipelines.logs.status'))
                     ->badge()
                     ->color(fn (string $state) => match ($state) {
                         'success' => 'success',
@@ -33,36 +33,36 @@ class LogsRelationManager extends RelationManager
                     ->formatStateUsing(fn (string $state) => PipelineLog::STATUSES[$state] ?? $state),
 
                 Tables\Columns\TextColumn::make('message')
-                    ->label('Сообщение')
+                    ->label(__('filament.pipelines.logs.message'))
                     ->limit(60)
                     ->wrap(),
 
                 Tables\Columns\TextColumn::make('processed')
-                    ->label('Обработано')
+                    ->label(__('filament.pipelines.logs.processed'))
                     ->alignRight(),
 
                 Tables\Columns\TextColumn::make('created')
-                    ->label('Создано')
+                    ->label(__('filament.pipelines.logs.created'))
                     ->alignRight()
                     ->color('success'),
 
                 Tables\Columns\TextColumn::make('updated')
-                    ->label('Обновлено')
+                    ->label(__('filament.pipelines.logs.updated'))
                     ->alignRight()
                     ->color('info'),
 
                 Tables\Columns\TextColumn::make('errors')
-                    ->label('Ошибок')
+                    ->label(__('filament.pipelines.logs.errors'))
                     ->alignRight()
                     ->color(fn ($state) => $state > 0 ? 'danger' : 'gray'),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Дата')
+                    ->label(__('filament.pipelines.logs.date'))
                     ->dateTime('d.m.Y H:i:s'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
-                    ->label('Статус')
+                    ->label(__('filament.pipelines.logs.status'))
                     ->options(PipelineLog::STATUSES),
             ])
             ->actions([

@@ -32,7 +32,7 @@ class UserForm
                 TextInput::make('city')
                     ->maxLength(255),
                 TextInput::make('avatar')
-                    ->helperText('Путь к файлу в storage'),
+                    ->helperText(__('filament.users.hints.storage_path')),
                 Textarea::make('bio')
                     ->rows(4)
                     ->columnSpanFull(),

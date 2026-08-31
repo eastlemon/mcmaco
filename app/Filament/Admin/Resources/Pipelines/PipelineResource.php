@@ -19,9 +19,9 @@ class PipelineResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowsRightLeft;
 
-    protected static ?string $navigationLabel = 'Пайплайны';
-    protected static ?string $modelLabel = 'Пайплайн';
-    protected static ?string $pluralModelLabel = 'Пайплайны';
+    protected static ?string $navigationLabel = null; // use getNavigationLabel()
+    protected static ?string $modelLabel = null; // use getModelLabel()
+    protected static ?string $pluralModelLabel = null; // use getPluralModelLabel()
 
     public static function table(\Filament\Tables\Table $table): \Filament\Tables\Table
     {

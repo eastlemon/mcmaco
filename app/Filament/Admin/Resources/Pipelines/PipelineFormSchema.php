@@ -18,15 +18,15 @@ trait PipelineFormSchema
     protected function pipelineFormSchema(): array
     {
         return [
-            Section::make('Основное')
+            Section::make(__('filament.pipelines.sections.main'))
                 ->schema([
                     TextInput::make('name')
-                        ->label('Название')
+                        ->label(__('filament.pipelines.fields.name'))
                         ->required()
                         ->maxLength(255),
 
                     Select::make('type')
-                        ->label('Тип')
+                        ->label(__('filament.pipelines.fields.type'))
                         ->options(Pipeline::TYPES)
                         ->required()
                         ->live()
@@ -36,7 +36,7 @@ trait PipelineFormSchema
                         }),
 
                     Select::make('adapter')
-                        ->label('Адаптер')
+                        ->label(__('filament.pipelines.fields.adapter'))
                         ->required()
                         ->live()
                         ->options(function (Get $get): array {
@@ -56,30 +56,30 @@ trait PipelineFormSchema
                         }),
 
                     Select::make('format')
-                        ->label('Формат')
+                        ->label(__('filament.pipelines.fields.format'))
                         ->options(Pipeline::FORMATS)
                         ->default('csv')
                         ->required(),
                 ]),
 
-            Section::make('Расписание')
+            Section::make(__('filament.pipelines.sections.schedule'))
                 ->schema([
                     TextInput::make('schedule')
-                        ->label('Cron-выражение')
-                        ->placeholder('0 * * * * (каждый час)')
-                        ->helperText('Например: 0 */6 * * * — каждые 6 часов. Оставьте пустым для ручного запуска.')
+                        ->label(__('filament.pipelines.fields.cron'))
+                        ->placeholder(__('filament.pipelines.placeholders.cron'))
+                        ->helperText(__('filament.pipelines.hints.cron'))
                         ->maxLength(100)
                         ->regex('/^[\d\/\*\,\-\s]+$/')
                         ->validationMessages([
-                            'regex' => 'Только цифры, пробелы и символы / * , -',
+                            'regex' => __('filament.pipelines.validation.cron_regex'),
                         ]),
 
                     Toggle::make('is_active')
-                        ->label('Активен')
+                        ->label(__('filament.pipelines.fields.active'))
                         ->default(true),
                 ]),
 
-            Section::make('Конфигурация адаптера')
+            Section::make(__('filament.pipelines.sections.adapter_config'))
                 ->schema(fn (Get $get): array => $this->buildConfigFields($get))
                 ->visible(fn (Get $get): bool => filled($get('adapter'))),
         ];

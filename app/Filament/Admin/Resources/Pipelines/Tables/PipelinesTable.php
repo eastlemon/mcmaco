@@ -18,27 +18,27 @@ class PipelinesTable
             ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('name')
-                    ->label('Название')
+                    ->label(__('filament.pipelines.fields.name'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('type')
-                    ->label('Тип')
+                    ->label(__('filament.pipelines.fields.type'))
                     ->badge()
                     ->color(fn (string $state) => $state === 'export' ? 'info' : 'success')
                     ->formatStateUsing(fn (string $state) => Pipeline::TYPES[$state] ?? $state),
 
                 TextColumn::make('adapter')
-                    ->label('Адаптер')
+                    ->label(__('filament.pipelines.fields.adapter'))
                     ->badge()
                     ->color('gray'),
 
                 TextColumn::make('format')
-                    ->label('Формат')
+                    ->label(__('filament.pipelines.fields.format'))
                     ->formatStateUsing(fn ($state) => is_string($state) ? mb_strtoupper($state) : $state),
 
                 TextColumn::make('lastRun.status')
-                    ->label('Последний запуск')
+                    ->label(__('filament.pipelines.fields.last_run'))
                     ->badge()
                     ->color(fn ($state) => match ($state) {
                         'success' => 'success',
@@ -50,35 +50,35 @@ class PipelinesTable
                     ->placeholder('—'),
 
                 TextColumn::make('lastRun.created_at')
-                    ->label('Когда')
+                    ->label(__('filament.pipelines.fields.when'))
                     ->dateTime('d.m.Y H:i')
                     ->placeholder('—'),
 
                 IconColumn::make('is_active')
-                    ->label('Активен')
+                    ->label(__('filament.pipelines.fields.active'))
                     ->boolean(),
             ])
             ->filters([
                 SelectFilter::make('type')
-                    ->label('Тип')
+                    ->label(__('filament.pipelines.fields.type'))
                     ->options(Pipeline::TYPES),
 
                 SelectFilter::make('is_active')
-                    ->label('Статус')
-                    ->options([1 => 'Активные', 0 => 'Отключённые']),
+                    ->label(__('filament.pipelines.fields.status'))
+                    ->options([1 => __('filament.pipelines.status.active'), 0 => __('filament.pipelines.status.disabled')]),
             ])
             ->recordActions([
-                ViewAction::make()->label('Просмотр'),
+                ViewAction::make()->label(__('filament.common.view')),
 
                 Action::make('run')
-                    ->label('Запустить')
+                    ->label(__('filament.pipelines.actions.run'))
                     ->icon('heroicon-o-play')
                     ->color('success')
                     ->action(function (Pipeline $record) {
                         \App\Jobs\RunPipelineJob::dispatch($record);
                         \Filament\Notifications\Notification::make()
                             ->success()
-                            ->title('Пайплайн запущен')
+                            ->title(__('filament.pipelines.notifications.started'))
                             ->body("{$record->name} поставлен в очередь")
                             ->send();
                     }),

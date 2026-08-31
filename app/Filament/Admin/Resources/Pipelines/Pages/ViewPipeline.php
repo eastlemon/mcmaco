@@ -21,14 +21,14 @@ class ViewPipeline extends ViewRecord
     {
         return [
             Action::make('run')
-                ->label('Запустить сейчас')
+                ->label(__('filament.pipelines.actions.run_now'))
                 ->icon('heroicon-o-play')
                 ->color('success')
                 ->action(function (Pipeline $record) {
                     RunPipelineJob::dispatch($record);
                     Notification::make()
                         ->success()
-                        ->title('Пайплайн запущен')
+                        ->title(__('filament.pipelines.notifications.started'))
                         ->body("{$record->name} поставлен в очередь выполнения")
                         ->send();
                 }),
