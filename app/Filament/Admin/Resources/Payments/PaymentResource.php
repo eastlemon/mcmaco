@@ -17,9 +17,9 @@ class PaymentResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCreditCard;
 
-    protected static ?string $navigationLabel = 'Платежи';
-    protected static ?string $modelLabel = 'Платёж';
-    protected static ?string $pluralModelLabel = 'Платежи';
+    protected static ?string $navigationLabel = null; // __('filament.payments.nav')
+    protected static ?string $modelLabel = null; // __('filament.payments.singular')
+    protected static ?string $pluralModelLabel = null; // __('filament.payments.plural')
 
     public static function table(Table $table): Table
     {

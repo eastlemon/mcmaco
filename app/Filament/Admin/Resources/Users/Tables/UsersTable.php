@@ -17,7 +17,7 @@ class UsersTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email')
+                    ->label(__('filament.users.fields.email'))
                     ->searchable(),
                 TextColumn::make('email_verified_at')
                     ->dateTime()

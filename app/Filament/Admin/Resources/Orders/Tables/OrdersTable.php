@@ -18,21 +18,21 @@ class OrdersTable
             ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('order_number')
-                    ->label('№ заказа')
+                    ->label(__('filament.orders.fields.number'))
                     ->searchable()
                     ->copyable()
                     ->fontFamily('mono'),
 
                 TextColumn::make('customer_name')
-                    ->label('Клиент')
+                    ->label(__('filament.orders.fields.client'))
                     ->searchable(),
 
                 TextColumn::make('customer_phone')
-                    ->label('Телефон')
+                    ->label(__('filament.orders.fields.phone'))
                     ->searchable(),
 
                 TextColumn::make('status')
-                    ->label('Статус')
+                    ->label(__('filament.orders.fields.status'))
                     ->badge()
                     ->color(fn (string $state) => match ($state) {
                         'new' => 'warning',
@@ -47,50 +47,50 @@ class OrdersTable
                     ->formatStateUsing(fn (string $state) => Order::STATUSES[$state] ?? $state),
 
                 TextColumn::make('total')
-                    ->label('Сумма')
+                    ->label(__('filament.orders.fields.amount'))
                     ->money('RUB', locale: 'ru')
                     ->sortable(),
 
                 TextColumn::make('deliveryMethod.name')
-                    ->label('Доставка')
+                    ->label(__('filament.orders.fields.delivery'))
                     ->placeholder(fn (Order $record) => Order::DELIVERY_METHODS[$record->delivery_method] ?? $record->delivery_method),
 
                 TextColumn::make('tracking_number')
-                    ->label('Трек')
+                    ->label(__('filament.orders.fields.tracking_short'))
                     ->searchable()
                     ->copyable()
                     ->limit(20)
                     ->placeholder('—'),
 
                 TextColumn::make('is_quick_order')
-                    ->label('Тип')
+                    ->label(__('filament.orders.fields.type'))
                     ->badge()
-                    ->formatStateUsing(fn ($state) => $state ? '⚡ 1-клик' : 'Обычный')
+                    ->formatStateUsing(fn ($state) => $state ? '⚡ ' . __('filament.orders.type.quick') : __('filament.orders.type.regular'))
                     ->color(fn ($state) => $state ? 'warning' : 'gray'),
 
                 TextColumn::make('created_at')
-                    ->label('Создан')
+                    ->label(__('filament.orders.fields.created_at'))
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
             ])
             ->filters([
                 SelectFilter::make('status')
-                    ->label('Статус')
+                    ->label(__('filament.orders.fields.status'))
                     ->options(Order::STATUSES),
 
                 SelectFilter::make('delivery_method_id')
-                    ->label('Доставка')
+                    ->label(__('filament.orders.fields.delivery'))
                     ->relationship('deliveryMethod', 'name'),
 
                 SelectFilter::make('is_quick_order')
-                    ->label('Тип заказа')
+                    ->label(__('filament.orders.fields.type'))
                     ->options([
-                        '1' => 'Быстрый заказ',
-                        '0' => 'Обычный',
+                        '1' => __('filament.orders.type.quick'),
+                        '0' => __('filament.orders.type.regular'),
                     ]),
             ])
             ->recordActions([
-                ViewAction::make()->label('Просмотр'),
+                ViewAction::make()->label(__('filament.common.view')),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

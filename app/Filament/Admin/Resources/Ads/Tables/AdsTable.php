@@ -24,11 +24,11 @@ class AdsTable
         return $table
             ->columns([
                 ImageColumn::make('cover')
-                    ->label('Фото')
+                    ->label(__('filament.ads.fields.photo'))
                     ->getStateUsing(fn (Ad $record): ?string => $record->cover_image?->url)
                     ->circular(),
                 TextColumn::make('title')
-                    ->label('Название')
+                    ->label(__('filament.ads.fields.title'))
                     ->searchable()
                     ->limit(40),
                 TextColumn::make('price')
@@ -39,7 +39,7 @@ class AdsTable
                     ->sortable()
                     ->color(fn ($state) => $state > 0 ? 'success' : 'danger'),
                 TextColumn::make('category.name')
-                    ->label('Категория')
+                    ->label(__('filament.ads.fields.category'))
                     ->searchable()
                     ->placeholder('—'),
                 TextColumn::make('status')
@@ -55,7 +55,7 @@ class AdsTable
                     ->badge(),
                 IconColumn::make('is_featured')
                     ->boolean()
-                    ->label('Реком.'),
+                    ->label(__('filament.ads.fields.featured_short')),
                 TextColumn::make('views')
                     ->numeric()
                     ->sortable()
@@ -77,15 +77,15 @@ class AdsTable
                 TrashedFilter::make(),
                 SelectFilter::make('status')
                     ->options([
-                        'pending' => 'На модерации',
-                        'active' => 'Активен',
-                        'closed' => 'Закрыт',
-                        'rejected' => 'Отклонён',
+                        'pending' => __('filament.ads.status.pending'),
+                        'active' => __('filament.ads.status.active'),
+                        'closed' => __('filament.ads.status.closed'),
+                        'rejected' => __('filament.ads.status.rejected'),
                     ]),
                 SelectFilter::make('is_featured')
                     ->options([
-                        '1' => 'Рекомендуемые',
-                        '0' => 'Обычные',
+                        '1' => __('filament.ads.featured.yes'),
+                        '0' => __('filament.ads.featured.no'),
                     ]),
             ])
             ->recordActions([

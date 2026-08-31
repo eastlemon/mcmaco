@@ -20,19 +20,19 @@ class ViewPayment extends ViewRecord
     {
         return [
             Actions\Action::make('check_status')
-                ->label('Проверить статус')
+                ->label(__('filament.payments.actions.check_status'))
                 ->icon('heroicon-o-arrow-path')
                 ->action(function () {
                     $service = app(YooKassaService::class);
                     try {
                         $service->checkPaymentStatus($this->record);
                         Notification::make()
-                            ->title('Статус обновлён')
+                            ->title(__('filament.payments.notifications.status_updated'))
                             ->success()
                             ->send();
                     } catch (\Throwable $e) {
                         Notification::make()
-                            ->title('Ошибка: ' . $e->getMessage())
+                            ->title(__('filament.common.error') . ': ' . $e->getMessage())
                             ->danger()
                             ->send();
                     }
@@ -40,7 +40,7 @@ class ViewPayment extends ViewRecord
                 ->visible(fn () => $this->record->status === Payment::STATUS_PENDING),
 
             Actions\Action::make('refund')
-                ->label('Возврат')
+                ->label(__('filament.payments.actions.refund'))
                 ->icon('heroicon-o-arrow-uturn-left')
                 ->requiresConfirmation()
                 ->action(function () {
@@ -48,12 +48,12 @@ class ViewPayment extends ViewRecord
                     try {
                         $service->refund($this->record);
                         Notification::make()
-                            ->title('Возврат оформлен')
+                            ->title(__('filament.payments.notifications.refunded'))
                             ->success()
                             ->send();
                     } catch (\Throwable $e) {
                         Notification::make()
-                            ->title('Ошибка возврата: ' . $e->getMessage())
+                            ->title(__('filament.common.error') . ' ' . __('filament.payments.actions.refund') . ': ' . $e->getMessage())
                             ->danger()
                             ->send();
                     }

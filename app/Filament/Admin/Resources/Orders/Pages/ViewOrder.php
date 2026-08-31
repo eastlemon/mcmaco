@@ -16,14 +16,14 @@ class ViewOrder extends ViewRecord
     {
         return [
             Action::make('set_tracking')
-                ->label('Трек-номер')
+                ->label(__('filament.orders.fields.tracking'))
                 ->icon('heroicon-o-map-pin')
                 ->color('info')
                 ->visible(fn (Order $record) => $record->deliveryMethod && $record->deliveryMethod->type !== 'pickup'
                     && in_array($record->status, [Order::STATUS_PAID, Order::STATUS_PROCESSING, Order::STATUS_SHIPPED]))
                 ->schema([
                     TextInput::make('tracking_number')
-                        ->label('Трек-номер')
+                        ->label(__('filament.orders.fields.tracking'))
                         ->required()
                         ->default(fn (Order $record) => $record->tracking_number),
                 ])
@@ -33,38 +33,38 @@ class ViewOrder extends ViewRecord
                         'status' => Order::STATUS_SHIPPED,
                     ]);
                 })
-                ->modalButton('Сохранить и отправить'),
+                ->modalButton(__('filament.orders.actions.save_and_send')),
 
             Action::make('confirm')
-                ->label('Подтвердить')
+                ->label(__('filament.orders.actions.confirm'))
                 ->icon('heroicon-o-check')
                 ->color('success')
                 ->visible(fn (Order $record) => $record->status === Order::STATUS_NEW)
                 ->action(fn (Order $record) => $record->update(['status' => Order::STATUS_CONFIRMED])),
 
             Action::make('process')
-                ->label('Собрать')
+                ->label(__('filament.orders.actions.pack'))
                 ->icon('heroicon-o-cube')
                 ->color('info')
                 ->visible(fn (Order $record) => in_array($record->status, [Order::STATUS_CONFIRMED, Order::STATUS_PAID]))
                 ->action(fn (Order $record) => $record->update(['status' => Order::STATUS_PROCESSING])),
 
             Action::make('ship')
-                ->label('Отправить')
+                ->label(__('filament.orders.actions.ship'))
                 ->icon('heroicon-o-truck')
                 ->color('warning')
                 ->visible(fn (Order $record) => $record->status === Order::STATUS_PROCESSING)
                 ->action(fn (Order $record) => $record->update(['status' => Order::STATUS_SHIPPED])),
 
             Action::make('complete')
-                ->label('Завершить')
+                ->label(__('filament.orders.actions.complete'))
                 ->icon('heroicon-o-check-badge')
                 ->color('gray')
                 ->visible(fn (Order $record) => $record->status === Order::STATUS_SHIPPED || $record->status === Order::STATUS_DELIVERED)
                 ->action(fn (Order $record) => $record->update(['status' => Order::STATUS_DONE])),
 
             Action::make('cancel')
-                ->label('Отменить')
+                ->label(__('filament.orders.actions.cancel'))
                 ->icon('heroicon-o-x-mark')
                 ->color('danger')
                 ->visible(fn (Order $record) => !in_array($record->status, [Order::STATUS_DONE, Order::STATUS_CANCELLED]))

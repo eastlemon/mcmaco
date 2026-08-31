@@ -17,9 +17,9 @@ class OrderResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingCart;
 
-    protected static ?string $navigationLabel = 'Заказы';
-    protected static ?string $modelLabel = 'Заказ';
-    protected static ?string $pluralModelLabel = 'Заказы';
+    protected static ?string $navigationLabel = null; // __('filament.orders.nav')
+    protected static ?string $modelLabel = null; // __('filament.orders.singular')
+    protected static ?string $pluralModelLabel = null; // __('filament.orders.plural')
 
     public static function table(Table $table): Table
     {

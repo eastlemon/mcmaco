@@ -22,9 +22,9 @@ class AdResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $modelLabel = 'Товар';
+    protected static ?string $modelLabel = null; // __('filament.ads.singular')
 
-    protected static ?string $pluralModelLabel = 'Товары';
+    protected static ?string $pluralModelLabel = null; // __('filament.ads.plural')
 
     public static function form(Schema $schema): Schema
     {

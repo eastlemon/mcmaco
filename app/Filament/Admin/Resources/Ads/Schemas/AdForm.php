@@ -17,7 +17,7 @@ class AdForm
     {
         return $schema
             ->components([
-                Section::make('Основное')
+                Section::make(__('filament.ads.sections.main'))
                     ->schema([
                         Select::make('user_id')
                             ->relationship('user', 'name')
@@ -25,10 +25,10 @@ class AdForm
                             ->preload()
                             ->nullable()
                             ->placeholder('—')
-                            ->hint('Товары магазина создаются без владельца')
-                            ->label('Владелец'),
+                            ->hint(__('filament.ads.hints.no_owner'))
+                            ->label(__('filament.ads.fields.owner')),
                         TextInput::make('title')
-                            ->label('Название')
+                            ->label(__('filament.ads.fields.title'))
                             ->required()
                             ->maxLength(100)
                             ->live(onBlur: true)
@@ -37,15 +37,15 @@ class AdForm
                             ->required()
                             ->unique(ignoreRecord: true),
                         Textarea::make('description')
-                            ->label('Описание')
+                            ->label(__('filament.ads.fields.description'))
                             ->required()
                             ->maxLength(5000)
                             ->rows(6)
                             ->columnSpanFull(),
                     ])->columns(2),
 
-                Section::make('Фотографии')
-                    ->description('До 10 изображений, порядок перетаскиванием — первое становится обложкой')
+                Section::make(__('filament.ads.sections.photos'))
+                    ->description(__('filament.ads.hints.photos'))
                     ->schema([
                         FileUpload::make('uploadedImages')
                             ->label('')
@@ -67,7 +67,7 @@ class AdForm
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Цена и наличие')
+                Section::make(__('filament.ads.sections.price'))
                     ->schema([
                         TextInput::make('price')
                             ->required()
@@ -80,13 +80,13 @@ class AdForm
                             ->numeric()
                             ->minValue(0)
                             ->default(1)
-                            ->label('Остаток на складе'),
+                            ->label(__('filament.ads.fields.stock')),
                         TextInput::make('sku')
-                            ->label('Артикул (SKU)')
+                            ->label(__('filament.ads.fields.sku'))
                             ->unique(ignoreRecord: true),
                     ])->columns(3),
 
-                Section::make('Категория и параметры')
+                Section::make(__('filament.ads.sections.category'))
                     ->schema([
                         Select::make('category_id')
                             ->relationship('category', 'name')
@@ -95,21 +95,21 @@ class AdForm
                         TextInput::make('city'),
                         Select::make('condition')
                             ->options([
-                                'new' => 'Новое',
-                                'used' => 'Б/у',
+                                'new' => __('filament.ads.condition.new'),
+                                'used' => __('filament.ads.condition.used'),
                             ])
                             ->required(),
                         Select::make('status')
                             ->options([
-                                'pending' => 'На модерации',
-                                'active' => 'Активен',
-                                'closed' => 'Закрыт',
-                                'rejected' => 'Отклонён',
+                                'pending' => __('filament.ads.status.pending'),
+                                'active' => __('filament.ads.status.active'),
+                                'closed' => __('filament.ads.status.closed'),
+                                'rejected' => __('filament.ads.status.rejected'),
                             ])
                             ->required()
                             ->default('active'),
                         Toggle::make('is_featured')
-                            ->label('Рекомендуемый (на главной)')
+                            ->label(__('filament.ads.fields.featured'))
                             ->default(false),
                     ])->columns(2),
 
@@ -117,11 +117,11 @@ class AdForm
                     ->schema([
                         TextInput::make('meta_title')
                             ->label('Meta Title')
-                            ->placeholder('Авто из заголовка'),
+                            ->placeholder(__('filament.ads.placeholders.slug')),
                         Textarea::make('meta_description')
                             ->label('Meta Description')
                             ->rows(2)
-                            ->placeholder('Авто из описания'),
+                            ->placeholder(__('filament.ads.placeholders.meta_description')),
                     ])->columns(1),
             ]);
     }

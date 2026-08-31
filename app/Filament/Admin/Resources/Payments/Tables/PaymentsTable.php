@@ -18,16 +18,16 @@ class PaymentsTable
                     ->sortable(),
 
                 TextColumn::make('order.order_number')
-                    ->label('Заказ')
+                    ->label(__('filament.payments.order'))
                     ->searchable()
                     ->url(fn ($record) => $record->order ? route('filament.admin.resources.orders.view', $record->order) : null),
 
                 TextColumn::make('provider')
-                    ->label('Провайдер')
+                    ->label(__('filament.payments.provider'))
                     ->badge(),
 
                 TextColumn::make('status')
-                    ->label('Статус')
+                    ->label(__('filament.payments.status'))
                     ->badge()
                     ->colors([
                         'warning' => \App\Models\Payment::STATUS_PENDING,
@@ -38,32 +38,32 @@ class PaymentsTable
                     ->formatStateUsing(fn ($state) => \App\Models\Payment::STATUSES[$state] ?? $state),
 
                 TextColumn::make('amount')
-                    ->label('Сумма')
+                    ->label(__('filament.payments.amount'))
                     ->money('RUB')
                     ->sortable(),
 
                 TextColumn::make('provider_payment_id')
-                    ->label('ID платежа')
+                    ->label(__('filament.payments.payment_id'))
                     ->copyable()
                     ->limit(20),
 
                 TextColumn::make('paid_at')
-                    ->label('Оплачен')
+                    ->label(__('filament.payments.paid_at'))
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
 
                 TextColumn::make('created_at')
-                    ->label('Создан')
+                    ->label(__('filament.payments.created_at'))
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
             ])
             ->filters([
                 SelectFilter::make('status')
-                    ->label('Статус')
+                    ->label(__('filament.payments.status'))
                     ->options(\App\Models\Payment::STATUSES),
 
                 SelectFilter::make('provider')
-                    ->label('Провайдер')
+                    ->label(__('filament.payments.provider'))
                     ->options(['yookassa' => 'ЮKassa']),
             ])
             ->defaultSort('created_at', 'desc');

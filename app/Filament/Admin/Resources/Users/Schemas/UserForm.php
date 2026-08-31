@@ -17,7 +17,7 @@ class UserForm
                     ->required()
                     ->maxLength(255),
                 TextInput::make('email')
-                    ->label('Email')
+                    ->label(__('filament.users.fields.email'))
                     ->email()
                     ->required()
                     ->unique(ignoreRecord: true),
