@@ -83,10 +83,10 @@
                 </div>
 
                 <button type="submit" name="pay_online" value="1" class="w-full bg-green-600 text-white font-medium py-3 rounded-lg mt-4 hover:bg-green-700 transition">
-                    💳 Оплатить онлайн
+                    💳 {{ __('shop.pay_online') }}
                 </button>
                 <button type="submit" class="w-full bg-amber-600 text-white font-medium py-3 rounded-lg mt-2 hover:bg-amber-700 transition">
-                    Подтвердить заказ (оплата при получении)
+                    {{ __('shop.confirm_cod') }}
                 </button>
             </form>
 

@@ -9,7 +9,7 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h18M6 12h12M10 20h4"/>
             </svg>
-            Фильтры
+            {{ __('ads.filter.label') }}
             @if($this->active_filters_count > 0)
                 <span class="bg-amber-600 text-white text-xs rounded-full px-2 py-0.5">{{ $this->active_filters_count }}</span>
             @endif
@@ -31,7 +31,7 @@
                 <h2 class="font-semibold text-gray-800">{{ __('ads.filter.label') }}</h2>
                 @if($this->active_filters_count > 0)
                     <button wire:click="clearFilters" class="text-xs text-amber-600 hover:text-amber-700 font-medium">
-                        Сбросить ({{ $this->active_filters_count }})
+                        {{ __('ads.filter.reset') }} ({{ $this->active_filters_count }})
                     </button>
                 @endif
             </div>
@@ -69,7 +69,7 @@
             {{-- Price range --}}
             <div>
                 <label class="block text-xs font-medium text-gray-500 mb-1.5">
-                    Цена, ₽
+                    {{ __('ads.price') }}, ₽
                     <span class="text-gray-400 normal-case">
                         @if($minPrice || $maxPrice)
                             ({{ $minPrice ?: $priceRange['min'] }} – {{ $maxPrice ?: $priceRange['max'] }})
@@ -173,7 +173,7 @@
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
             </svg>
-            Загрузка...
+            {{ __('common.loading') }}
         </div>
 
         {{-- Grid --}}
@@ -187,7 +187,7 @@
                     <p class="text-sm text-gray-400 mb-4">{{ __('ads.empty_hint') }}</p>
                     @if($this->active_filters_count > 0)
                         <button wire:click="clearFilters" class="text-amber-600 hover:text-amber-700 text-sm font-medium">
-                            Сбросить фильтры
+                            {{ __('ads.filter.reset') }}
                         </button>
                     @endif
                 </div>

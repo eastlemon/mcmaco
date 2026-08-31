@@ -33,15 +33,15 @@
             </div>
 
             <div class="text-sm text-gray-500 mb-6">
-                Доставка: {{ $order->delivery_method_label }}<br>
+                {{ __('shop.delivery') }}: {{ $order->delivery_method_label }}<br>
                 @if($order->delivery_address) {{ $order->delivery_address }} @endif
                 @if($order->has_tracking)
                     <br>
                     <span class="inline-block mt-2">
-                        Трек-номер: <span class="font-mono font-medium text-gray-800">{{ $order->tracking_number }}</span>
+                        {{ __('shop.tracking') }}: <span class="font-mono font-medium text-gray-800">{{ $order->tracking_number }}</span>
                         <a href="{{ $order->tracking_url }}" target="_blank" rel="noopener"
                            class="ml-2 text-amber-600 hover:text-amber-700 text-xs underline">
-                            Отследить →
+                            {{ __('shop.track') }} →
                         </a>
                     </span>
                 @endif
@@ -50,7 +50,7 @@
             @if(in_array($order->status, [\App\Models\Order::STATUS_NEW, \App\Models\Order::STATUS_CONFIRMED]) && app(\App\Services\YooKassaService::class)->isEnabled())
                 <div class="flex flex-col gap-3 items-center mb-6">
                     <a href="{{ route('payments.pay', $order) }}" class="inline-block bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition font-medium">
-                        💳 Оплатить онлайн
+                        💳 {{ __('shop.pay_online') }}
                     </a>
                     <span class="text-xs text-gray-400">{{ __('shop.or_pay_on_delivery') }}</span>
                 </div>
@@ -63,7 +63,7 @@
             @endif
 
             <a href="{{ route('ads.index') }}" class="inline-block bg-amber-600 text-white px-6 py-2 rounded-lg hover:bg-amber-700 transition">
-                Продолжить покупки
+                {{ __('shop.continue_shopping') }}
             </a>
         </div>
     </div>

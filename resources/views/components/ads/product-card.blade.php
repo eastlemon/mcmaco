@@ -21,19 +21,19 @@
 
         @if($ad->is_featured)
             <span class="absolute top-2.5 left-2.5 bg-amber-500 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm">
-                Хит
+                {{ __('ads.hit') }}
             </span>
         @endif
 
         @if($ad->condition === 'used')
             <span class="absolute top-2.5 {{ $ad->is_featured ? 'left-16' : 'left-2.5' }} bg-gray-700/80 text-white text-[11px] font-medium px-2 py-0.5 rounded-full">
-                Б/у
+                {{ __('ads.condition_used') }}
             </span>
         @endif
 
         @unless($inStock)
             <span class="absolute inset-x-0 bottom-0 bg-gray-900/70 text-white text-[11px] font-medium text-center py-1.5 backdrop-blur-sm">
-                Нет в наличии
+                {{ __('ads.out_of_stock') }}
             </span>
         @endunless
     </a>

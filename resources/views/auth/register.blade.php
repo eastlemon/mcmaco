@@ -66,12 +66,12 @@
 
         <button type="submit"
                 class="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-semibold text-sm shadow-sm hover:shadow transition">
-            Создать аккаунт
+            {{ __('auth.create_account') }}
         </button>
     </form>
 
     <p class="mt-8 text-sm text-center text-gray-500">
-        Уже зарегистрированы?
+        {{ __('auth.have_account') }}
         <a href="{{ route('login') }}" class="font-semibold text-amber-600 hover:text-amber-700 transition">{{ __('auth.login') }}</a>
     </p>
 </x-guest-layout>

@@ -25,7 +25,7 @@
         </div>
 
         <a href="{{ route('ads.index') }}" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
-            Вернуться в магазин
+            {{ __('shop.back_to_shop') }}
         </a>
     </div>
 </div>

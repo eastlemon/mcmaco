@@ -31,7 +31,7 @@
 
         <button type="submit"
                 class="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-semibold text-sm shadow-sm hover:shadow transition">
-            Сохранить пароль
+            {{ __('auth.save_password') }}
         </button>
     </form>
 </x-guest-layout>

@@ -28,7 +28,7 @@
                 <label for="password" class="block text-sm font-medium text-gray-700">{{ __('auth.password') }}</label>
                 @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}" class="text-xs font-medium text-amber-600 hover:text-amber-700 transition">
-                        Забыли пароль?
+                        {{ __('auth.forgot_password') }}
                     </a>
                 @endif
             </div>
@@ -62,7 +62,7 @@
     </form>
 
     <p class="mt-8 text-sm text-center text-gray-500">
-        Нет аккаунта?
+        {{ __('auth.no_account') }}
         <a href="{{ route('register') }}" class="font-semibold text-amber-600 hover:text-amber-700 transition">{{ __('auth.register') }}</a>
     </p>
 </x-guest-layout>

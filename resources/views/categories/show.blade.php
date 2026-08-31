@@ -79,8 +79,8 @@
         @else
             <div class="bg-white rounded-xl shadow-sm p-12 text-center">
                 <div class="text-5xl mb-4">🔍</div>
-                <h3 class="text-lg font-medium text-gray-600 mb-2">В этой категории пока нет товаров</h3>
-                <a href="{{ route('ads.index') }}" class="text-amber-600 hover:text-amber-700 text-sm font-medium">Перейти в каталог</a>
+                <h3 class="text-lg font-medium text-gray-600 mb-2">{{ __('ads.category_empty') }}</h3>
+                <a href="{{ route('ads.index') }}" class="text-amber-600 hover:text-amber-700 text-sm font-medium">{{ __('ads.go_to_catalog') }}</a>
             </div>
         @endif
     </div>

@@ -8,7 +8,7 @@
 
     <button onclick="document.getElementById('quick-order-modal-{{ $adId }}').showModal()"
             class="w-full border-2 border-amber-600 text-amber-700 hover:bg-amber-50 font-medium py-3 rounded-lg transition">
-        ⚡ Купить в 1 клик
+        ⚡ {{ __('shop.buy_one_click') }}
     </button>
 
     <dialog id="quick-order-modal-{{ $adId }}" class="rounded-xl p-0 backdrop:bg-black/50">
@@ -32,7 +32,7 @@
                     @error('phone') <div class="text-xs text-red-500 mt-1">{{ $message }}</div> @enderror
                 </div>
                 <button type="submit" class="w-full bg-amber-600 text-white py-3 rounded-lg font-medium hover:bg-amber-700">
-                    Оформить заказ
+                    {{ __('shop.checkout') }}
                 </button>
             </form>
         </div>

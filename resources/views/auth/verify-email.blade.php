@@ -20,7 +20,7 @@
                 @csrf
                 <button type="submit"
                         class="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-semibold text-sm shadow-sm hover:shadow transition">
-                    Отправить ссылку ещё раз
+                    {{ __('auth.resend') }}
                 </button>
             </form>
 

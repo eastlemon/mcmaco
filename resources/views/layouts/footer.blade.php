@@ -6,7 +6,7 @@
             <div>
                 <h3 class="text-white font-semibold mb-3">mcmaco</h3>
                 <p class="text-sm text-gray-400 leading-relaxed">
-                    Интернет-магазин товаров с доставкой по России.
+                    {{ __('common.site_tagline') }}.
                 </p>
             </div>
 
@@ -54,7 +54,7 @@
         </div>
 
         <div class="border-t border-gray-700 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p class="text-sm text-gray-500">© {{ date('Y') }} mcmaco. Все права защищены.</p>
+            <p class="text-sm text-gray-500">© {{ date('Y') }} mcmaco. {{ __('footer.rights') }}</p>
             <div class="flex items-center gap-4 text-xs text-gray-500">
                 <span>{{ __('footer.payment') }}:</span>
                 <span class="bg-gray-700 px-2 py-1 rounded text-gray-300">ЮKassa</span>

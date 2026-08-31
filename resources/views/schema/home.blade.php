@@ -5,7 +5,7 @@
             '@type' => 'Organization',
             'name' => 'mcmaco',
             'url' => config('app.url'),
-            'description' => 'Интернет-магазин товаров с доставкой по России',
+            'description' => __('common.meta_description'),
             'address' => [
                 '@type' => 'PostalAddress',
                 'addressCountry' => 'RU',

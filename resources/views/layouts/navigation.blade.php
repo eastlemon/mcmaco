@@ -73,7 +73,7 @@
         <div class="hidden sm:flex items-center gap-1 h-10 border-t border-gray-50 overflow-x-auto scrollbar-hide">
             <a href="{{ route('ads.index') }}"
                class="shrink-0 px-3 py-1 text-sm font-medium {{ request()->routeIs('ads.index') && !request('category_id') ? 'text-amber-600' : 'text-gray-600 hover:text-amber-600' }} transition">
-                Все товары
+                {{ __('ads.all_items') }}
             </a>
             @foreach($rootCategories as $cat)
                 <a href="{{ $cat->slug ? route('categories.show', $cat->slug) : route('ads.index', ['category_id' => $cat->id]) }}"
