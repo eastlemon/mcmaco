@@ -35,9 +35,14 @@ class CartPage extends Component
         $cart = $service->getOrCreateCart(request());
         $items = $cart->items()->with('ad.images', 'ad.category')->get();
 
+        // ->extends() (Livewire's View macro) instead of @extends in the template:
+        // a full-page component view must have a single root element, otherwise
+        // Livewire cannot inject wire:id/wire:snapshot and wire:click stays dead.
         return view('livewire.cart-page', [
             'items' => $items,
             'total' => $cart->total,
+        ])->extends('layouts.app', [
+            'meta_title' => __('shop.cart') . ' — mcmaco',
         ]);
     }
 }

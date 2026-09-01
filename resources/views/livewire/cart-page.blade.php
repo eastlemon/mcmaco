@@ -1,8 +1,3 @@
-@extends('layouts.app')
-
-@section('meta_title', __('shop.cart') . ' — mcmaco')
-
-@section('content')
 <div class="py-6">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Breadcrumbs --}}
@@ -63,4 +58,3 @@
         @endif
     </div>
 </div>
-@endsection
