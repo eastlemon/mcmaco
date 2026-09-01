@@ -27,6 +27,7 @@ class PipelineLog extends Model
         'created',
         'updated',
         'errors',
+        'photos',
         'details',
     ];
 
@@ -35,6 +36,7 @@ class PipelineLog extends Model
         'created' => 'integer',
         'updated' => 'integer',
         'errors' => 'integer',
+        'photos' => 'integer',
         'details' => 'array',
     ];
 

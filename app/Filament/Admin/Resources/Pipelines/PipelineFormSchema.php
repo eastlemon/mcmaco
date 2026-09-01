@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources\Pipelines;
 use App\Models\Pipeline;
 use App\Pipelines\AdapterRegistry;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -121,6 +122,8 @@ trait PipelineFormSchema
         $helperText = $def['help'] ?? null;
 
         return match ($type) {
+            'file' => $this->makeFileField($name, $def, $label, $required, $helperText),
+
             'select' => Select::make($name)
                 ->label($label)
                 ->options($def['options'] ?? [])
@@ -153,5 +156,23 @@ trait PipelineFormSchema
                 ->required($required)
                 ->helperText($helperText),
         };
+    }
+
+    private function makeFileField(string $name, array $def, string $label, bool $required, ?string $helperText): FileUpload
+    {
+        $field = FileUpload::make($name)
+            ->label($label)
+            ->disk($def['disk'] ?? 'local')
+            ->directory($def['directory'] ?? 'pipeline-uploads')
+            ->maxSize($def['max_size'] ?? 20480)
+            ->panelLayout('integrated')
+            ->helperText($helperText)
+            ->required($required);
+
+        if (! empty($def['accepted'])) {
+            $field->acceptedFileTypes($def['accepted']);
+        }
+
+        return $field;
     }
 }

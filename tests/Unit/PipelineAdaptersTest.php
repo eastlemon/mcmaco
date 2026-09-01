@@ -60,10 +60,15 @@ class PipelineAdaptersTest extends TestCase
         $adapter = new CsvProductsImport();
         $schema = $adapter->configSchema();
 
+        $this->assertArrayHasKey('csv_file', $schema);
         $this->assertArrayHasKey('file_path', $schema);
+        $this->assertArrayHasKey('photos_zip', $schema);
+        $this->assertArrayHasKey('photo_strategy', $schema);
         $this->assertArrayHasKey('delimiter', $schema);
         $this->assertArrayHasKey('default_user_id', $schema);
-        $this->assertTrue($schema['file_path']['required']);
+        $this->assertSame('file', $schema['csv_file']['type']);
+        $this->assertSame('file', $schema['photos_zip']['type']);
+        $this->assertSame('replace', $schema['photo_strategy']['default']);
     }
 
     public function test_orders_export_config_schema_has_fields(): void

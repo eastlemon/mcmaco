@@ -56,10 +56,17 @@ class LogsRelationManager extends RelationManager
                     ->alignRight()
                     ->color(fn ($state) => $state > 0 ? 'danger' : 'gray'),
 
+                Tables\Columns\TextColumn::make('photos')
+                    ->label(__('filament.pipelines.logs.photos'))
+                    ->alignRight()
+                    ->color('success')
+                    ->toggleable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('filament.pipelines.logs.date'))
                     ->dateTime('d.m.Y H:i:s'),
             ])
+            ->poll('10s')
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->label(__('filament.pipelines.logs.status'))

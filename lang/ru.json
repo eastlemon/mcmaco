@@ -148,6 +148,7 @@
     "filament.pipelines.logs.created": "Создано",
     "filament.pipelines.logs.updated": "Обновлено",
     "filament.pipelines.logs.errors": "Ошибок",
+    "filament.pipelines.logs.photos": "Фото",
     "filament.pipelines.logs.date": "Дата",
     "filament.users.fields.email": "Email",
     "filament.users.hints.storage_path": "Путь к файлу в storage",

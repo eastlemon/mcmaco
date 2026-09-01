@@ -107,6 +107,7 @@
     "filament.pipelines.logs.created": "Created",
     "filament.pipelines.logs.updated": "Updated",
     "filament.pipelines.logs.errors": "Errors",
+    "filament.pipelines.logs.photos": "Photos",
     "filament.pipelines.logs.date": "Date",
     "filament.users.fields.email": "Email",
     "filament.users.hints.storage_path": "Path to the file in storage",
