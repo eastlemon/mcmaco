@@ -9,10 +9,21 @@
 <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {{-- Breadcrumbs --}}
-        <nav class="text-sm text-gray-400 mb-4">
-            <span class="text-gray-600">{{ __('common.home') }}</span>
-        </nav>
+        {{-- Breadcrumbs - Only show when not on main page --}}
+        @if(request()->hasAny(['q', 'category_id', 'city', 'condition', 'min_price', 'max_price', 'sort', 'page', 'inStockOnly', 'featuredOnly']))
+            <nav class="text-sm text-gray-400 mb-4">
+                @if(request('category_id'))
+                    @php $cat = \App\Models\Category::find(request('category_id')); @endphp
+                    @if($cat)
+                        <a href="{{ route('ads.index') }}" class="hover:text-amber-600">{{ __('common.home') }}</a>
+                        <span class="mx-1">/</span>
+                        <a href="{{ $cat->slug ? route('categories.show', $cat->slug) : route('ads.index', ['category_id' => $cat->id]) }}" class="hover:text-amber-600">{{ $cat->name }}</a>
+                    @endif
+                @else
+                    <span class="text-gray-600">{{ __('common.home') }}</span>
+                @endif
+            </nav>
+        @endif
 
         {{-- Hero (only on clean landing) --}}
         @if(!request()->hasAny(['q', 'category_id', 'city', 'condition', 'min_price', 'max_price', 'sort', 'page', 'inStockOnly', 'featuredOnly']))
@@ -21,7 +32,7 @@
                 <p class="text-base opacity-90">{{ __('ads.hero_subtitle') }}</p>
             </div>
 
-            {{-- Популярные --}}
+            {{-- Popular Products --}}
             @php
                 $featured = \App\Models\Ad::featured()->with(['images', 'category'])->limit(8)->get();
             @endphp
@@ -36,19 +47,8 @@
                 </div>
             @endif
 
-            <h2 class="text-lg font-bold mb-4 text-gray-800">🛒 {{ __('ads.all_items') }}</h2>
-        @else
-            {{-- Breadcrumbs with category --}}
-            @if(request('category_id'))
-                @php $cat = \App\Models\Category::find(request('category_id')); @endphp
-                @if($cat)
-                    <nav class="text-sm text-gray-400 mb-4">
-                        <a href="{{ route('ads.index') }}" class="hover:text-amber-600">{{ __('common.home') }}</a>
-                        <span class="mx-1">/</span>
-                        <a href="{{ $cat->slug ? route('categories.show', $cat->slug) : route('ads.index', ['category_id' => $cat->id]) }}" class="hover:text-amber-600">{{ $cat->name }}</a>
-                    </nav>
-                @endif
-            @endif
+            {{-- "All products" is now hidden on main page --}}
+            {{-- <h2 class="text-lg font-bold mb-4 text-gray-800">🛒 {{ __('ads.all_items') }}</h2> --}}
         @endif
 
         {{-- Livewire Product Browser --}}
