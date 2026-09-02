@@ -7,10 +7,12 @@ use App\Filament\Admin\Resources\Pipelines\Pages\EditPipeline;
 use App\Filament\Admin\Resources\Pipelines\Pages\ListPipelines;
 use App\Filament\Admin\Resources\Pipelines\Pages\ViewPipeline;
 use App\Filament\Admin\Resources\Pipelines\RelationManagers\LogsRelationManager;
+use App\Filament\Admin\Resources\Pipelines\Schemas\PipelineForm;
 use App\Filament\Admin\Resources\Pipelines\Tables\PipelinesTable;
 use App\Models\Pipeline;
 use BackedEnum;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 
 class PipelineResource extends Resource
@@ -37,6 +39,11 @@ class PipelineResource extends Resource
     public static function table(\Filament\Tables\Table $table): \Filament\Tables\Table
     {
         return PipelinesTable::configure($table);
+    }
+
+    public static function form(Schema $schema): Schema
+    {
+        return PipelineForm::configure($schema);
     }
 
     public static function getPages(): array

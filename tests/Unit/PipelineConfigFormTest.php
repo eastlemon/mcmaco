@@ -2,35 +2,23 @@
 
 namespace Tests\Unit;
 
+use App\Filament\Admin\Resources\Pipelines\Schemas\PipelineForm;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Tests\TestCase;
 
 /**
- * Covers the configSchema() -> Filament form field mapping in PipelineFormSchema.
+ * Covers the configSchema() -> Filament form field mapping in PipelineForm.
  */
 class PipelineConfigFormTest extends TestCase
 {
-    /** @var object anonymous class carrying the trait */
-    private object $schemaHost;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->schemaHost = new class
-        {
-            use \App\Filament\Admin\Resources\Pipelines\PipelineFormSchema;
-        };
-    }
-
     private function makeField(array $def): object
     {
-        $method = new \ReflectionMethod($this->schemaHost, 'makeConfigField');
+        $method = new \ReflectionMethod(PipelineForm::class, 'makeConfigField');
         $method->setAccessible(true);
 
-        return $method->invoke($this->schemaHost, 'config.test_key', 'test_key', $def);
+        return $method->invoke(null, 'config.test_key', 'test_key', $def);
     }
 
     public function test_file_type_maps_to_file_upload(): void

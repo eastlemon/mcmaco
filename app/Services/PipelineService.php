@@ -70,7 +70,7 @@ class PipelineService
 
         try {
             $config = $pipeline->config ?? [];
-            $adapter = $this->registry->getImportAdapter($pipeline->adapter, $pipeline->type);
+            $adapter = $this->registry->getAdapter($pipeline->adapter, $pipeline->type);
             $rows = iterator_to_array($adapter->read($config));
 
             if (count($rows) > self::MAX_ROWS_PER_RUN) {

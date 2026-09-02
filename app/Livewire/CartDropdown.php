@@ -56,7 +56,7 @@ class CartDropdown extends Component
                 'price' => $item->ad->price,
                 'quantity' => $item->qty,
                 'subtotal' => $item->ad->price * $item->qty,
-                'image' => $item->ad->images->first()?->path ?? null,
+                'image' => $item->ad->images->first()?->path,
                 'slug' => $item->ad->slug ?? null,
             ];
         })->toArray();

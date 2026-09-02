@@ -24,6 +24,36 @@ class AdminPipelinesPageTest extends TestCase
             ->assertSee('pipelines/create');
     }
 
+    public function test_create_page_renders_form_fields(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        // Regression for the "blank create page": Filament 5 pulls the form
+        // from PipelineResource::form(); a page-level getFormSchema() is ignored.
+        $this->actingAs($admin)
+            ->get('/admin/pipelines/create')
+            ->assertOk()
+            ->assertSee(__('filament.pipelines.fields.name'))
+            ->assertSee(__('filament.pipelines.sections.main'));
+    }
+
+    public function test_edit_page_renders_form_fields(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $pipeline = \App\Models\Pipeline::create([
+            'name' => 'Test import',
+            'type' => 'import',
+            'adapter' => 'csv_products',
+            'format' => 'csv',
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($admin)
+            ->get("/admin/pipelines/{$pipeline->id}/edit")
+            ->assertOk()
+            ->assertSee(__('filament.pipelines.fields.name'));
+    }
+
     public function test_non_admin_cannot_access_pipelines_list(): void
     {
         $user = User::factory()->create(['is_admin' => false]);

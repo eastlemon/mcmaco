@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Admin\Resources\Pipelines;
+namespace App\Filament\Admin\Resources\Pipelines\Schemas;
 
 use App\Models\Pipeline;
 use App\Pipelines\AdapterRegistry;
@@ -13,12 +13,13 @@ use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
 
-trait PipelineFormSchema
+class PipelineForm
 {
-    protected function pipelineFormSchema(): array
+    public static function configure(Schema $schema): Schema
     {
-        return [
+        return $schema->components([
             Section::make(__('filament.pipelines.sections.main'))
                 ->schema([
                     TextInput::make('name')
@@ -81,12 +82,12 @@ trait PipelineFormSchema
                 ]),
 
             Section::make(__('filament.pipelines.sections.adapter_config'))
-                ->schema(fn (Get $get): array => $this->buildConfigFields($get))
+                ->schema(fn (Get $get): array => self::buildConfigFields($get))
                 ->visible(fn (Get $get): bool => filled($get('adapter'))),
-        ];
+        ]);
     }
 
-    private function buildConfigFields(Get $get): array
+    private static function buildConfigFields(Get $get): array
     {
         $adapterCode = $get('adapter');
         $type = $get('type');
@@ -108,13 +109,13 @@ trait PipelineFormSchema
         $fields = [];
 
         foreach ($schema as $key => $def) {
-            $fields[] = $this->makeConfigField("config.{$key}", $key, $def);
+            $fields[] = self::makeConfigField("config.{$key}", $key, $def);
         }
 
         return $fields;
     }
 
-    private function makeConfigField(string $name, string $key, array $def): Component
+    private static function makeConfigField(string $name, string $key, array $def): Component
     {
         $label = $def['label'] ?? ucfirst($key);
         $type = $def['type'] ?? 'text';
@@ -122,7 +123,7 @@ trait PipelineFormSchema
         $helperText = $def['help'] ?? null;
 
         return match ($type) {
-            'file' => $this->makeFileField($name, $def, $label, $required, $helperText),
+            'file' => self::makeFileField($name, $def, $label, $required, $helperText),
 
             'select' => Select::make($name)
                 ->label($label)
@@ -158,7 +159,7 @@ trait PipelineFormSchema
         };
     }
 
-    private function makeFileField(string $name, array $def, string $label, bool $required, ?string $helperText): FileUpload
+    private static function makeFileField(string $name, array $def, string $label, bool $required, ?string $helperText): FileUpload
     {
         $field = FileUpload::make($name)
             ->label($label)
