@@ -52,7 +52,7 @@ class CartDropdown extends Component
             return [
                 'id' => $item->id,
                 'ad_id' => $item->ad_id,
-                'name' => $item->ad->name,
+                'name' => $item->ad->title,
                 'price' => $item->ad->price,
                 'quantity' => $item->qty,
                 'subtotal' => $item->ad->price * $item->qty,

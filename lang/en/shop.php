@@ -72,4 +72,9 @@ return [
     'payment_failed'    => 'Payment failed',
     'payment_processing' => 'Payment is being processed',
     'payment_pending'   => 'Order :number. The status will update automatically.',
+    'shopping_cart'    => 'Shopping Cart',
+    'view_cart'        => 'View Cart',
+    'your_cart_is_empty' => 'Your cart is empty',
+    'start_shopping'   => 'Add products from the catalog',
+    'browse_products'  => 'Browse products',
 ];

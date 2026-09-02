@@ -71,5 +71,10 @@ return [
     'payment_success'   => 'Оплата получена!',
     'payment_failed'    => 'Ошибка оплаты',
     'payment_processing' => 'Платёж обрабатывается',
+    'shopping_cart'    => 'Корзина',
+    'view_cart'        => 'Перейти в корзину',
+    'your_cart_is_empty' => 'Ваша корзина пуста',
+    'start_shopping'   => 'Добавьте товары из каталога',
+    'browse_products'  => 'Перейти к покупкам',
     'payment_pending'   => 'Заказ :number. Статус обновится автоматически.',
 ];

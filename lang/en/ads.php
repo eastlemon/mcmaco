@@ -72,4 +72,5 @@ return [
 
     'empty'           => 'No listings found',
     'empty_hint'      => 'Try adjusting your search or filters',
+    'my_listings'      => 'My Listings',
 ];

@@ -175,10 +175,10 @@ class CartLivewireTest extends TestCase
         $page = $this->get(route('ads.index'))->assertOk();
         $html = $page->getContent();
 
-        // Badge span next to the cart icon must be rendered with the count
-        $this->assertStringContainsString('min-w-5 h-5 px-1 bg-amber-600', $html);
+        // Text badge next to the label must be rendered with the count
+        $this->assertStringContainsString('min-w-[18px] h-[18px] px-1.5 bg-amber-100 text-amber-700', $html);
         $this->assertMatchesRegularExpression(
-            '/bg-amber-600[^>]*>\s*3\s*<\/span>/',
+            '/min-w-\[18px\][^>]*>\s*3\s*<\/span>/',
             $html,
             'Navbar badge should contain the item count.',
         );
