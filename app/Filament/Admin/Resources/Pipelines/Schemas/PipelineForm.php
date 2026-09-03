@@ -32,7 +32,10 @@ class PipelineForm
                         ->options(Pipeline::TYPES)
                         ->required()
                         ->live()
-                        ->afterStateUpdated(function (Set $set) {
+                        ->afterStateUpdated(function (Set $set): void {
+                            // Explicit reset — the adapter hook chain can be
+                            // deduplicated by Filament's state-hash guard, so
+                            // do not rely on it for the config reset.
                             $set('adapter', null);
                             $set('config', []);
                         }),
@@ -53,8 +56,8 @@ class PipelineForm
                                 ? $registry->listExports()
                                 : $registry->listImports();
                         })
-                        ->afterStateUpdated(function (Set $set) {
-                            $set('config', []);
+                        ->afterStateUpdated(function (Get $get, Set $set): void {
+                            $set('config', self::defaultConfigFor($get('type'), $get('adapter')));
                         }),
 
                     Select::make('format')
@@ -85,6 +88,46 @@ class PipelineForm
                 ->schema(fn (Get $get): array => self::buildConfigFields($get))
                 ->visible(fn (Get $get): bool => filled($get('adapter'))),
         ]);
+    }
+
+    /**
+     * Default state for the dynamic adapter config fields.
+     *
+     * Filament 5 caches child schemas: on mount (no adapter selected) the
+     * config fields do not exist, so `fill()` never creates their state
+     * paths. When the schema closure re-evaluates after an adapter is
+     * selected, the rendered fields entangle to `data.config.*` paths that
+     * are missing from the Livewire snapshot — Livewire 4 throws
+     * "Livewire property ['data.config.*'] cannot be found" and the inputs
+     * stop syncing. Seeding every schema key (defaults, null for files)
+     * before the fields render keeps the entangled state intact.
+     */
+    public static function defaultConfigFor(?string $type, ?string $adapter): array
+    {
+        if (! $type || ! $adapter) {
+            return [];
+        }
+
+        /** @var AdapterRegistry $registry */
+        $registry = app(AdapterRegistry::class);
+
+        try {
+            $schema = $registry->getAdapter($adapter, $type)->configSchema();
+        } catch (\Throwable) {
+            return [];
+        }
+
+        $defaults = [];
+
+        foreach ($schema as $key => $def) {
+            // FileUpload normalizes blank state to an empty array; seed the
+            // same shape so the entangled state matches what the JS expects.
+            $defaults[$key] = ($def['type'] ?? 'text') === 'file'
+                ? []
+                : ($def['default'] ?? null);
+        }
+
+        return $defaults;
     }
 
     private static function buildConfigFields(Get $get): array

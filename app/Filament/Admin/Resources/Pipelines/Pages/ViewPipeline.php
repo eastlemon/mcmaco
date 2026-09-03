@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\Pipelines\Pages;
 
 use App\Filament\Admin\Resources\Pipelines\PipelineResource;
+use App\Filament\Admin\Resources\Pipelines\Schemas\PipelineForm;
 use App\Jobs\RunPipelineJob;
 use App\Models\Pipeline;
 use App\Pipelines\AdapterRegistry;
@@ -16,6 +17,18 @@ use Filament\Tables\Tables;
 class ViewPipeline extends ViewRecord
 {
     protected static string $resource = PipelineResource::class;
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        // Same padding as EditPipeline: every dynamic config field must have
+        // state to entangle to, even for records saved before a key existed.
+        $data['config'] = array_replace(
+            PipelineForm::defaultConfigFor($data['type'] ?? null, $data['adapter'] ?? null),
+            $data['config'] ?? [],
+        );
+
+        return $data;
+    }
 
     protected function getHeaderActions(): array
     {
