@@ -182,7 +182,7 @@ class CsvProductsImport implements ImportAdapter
             $disk = Storage::disk('local');
 
             if (! $disk->exists($csvFile)) {
-                throw new \RuntimeException("CSV file not found: {$csvFile}");
+                throw new \RuntimeException("CSV file not found on disk: {$csvFile}");
             }
 
             return $disk->path($csvFile);
@@ -190,7 +190,11 @@ class CsvProductsImport implements ImportAdapter
 
         $path = $config['file_path'] ?? null;
 
-        if (!$path || !file_exists($path)) {
+        if (! $path) {
+            throw new \RuntimeException('CSV source not configured: upload a CSV file in the pipeline settings or set file_path');
+        }
+
+        if (! file_exists($path)) {
             throw new \RuntimeException("CSV file not found: {$path}");
         }
 

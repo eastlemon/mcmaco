@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Pipeline;
+use App\Models\PipelineLog;
+use App\Pipelines\PipelineRunFailed;
 use App\Services\PipelineService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,10 +37,28 @@ class RunPipelineJob implements ShouldQueue
     {
         Log::error("Pipeline {$this->pipeline->id} failed: {$exception->getMessage()}");
 
-        $this->pipeline->logs()->create([
-            'status' => 'failed',
+        if ($exception instanceof PipelineRunFailed && $exception->log !== null) {
+            // PipelineService already recorded the failure in its log.
+            return;
+        }
+
+        // Recover a stuck "running" entry (timeout, worker kill) or
+        // record a new entry for failures outside PipelineService.
+        $log = $this->pipeline->logs()
+            ->where('status', PipelineLog::STATUS_RUNNING)
+            ->latest('id')
+            ->first();
+
+        $attributes = [
+            'status' => PipelineLog::STATUS_FAILED,
             'message' => "Job failed: {$exception->getMessage()}",
             'errors' => 1,
-        ]);
+        ];
+
+        if ($log !== null) {
+            $log->update($attributes);
+        } else {
+            $this->pipeline->logs()->create($attributes);
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Pipeline;
 use App\Models\PipelineLog;
 use App\Pipelines\AdapterRegistry;
+use App\Pipelines\PipelineRunFailed;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
@@ -49,7 +50,7 @@ class PipelineService
                 'errors' => 1,
             ]);
 
-            throw $e;
+            throw new PipelineRunFailed($e->getMessage(), $log, $e);
         }
 
         return $log->refresh();
@@ -124,7 +125,7 @@ class PipelineService
                 'errors' => 1,
             ]);
 
-            throw $e;
+            throw new PipelineRunFailed($e->getMessage(), $log, $e);
         }
 
         return $log->refresh();
