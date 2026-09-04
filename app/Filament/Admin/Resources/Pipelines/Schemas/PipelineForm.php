@@ -214,9 +214,47 @@ class PipelineForm
             ->required($required);
 
         if (! empty($def['accepted'])) {
-            $field->acceptedFileTypes($def['accepted']);
+            $field->acceptedFileTypes(self::expandAcceptedFileTypes($def['accepted']));
         }
 
         return $field;
+    }
+
+    /**
+     * Филамент скармливает acceptedFileTypes() и в HTML accept, и в правило
+     * валидации `mimetypes:` без изменений. Голое расширение («.csv») в таком
+     * правиле невыполнимо — Symfony гессает MIME по содержимому файла, и он
+     * никогда не равен «.csv». Поэтому расширения автоматически дополняем
+     * известными MIME-типами: расширение остаётся для файлпикера, MIME
+     * обеспечивают проходимость валидации. Прямые MIME проходят как есть.
+     *
+     * @param  list<string>  $accepted
+     * @return list<string>
+     */
+    private static function expandAcceptedFileTypes(array $accepted): array
+    {
+        $extensionMimes = [
+            'csv' => ['text/csv', 'text/plain', 'application/csv'],
+            'zip' => ['application/zip', 'application/x-zip-compressed'],
+            'pdf' => ['application/pdf'],
+            'txt' => ['text/plain'],
+            'json' => ['application/json', 'text/plain'],
+            'xlsx' => [
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-excel',
+            ],
+        ];
+
+        $expanded = [];
+        foreach ($accepted as $type) {
+            $expanded[] = $type;
+
+            if (str_starts_with($type, '.')) {
+                $extension = strtolower(ltrim($type, '.'));
+                $expanded = array_merge($expanded, $extensionMimes[$extension] ?? []);
+            }
+        }
+
+        return array_values(array_unique($expanded));
     }
 }

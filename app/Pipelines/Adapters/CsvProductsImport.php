@@ -124,7 +124,12 @@ class CsvProductsImport implements ImportAdapter
             'csv_file' => [
                 'type' => 'file',
                 'label' => 'CSV со списком товаров',
-                'accepted' => ['.csv'],
+                // `accepted` идёт и в HTML-атрибут accept, и в Filament-правило
+                // `mimetypes:`. Голые расширения («.csv») делают правило невыполнимым:
+                // Symfony гессает MIME по содержимому (text/csv, text/plain), а не по
+                // расширению, поэтому рядом с расширением обязаны стоять реальные MIME.
+                // Расширение оставляем для файлпикера, MIME — для валидации.
+                'accepted' => ['.csv', 'text/csv', 'text/plain', 'application/csv'],
                 'max_size' => 20480, // KB
                 'directory' => 'pipeline-uploads',
                 'help' => 'title, sku, price, stock, description, category, condition, city, weight',
@@ -137,7 +142,9 @@ class CsvProductsImport implements ImportAdapter
             'photos_zip' => [
                 'type' => 'file',
                 'label' => 'ZIP-архив с фото',
-                'accepted' => ['.zip'],
+                // Смотрите комментарий у csv_file: MIME обязателы для валидации,
+                // расширение — для файлпикера.
+                'accepted' => ['.zip', 'application/zip', 'application/x-zip-compressed'],
                 'max_size' => 204800, // KB (200 MB)
                 'directory' => 'pipeline-uploads',
                 'help' => 'photos/{SKU}/1-cover.jpg — номер задаёт порядок, суффикс «-cover» обложку',
