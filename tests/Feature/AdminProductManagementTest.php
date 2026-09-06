@@ -146,6 +146,50 @@ class AdminProductManagementTest extends TestCase
         $this->actingAs($admin)->get("/admin/ads/{$ad->id}/edit")->assertOk();
     }
 
+    public function test_ad_can_be_created_without_city(): void
+    {
+        // Регрессия: ads.city был NOT NULL (наследие доски), и создание товара
+        // из админки без города падало с SQLSTATE 1048 → 500 на «Сохранить».
+        $ad = Ad::query()->create([
+            'title' => 'Товар без города',
+            'slug' => 'tovar-bez-goroda-' . uniqid(),
+            'description' => 'Описание товара без города.',
+            'price' => 1500,
+            'stock' => 5,
+            'city' => null,
+            'category_id' => \App\Models\Category::create(['name' => 'Тест', 'slug' => 'test-' . uniqid()])->id,
+            'condition' => 'new',
+            'status' => 'active',
+        ]);
+
+        $this->assertDatabaseHas('ads', ['id' => $ad->id, 'city' => null]);
+    }
+
+    public function test_filament_create_ad_without_city(): void
+    {
+        // Полный путь через Filament-страницу: город не указан в форме.
+        $admin = \App\Models\User::factory()->create(['is_admin' => true]);
+
+        \Livewire::test(\App\Filament\Admin\Resources\Ads\Pages\CreateAd::class)
+            ->fillForm([
+                'title' => 'Товар без города',
+                'slug' => 'tovar-bez-goroda-' . uniqid(),
+                'description' => 'Описание товара без города.',
+                'price' => 1500,
+                'stock' => 5,
+                'category_id' => \App\Models\Category::create(['name' => 'Тест', 'slug' => 'test-' . uniqid()])->id,
+                'condition' => 'new',
+                'status' => 'active',
+            ])
+            ->call('create')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('ads', [
+            'title' => 'Товар без города',
+            'city' => null,
+        ]);
+    }
+
     public function test_regular_user_cannot_access_admin_panel(): void
     {
         $user = \App\Models\User::factory()->create(['is_admin' => false]);
