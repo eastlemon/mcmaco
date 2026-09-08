@@ -26,7 +26,9 @@ class PhotoAttacher
 
     public function __construct(
         private readonly int $maxPerAd = 10,
-        private readonly int $maxBytes = 5242880, // 5 MB, mirrors the admin form
+        // Raw supplier files may be large; they are re-encoded to WebP ≤1600px
+        // by Ad::syncImages(), so the raw cap only guards against abuse.
+        private readonly int $maxBytes = 31457280, // 30 MB raw, was 5 MB (pre-optimization)
     ) {}
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ImageOptimizer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -128,6 +129,8 @@ class Ad extends Model
     /**
      * Синхронизирует изображения товара с массивом путей (порядок массива = sort_order).
      * Новые файлы из ads/draft/ переносятся в ads/{id}/.
+     * Новые файлы ре-энкодятся в WebP ≤1600px (ImageOptimizer) — как из импорта,
+     * так и из админки, единая точка оптимизации.
      *
      * @param  array<int, string|null>  $paths
      */
@@ -143,6 +146,20 @@ class Ad extends Model
 
                 if ($disk->move($path, $newPath)) {
                     $paths[$i] = $newPath;
+                }
+            }
+        }
+
+        // Re-encode every NEW image into optimized WebP before storing the row.
+        // Existing paths are left untouched (idempotent: webp is skipped).
+        $existingBefore = $this->images()->pluck('path')->all();
+
+        foreach ($paths as $i => $path) {
+            if (! in_array($path, $existingBefore, true)) {
+                $optimized = $this->optimizeStored($disk, $path);
+
+                if ($optimized !== null) {
+                    $paths[$i] = $optimized;
                 }
             }
         }
@@ -175,6 +192,34 @@ class Ad extends Model
         }
 
         $this->load('images');
+    }
+
+    /**
+     * Re-encode a stored image into optimized WebP. Returns the new path
+     * (original deleted), the same path when already webp/missing, or null
+     * when the file could not be decoded.
+     */
+    private function optimizeStored(\Illuminate\Contracts\Filesystem\Filesystem $disk, string $path): ?string
+    {
+        if (! str_ends_with(strtolower($path), '.webp') && str_starts_with($path, 'ads/')) {
+            $abs = $disk->path($path);
+
+            if (is_file($abs)) {
+                $bytes = app(ImageOptimizer::class)->toWebp($abs);
+
+                if ($bytes !== null) {
+                    $newPath = preg_replace('/\.[^.]+$/', '.webp', $path);
+
+                    if ($disk->put($newPath, $bytes)) {
+                        $disk->delete($path);
+
+                        return $newPath;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     public function scopeActive(Builder $query): Builder

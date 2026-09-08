@@ -101,8 +101,10 @@ class PhotoAttacherTest extends TestCase
 
     public function test_oversized_files_are_skipped(): void
     {
+        // Above the raw cap (30 MB — raw files get re-encoded to WebP on attach,
+        // so the raw cap only guards against abuse).
         $big = rtrim($this->dir, '/') . '/big.jpg';
-        file_put_contents($big, base64_decode(self::JPEG_B64) . str_repeat('x', 6 * 1024 * 1024));
+        file_put_contents($big, base64_decode(self::JPEG_B64) . str_repeat('x', 31 * 1024 * 1024));
 
         $this->jpeg('1.jpg', 1);
 
