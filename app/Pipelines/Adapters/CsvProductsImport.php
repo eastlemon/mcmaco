@@ -38,12 +38,13 @@ class CsvProductsImport implements ImportAdapter
 
     public function process(array $row, array $config): array
     {
-        $title = $row['title'] ?? $row['name'] ?? null;
-        if (!$title) {
+        $title = trim($row['title'] ?? $row['name'] ?? '');
+        if ($title === '') {
             return ['action' => 'error', 'message' => 'Missing title'];
         }
 
-        $sku = $row['sku'] ?? $row['article'] ?? null;
+        $sku = trim($row['sku'] ?? $row['article'] ?? '');
+        $sku = $sku === '' ? null : $sku;
         $price = (int) ($row['price'] ?? 0);
         $stock = (int) ($row['stock'] ?? $row['quantity'] ?? 0);
         $description = $row['description'] ?? null;
@@ -232,19 +233,33 @@ class CsvProductsImport implements ImportAdapter
 
     private function resolveCategory(string $name, array $config): ?int
     {
-        $category = Category::where('name', $name)->first();
+        $name = trim($name);
+        $slug = Str::slug($name);
+
+        // Slug is the unique key in the DB, so it is the identity for import:
+        // "Bulk Cat", " Bulk Cat" and "bulk cat" must resolve to one category.
+        $category = Category::where('slug', $slug)->first()
+            ?? Category::where('name', $name)->first();
+
         if ($category) {
             return $category->id;
         }
 
         // Auto-create category if configured
-        if (($config['auto_create_categories'] ?? false)) {
-            return Category::create([
-                'name' => $name,
-                'slug' => Str::slug($name),
-            ])->id;
+        if (! ($config['auto_create_categories'] ?? false)) {
+            return null;
         }
 
-        return null;
+        try {
+            return Category::create([
+                'name' => $name,
+                'slug' => $slug,
+            ])->id;
+        } catch (\Illuminate\Database\QueryException) {
+            // A parallel row job (multiple queue workers) or a slug collision
+            // beat us to the insert — reuse the winning category instead of
+            // failing the row permanently (queue runs with --tries=1).
+            return Category::where('slug', $slug)->first()?->id;
+        }
     }
 }
