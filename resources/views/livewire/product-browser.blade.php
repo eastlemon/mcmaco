@@ -25,9 +25,9 @@
 
     {{-- Sidebar Filters --}}
     <aside class="{{ $filtersOpen ? 'block' : 'hidden'}} lg:block">
-        <div class="bg-white rounded-xl shadow-sm p-5 space-y-5 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7.5rem)] lg:overflow-y-auto">
+        <div class="bg-white rounded-xl shadow-sm p-5 space-y-5 lg:sticky lg:top-4">
 
-            <div class="flex items-center justify-between shrink-0">
+            <div class="flex items-center justify-between">
                 <h2 class="font-semibold text-gray-800">{{ __('ads.filter.label') }}</h2>
                 @if($this->active_filters_count > 0)
                     <button wire:click="clearFilters" class="text-xs text-amber-600 hover:text-amber-700 font-medium">
