@@ -142,7 +142,7 @@ function updateDelivery(label, cost) {
     const grandTotal = document.getElementById('grand-total');
 
     if (cost === 0) {
-        deliveryLabel.textContent = '{{ __(\'shop.free\') }}';
+        deliveryLabel.textContent = '{{ __('shop.free') }}';
         deliveryLabel.classList.add('text-green-600');
     } else {
         deliveryLabel.textContent = cost.toLocaleString('ru-RU') + ' ₽';
