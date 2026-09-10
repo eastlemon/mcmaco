@@ -25,7 +25,7 @@
 
     {{-- Sidebar Filters --}}
     <aside class="{{ $filtersOpen ? 'block' : 'hidden'}} lg:block">
-        <div class="bg-white rounded-xl shadow-sm p-5 space-y-5 lg:sticky lg:top-4">
+        <div class="bg-white rounded-xl shadow-sm p-5 space-y-5 lg:sticky lg:top-[118px]">
 
             <div class="flex items-center justify-between">
                 <h2 class="font-semibold text-gray-800">{{ __('ads.filter.label') }}</h2>
