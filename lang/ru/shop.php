@@ -72,7 +72,7 @@ return [
     'payment_failed'    => 'Ошибка оплаты',
     'payment_processing' => 'Платёж обрабатывается',
     'shopping_cart'    => 'Корзина',
-    'view_cart'        => 'Перейти в корзину',
+    'view_cart'        => 'Корзина',
     'your_cart_is_empty' => 'Ваша корзина пуста',
     'start_shopping'   => 'Добавьте товары из каталога',
     'browse_products'  => 'Перейти к покупкам',
