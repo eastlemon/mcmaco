@@ -13,6 +13,9 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        {{-- Guest pages render no Livewire components, so Livewire/Alpine would not
+             be auto-injected; request it explicitly for x-data directives. --}}
+        @livewireScripts
     </head>
     <body class="font-sans text-gray-900 antialiased bg-stone-50">
         <div class="min-h-screen grid lg:grid-cols-[5fr_7fr] 2xl:grid-cols-2">
