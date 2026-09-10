@@ -115,9 +115,8 @@
                             {{ __('shop.view_cart') }}
                         </a>
                         <a href="{{ route('checkout.index') }}"
-                           class="flex items-center justify-center gap-1 bg-amber-600 text-white text-sm py-2.5 rounded-lg hover:bg-amber-700 transition duration-200 font-medium shadow-sm hover:shadow whitespace-nowrap">
+                           class="text-center bg-amber-600 text-white text-sm py-2.5 rounded-lg hover:bg-amber-700 transition duration-200 font-medium shadow-sm hover:shadow">
                             {{ __('shop.checkout') }}
-                            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                         </a>
                     </div>
                 </div>
