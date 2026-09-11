@@ -127,6 +127,31 @@ class Ad extends Model
     }
 
     /**
+     * Находится ли товар в избранном текущего пользователя.
+     * Список id кешируется на время запроса (по пользователю) — одна выборка
+     * на страницу, независимо от количества карточек.
+     */
+    public function isFavorited(): bool
+    {
+        if (! auth()->check()) {
+            return false;
+        }
+
+        static $favoriteIds = [];
+
+        $userId = auth()->id();
+
+        if (! array_key_exists($userId, $favoriteIds)) {
+            $favoriteIds[$userId] = Favorite::query()
+                ->where('user_id', $userId)
+                ->pluck('ad_id')
+                ->all();
+        }
+
+        return in_array($this->id, $favoriteIds[$userId], true);
+    }
+
+    /**
      * Синхронизирует изображения товара с массивом путей (порядок массива = sort_order).
      * Новые файлы из ads/draft/ переносятся в ads/{id}/.
      * Новые файлы ре-энкодятся в WebP ≤1600px (ImageOptimizer) — как из импорта,
