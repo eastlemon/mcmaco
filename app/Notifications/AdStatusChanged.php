@@ -35,7 +35,7 @@ class AdStatusChanged extends Notification
             ->subject('Статус объявления изменён')
             ->greeting('Привет!')
             ->line("Ваше объявление «{$this->ad->title}» было {$statusLabel}.")
-            ->action('Посмотреть объявление', route('ads.show', $this->ad));
+            ->action('Посмотреть объявление', route('ads.show', $this->ad->slug));
 
         if ($this->reason) {
             $message->line('Причина: ' . $this->reason);

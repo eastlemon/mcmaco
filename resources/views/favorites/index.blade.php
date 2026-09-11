@@ -10,7 +10,7 @@
                     <div class="p-4 flex items-center justify-between">
                         <div>
                             <div class="font-semibold">
-                                <a href="{{ route('ads.show', $favorite->ad) }}" class="text-amber-700 hover:underline">
+                                <a href="{{ $favorite->ad ? route('ads.show', $favorite->ad->slug) : '#' }}" class="text-amber-700 hover:underline">
                                     {{ $favorite->ad?->title }}
                                 </a>
                             </div>

@@ -45,7 +45,6 @@
                                         {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                     </span>
                                 @endif
-                                <span class="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full ring-1.5 ring-white"></span>
                             </span>
                             <span class="hidden sm:inline font-medium max-w-[100px] truncate">
                                 {{ Auth::user()->name }}
