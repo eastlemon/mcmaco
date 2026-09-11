@@ -21,7 +21,7 @@
             <form action="{{ route('categories.show', $category->slug) }}" method="GET" class="flex items-center gap-2">
                 @if(request('q')) <input type="hidden" name="q" value="{{ request('q') }}"> @endif
                 <select name="sort" onchange="this.form.submit()"
-                        class="border rounded-lg px-3 py-2 text-sm bg-white">
+                        class="border rounded-lg pl-3 pr-8 py-2 text-sm bg-white">
                     <option value="newest" @selected(request('sort', 'newest') === 'newest')>{{ __('ads.sort.newest') }}</option>
                     <option value="price_asc" @selected(request('sort') === 'price_asc')>{{ __('ads.sort.price_asc') }}</option>
                     <option value="price_desc" @selected(request('sort') === 'price_desc')>{{ __('ads.sort.price_desc') }}</option>

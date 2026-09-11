@@ -15,7 +15,7 @@
             @endif
         </button>
 
-        <select wire:model.live="sort" class="border rounded-lg px-3 py-2 text-sm bg-white">
+        <select wire:model.live="sort" class="border rounded-lg pl-3 pr-8 py-2 text-sm bg-white">
             <option value="newest">{{ __('ads.sort.newest') }}</option>
             <option value="price_asc">{{ __('ads.sort.price_asc') }}</option>
             <option value="price_desc">{{ __('ads.sort.price_desc') }}</option>
@@ -154,7 +154,7 @@
             <div class="text-sm text-gray-500">
                 {{ __('ads.found') }}: <span class="font-medium text-gray-700">{{ $ads->total() }}</span> {{ __('ads.items_count') }}
             </div>
-            <select wire:model.live="sort" class="border rounded-lg px-3 py-2 text-sm bg-white">
+            <select wire:model.live="sort" class="border rounded-lg pl-3 pr-8 py-2 text-sm bg-white">
                 <option value="newest">{{ __('ads.sort.newest') }}</option>
                 <option value="price_asc">{{ __('ads.sort.price_asc') }}</option>
                 <option value="price_desc">{{ __('ads.sort.price_desc') }}</option>
