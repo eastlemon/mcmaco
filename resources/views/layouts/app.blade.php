@@ -52,7 +52,14 @@
             @endisset
 
             <main class="flex-1 flex flex-col">
-                @yield('content')
+                {{-- Component pages (<x-app-layout>) pass their body as the default
+                     slot; classic pages (@extends) use the 'content' section.
+                     Render whichever is present. --}}
+                @isset($slot)
+                    {{ $slot }}
+                @else
+                    @yield('content')
+                @endisset
             </main>
 
             @include('layouts.footer')

@@ -13,13 +13,6 @@
 <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {{-- Breadcrumbs --}}
-        <nav class="text-sm text-gray-400 mb-4">
-            <a href="{{ route('ads.index') }}" class="hover:text-amber-600">{{ __('common.home') }}</a>
-            <span class="mx-1">/</span>
-            <span class="text-gray-600">{{ $category->name }}</span>
-        </nav>
-
         {{-- Title + Sort --}}
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
             <div>
