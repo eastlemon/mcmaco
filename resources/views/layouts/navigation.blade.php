@@ -10,7 +10,7 @@
             </div>
 
             {{-- Search (desktop) --}}
-            <form action="{{ route('ads.index') }}" method="GET" class="hidden md:flex flex-1 max-w-xl">
+            <form action="{{ route('ads.index') }}" method="GET" class="hidden sm:flex flex-1 max-w-xl">
                 <div class="relative w-full">
                     <input type="text" name="q" value="{{ request('q') }}"
                            placeholder="{{ __('common.search_placeholder') }}"
