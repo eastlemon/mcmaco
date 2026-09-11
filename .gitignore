@@ -25,3 +25,4 @@ Thumbs.db
 /bootstrap/cache/*
 !bootstrap/cache/
 !bootstrap/cache/.gitkeep
+sitemap.xml
