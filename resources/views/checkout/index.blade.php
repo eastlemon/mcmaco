@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="py-6">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="text-sm text-gray-400 mb-4">
             <a href="{{ route('ads.index') }}" class="hover:text-amber-600">{{ __('common.home') }}</a>
             <span class="mx-1">/</span>

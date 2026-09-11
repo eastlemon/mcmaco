@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-2xl mx-auto px-4 py-12">
-    <div class="bg-white rounded-lg shadow p-8 text-center">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8 text-center">
         @if($order->status === \App\Models\Order::STATUS_PAID)
             <div class="text-green-500 text-6xl mb-4">✓</div>
             <h1 class="text-2xl font-bold mb-2">{{ __('shop.payment_success') }}</h1>

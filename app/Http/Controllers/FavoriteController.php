@@ -16,8 +16,9 @@ class FavoriteController extends Controller
     public function index(Request $request): View
     {
         $favorites = Favorite::query()
-            ->with('ad.category')
+            ->with(['ad.category', 'ad.images'])
             ->where('user_id', $request->user()->id)
+            ->whereHas('ad')
             ->latest()
             ->paginate(20);
 

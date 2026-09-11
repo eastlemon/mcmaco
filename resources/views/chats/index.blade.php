@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow rounded-lg divide-y">
                 @forelse($chats as $chat)
                     <a href="{{ route('chats.show', $chat) }}" class="block p-4 hover:bg-gray-50">
