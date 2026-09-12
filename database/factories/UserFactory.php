@@ -42,4 +42,28 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Mark this user as a simulated bot account (is_simulated=true).
+     * Used by SimulatedUserSeeder and simulation generators.
+     */
+    public function simulated(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_simulated' => true,
+            // Bots get a city and phone so they look like real users in chats/orders
+            'city' => fake()->randomElement([
+                'Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург',
+                'Казань', 'Нижний Новгород', 'Челябинск', 'Краснодар',
+                'Самара', 'Томск', 'Воронеж', 'Уфа',
+            ]),
+            'phone' => '+7' . fake()->numerify('9## ### ## ##'),
+            // Avatar URL from DiceBear (free, no API key required)
+            'avatar' => sprintf(
+                'https://api.dicebear.com/9.x/%s/svg?seed=%s',
+                config('simulation.avatar_style', 'avataaars'),
+                urlencode($attributes['name'] ?? fake()->name())
+            ),
+        ]);
+    }
 }
