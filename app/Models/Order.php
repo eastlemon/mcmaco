@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasSimulatedFlag;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,14 +12,14 @@ use Illuminate\Support\Str;
 
 class Order extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory, HasSimulatedFlag, Notifiable;
     protected $fillable = [
         'user_id', 'order_number', 'status',
         'customer_name', 'customer_phone', 'customer_email',
         'delivery_address', 'delivery_method', 'delivery_method_id', 'delivery_cost',
         'tracking_number',
         'items_total', 'total', 'comment',
-        'is_quick_order', 'paid_at',
+        'is_quick_order', 'is_simulated', 'paid_at',
     ];
 
     protected $casts = [
@@ -26,6 +27,7 @@ class Order extends Model
         'delivery_cost' => 'integer',
         'total' => 'integer',
         'is_quick_order' => 'boolean',
+        'is_simulated' => 'boolean',
         'paid_at' => 'datetime',
     ];
 

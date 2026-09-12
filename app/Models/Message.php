@@ -2,21 +2,26 @@
 
 namespace App\Models;
 
+use App\Traits\HasSimulatedFlag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Message extends Model
 {
+    use HasSimulatedFlag;
+
     protected $fillable = [
         'chat_id',
         'user_id',
         'message',
         'is_read',
         'read_at',
+        'is_simulated',
     ];
 
     protected $casts = [
         'is_read' => 'boolean',
+        'is_simulated' => 'boolean',
         'read_at' => 'datetime',
     ];
 

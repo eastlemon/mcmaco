@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\HasSimulatedFlag;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -13,12 +14,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'phone', 'city', 'avatar', 'bio', 'is_admin'])]
+#[Fillable(['name', 'email', 'password', 'phone', 'city', 'avatar', 'bio', 'is_admin', 'is_simulated'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, HasSimulatedFlag, Notifiable;
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -35,6 +36,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'is_admin' => 'boolean',
+            'is_simulated' => 'boolean',
             'password' => 'hashed',
         ];
     }
