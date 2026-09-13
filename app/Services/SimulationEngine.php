@@ -140,7 +140,9 @@ class SimulationEngine
         }
 
         $bots = User::query()->where('is_simulated', true)->pluck('id');
-        $ads  = Ad::query()->active()->inStock()->with('user_id')->pluck('id', 'user_id');
+        // pluck('user_id', 'id') — key=ad id, value=seller id.
+        // Using 'id' as key preserves both ads even when they share the same seller.
+        $ads  = Ad::query()->active()->inStock()->pluck('user_id', 'id');
 
         if ($bots->isEmpty() || $ads->isEmpty()) {
             return 0;
@@ -201,7 +203,7 @@ class SimulationEngine
         }
 
         $bots = User::query()->where('is_simulated', true)->pluck('id');
-        $ads  = Ad::query()->active()->inStock()->get(['id', 'title', 'price', 'user_id']);
+        $ads  = Ad::query()->active()->inStock()->get(['id', 'title', 'price', 'stock', 'user_id']);
 
         if ($bots->isEmpty() || $ads->isEmpty()) {
             return 0;
